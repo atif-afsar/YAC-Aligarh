@@ -12,12 +12,12 @@ export default function Navbar() {
           <img
             src="/images/Logo.png"
             alt="YAC Aligarh Logo"
-            className="h-10 w-auto"
+            className="h-15 w-auto"
           />
         </div>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-8 text-lg font-medium">
+        <nav className="hidden md:flex gap-8 text-xl font-medium">
           {["Home", "Courses", "Results", "Faculty", "Contact"].map((item) => (
             <a
               key={item}
@@ -30,7 +30,7 @@ export default function Navbar() {
         </nav>
 
         {/* Desktop Button */}
-        <button className="hidden md:block bg-[#DC3545] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-600 transition">
+        <button className="hidden md:block bg-[#DC3545] text-white px-5 py-2 rounded-full text-xl font-semibold hover:bg-red-600 transition">
           Enroll Now
         </button>
 
@@ -58,7 +58,7 @@ export default function Navbar() {
               </a>
             ))}
 
-            <button className="mt-4 bg-[#DC3545] text-white py-3 rounded-full text-sm font-semibold hover:bg-red-600 transition">
+            <button className="mt-4 bg-[#DC3545] text-white py-3 rounded-full text-xl font-semibold hover:bg-red-600 transition">
               Enroll Now
             </button>
           </nav>
