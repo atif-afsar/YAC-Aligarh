@@ -1,18 +1,15 @@
 import React from 'react'
 import Hero from '../Components/Home/Hero'
-import Story from '../Components/Home/Story'
-import HeroIntro from '../Components/Home/HeroIntro'
-import Stats from '../Components/Home/Stats'
-import Programs from '../Components/Home/Programs'
+import Methodology from '../Components/Home/Methodology'
+import AdmissionsCTA from '../Components/Home/AdmissionsCTA'
 
 const Home = () => {
   return (
-    <div>
-     <Hero />
-     <HeroIntro /> 
-      <Programs />
-     <Story />
-    </div>
+    <main>
+      <Hero />
+      <Methodology />
+      <AdmissionsCTA />
+    </main>
   )
 }
 

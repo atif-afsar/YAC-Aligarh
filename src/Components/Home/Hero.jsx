@@ -1,100 +1,156 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { FaCheck, FaArrowRight, FaPlay, FaCalendar } from "react-icons/fa";
 import Stats from "./Stats";
 
 export default function Hero() {
-  const images = [
-    "https://www.yasiraliclasses.in/assets/images/sliders/slider2.jpg",
-    "https://www.yasiraliclasses.in/assets/images/sliders/Banner2.5.jpg",
-  ];
-
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 3800);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section className="bg-[#f8f8f8] pt-24 pb-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-5">
-
+    <section className="bg-white pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-5 lg:px-6">
         {/* MAIN GRID */}
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
-
-          {/* LEFT CONTENT */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          
+          {/* LEFT COLUMN - TEXT CONTENT */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="max-w-xl text-center lg:text-left mx-auto lg:mx-0"
+            className="text-center lg:text-left"
           >
-            <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1 rounded-full mb-4">
-              COMMERCE COACHING
-            </span>
-
-            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[#0b1d3a]">
-              Master Commerce{" "}
-              <span className="block sm:inline">
-                with <span className="text-[#DC3545]">Yasir Ali Classes</span>
+            {/* RANKED BADGE */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="inline-flex items-center gap-2 border-2 border-[#DC3545] rounded-full px-4 py-2 mb-6"
+            >
+              <FaCheck className="text-[#DC3545] text-sm" />
+              <span className="text-sm font-semibold text-[#DC3545]">
+                Ranked #1 Commerce Coaching
               </span>
-            </h1>
+            </motion.div>
 
-            <p className="mt-5 text-gray-600 text-sm sm:text-base leading-relaxed">
-              Expert guidance for Class 11–12, B.Com, CA Foundation & CS.
-              Personalized teaching that builds confidence and delivers results.
-            </p>
+            {/* HEADLINE */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900 mb-6"
+            >
+              Empowering the{" "}
+              <span className="text-[#DC3545]">Next Generation</span> of
+              Commerce Leaders
+            </motion.h1>
 
-            {/* BUTTONS */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="bg-[#DC3545] text-white px-7 py-3 rounded-lg font-semibold hover:bg-red-600 transition">
+            {/* SUBTEXT */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-base sm:text-lg text-gray-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
+            >
+              Comprehensive coaching for CA, CS, and CMA. Learn from industry
+              experts with proven track records and secure your financial future
+              today.
+            </motion.p>
+
+            {/* CTA BUTTONS */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-[#DC3545] text-white px-8 py-4 rounded-xl font-semibold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition"
+              >
                 Explore Courses
-              </button>
+                <FaArrowRight />
+              </motion.button>
 
-              <button className="border border-[#DC3545] text-[#DC3545] px-7 py-3 rounded-lg font-semibold hover:bg-[#DC3545] hover:text-white transition">
-                View Results
-              </button>
-            </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold text-base sm:text-lg border-2 border-gray-300 flex items-center justify-center gap-2 hover:border-gray-400 transition"
+              >
+                <FaPlay className="text-gray-900" />
+                Watch Demo
+              </motion.button>
+            </motion.div>
+
+            {/* FEATURE HIGHLIGHTS */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex flex-wrap gap-6 justify-center lg:justify-start"
+            >
+              {["Expert Faculty", "Updated Syllabus"].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
+                  className="flex items-center gap-2"
+                >
+                  <FaCheck className="text-[#DC3545] text-sm" />
+                  <span className="text-gray-700 font-medium text-sm sm:text-base">
+                    {feature}
+                  </span>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
 
-          {/* RIGHT IMAGE AREA */}
-          <div className="relative flex justify-center lg:justify-end mt-12 lg:mt-0">
-
-            {/* SOFT GLOW (CONTROLLED) */}
-            <div className="absolute w-64 h-64 bg-pink-200 blur-[80px] opacity-40 rounded-full" />
-
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={images[current]}
-                src={images[current]}
-                alt="Commerce Classroom"
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
-                className="
-                  relative
-                  w-full
-                  max-w-[320px]
-                  sm:max-w-[420px]
-                  lg:max-w-xl
-                  rounded-3xl
-                  object-contain
-                  shadow-xl
-                "
+          {/* RIGHT COLUMN - IMAGE WITH OVERLAY */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="relative mt-12 lg:mt-0"
+          >
+            {/* MAIN IMAGE */}
+            <motion.div
+              className="relative rounded-3xl overflow-hidden shadow-2xl"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop"
+                alt="Students learning together"
+                className="w-full h-auto object-cover"
               />
-            </AnimatePresence>
-
-          </div>
+              
+              {/* OVERLAY CARD */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.8 }}
+                className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl p-5 shadow-xl"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[#DC3545] text-xs font-bold uppercase mb-1">
+                      UPCOMING BATCH
+                    </p>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      CA Foundation 2024
+                    </h3>
+                  </div>
+                  <div className="bg-[#DC3545]/10 p-3 rounded-xl">
+                    <FaCalendar className="text-[#DC3545] text-xl" />
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* STATS */}
-        <div className="mt-20">
+        {/* STATS SECTION */}
+        <div className="mt-20 lg:mt-32">
           <Stats />
         </div>
-
       </div>
     </section>
   );
