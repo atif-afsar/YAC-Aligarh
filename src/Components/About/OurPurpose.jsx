@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { FaBullseye, FaLightbulb } from "react-icons/fa";
 
 export default function OurPurpose() {
@@ -6,7 +6,7 @@ export default function OurPurpose() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-5 lg:px-6">
         {/* Header */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -19,12 +19,12 @@ export default function OurPurpose() {
           <p className="text-gray-600 text-lg max-w-3xl mx-auto">
             Driven by a commitment to academic excellence and professional ethics, we strive to shape the minds that will shape the economy.
           </p>
-        </motion.div>
+        </Motion.div>
 
         {/* Mission and Vision Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Mission Card */}
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -44,10 +44,10 @@ export default function OurPurpose() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
 
           {/* Vision Card */}
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -67,7 +67,7 @@ export default function OurPurpose() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </div>
     </section>

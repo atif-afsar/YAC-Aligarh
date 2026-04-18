@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 const stats = [
   { value: "15+", label: "Years of Experience" },
@@ -13,7 +13,7 @@ export default function AboutStats() {
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
 
         {stats.map((stat, i) => (
-          <motion.div
+          <Motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -23,7 +23,7 @@ export default function AboutStats() {
           >
             <h3 className="text-3xl font-bold text-red-600">{stat.value}</h3>
             <p className="mt-2 text-sm text-gray-600">{stat.label}</p>
-          </motion.div>
+          </Motion.div>
         ))}
 
       </div>

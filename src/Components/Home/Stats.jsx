@@ -1,87 +1,84 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { useEffect } from "react";
-import { FaGraduationCap, FaUsers, FaChartLine } from "react-icons/fa";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const stats = [
-  {
-    icon: FaGraduationCap,
-    value: 500,
-    suffix: "+",
-    label: "Students Placed",
-  },
-  {
-    icon: FaUsers,
-    value: 25,
-    suffix: "+",
-    label: "Expert Tutors",
-  },
-  {
-    icon: FaChartLine,
-    value: 98,
-    suffix: "%",
-    label: "Success Rate",
-  },
+gsap.registerPlugin(ScrollTrigger);
+
+const STATS = [
+  { end: 5000, suffix: "+", label: "Students Mentored" },
+  { end: 200, suffix: "+", label: "Final Selections" },
+  { end: 10, suffix: "+", label: "Years Experience" },
 ];
 
-function StatCard({ icon: Icon, value, suffix, label, delay }) {
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
+function StatItem({ end, suffix, label, index }) {
+  const numRef = useRef(null);
+  const wrapRef = useRef(null);
 
-  useEffect(() => {
-    const controls = animate(count, value, {
-      duration: 1.5,
-      delay,
-      ease: "easeOut",
-    });
-    return controls.stop;
-  }, [value, delay, count]);
+  useLayoutEffect(() => {
+    const el = numRef.current;
+    const wrap = wrapRef.current;
+    if (!el || !wrap) return;
+
+    const obj = { val: 0 };
+    const tween = gsap.fromTo(
+      obj,
+      { val: 0 },
+      {
+        val: end,
+        duration: 2.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: wrap,
+          start: "top 88%",
+          once: true,
+        },
+        onUpdate: () => {
+          const v = Math.round(obj.val);
+          el.textContent =
+            end >= 1000 ? v.toLocaleString("en-IN") : String(v);
+        },
+      }
+    );
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, [end]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
-      whileHover={{ y: -8, scale: 1.05 }}
-      className="bg-white rounded-2xl p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+    <div
+      ref={wrapRef}
+      className="text-center px-4"
+      style={{ animationDelay: `${index * 0.08}s` }}
     >
-      {/* ICON */}
-      <div className="flex justify-center mb-4">
-        <div className="bg-[#DC3545]/10 p-4 rounded-xl">
-          <Icon className="text-[#DC3545] text-3xl" />
-        </div>
-      </div>
-
-      {/* NUMBER */}
-      <motion.h3 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-2">
-        <motion.span>{rounded}</motion.span>
-        {suffix}
-      </motion.h3>
-
-      {/* LABEL */}
-      <p className="text-gray-600 text-base font-medium">{label}</p>
-    </motion.div>
+      <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 tabular-nums tracking-tight">
+        <span ref={numRef}>0</span>
+        <span>{suffix}</span>
+      </p>
+      <p className="mt-2 text-sm sm:text-base font-medium text-gray-600">
+        {label}
+      </p>
+    </div>
   );
 }
 
 export default function Stats() {
   return (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8"
-    >
-      {stats.map((stat, index) => (
-        <StatCard
-          key={stat.label}
-          icon={stat.icon}
-          value={stat.value}
-          suffix={stat.suffix}
-          label={stat.label}
-          delay={index * 0.15}
-        />
-      ))}
-    </motion.div>
+    <section className="bg-[#F9F9F9] border-y border-gray-100/80 py-14 md:py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 divide-y divide-gray-200/80 md:divide-y-0 md:divide-x">
+          {STATS.map((s, i) => (
+            <StatItem
+              key={s.label}
+              end={s.end}
+              suffix={s.suffix}
+              label={s.label}
+              index={i}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

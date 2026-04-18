@@ -1,120 +1,102 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import {
-  FaClipboardCheck,
-  FaBookOpen,
-  FaUsers,
-  FaBullseye,
+  FaChalkboardTeacher,
+  FaChartLine,
+  FaUserFriends,
+  FaClipboardList,
 } from "react-icons/fa";
 
-const features = [
+const ADVANTAGES = [
   {
-    icon: FaClipboardCheck,
-    title: "Experienced Faculty",
+    icon: FaChalkboardTeacher,
+    title: "Expert Faculty",
     description:
-      "Learn from industry veterans with years of practical experience and proven teaching methodologies.",
+      "Learn from mentors who combine industry experience with exam-tested teaching methods.",
   },
   {
-    icon: FaBookOpen,
-    title: "Comprehensive Material",
+    icon: FaChartLine,
+    title: "Proven Results",
     description:
-      "Well-structured study materials, updated syllabus, and comprehensive resources for every course.",
+      "Consistent selections and strong fundamentals—our outcomes speak through our students.",
   },
   {
-    icon: FaUsers,
-    title: "Personalized Attention",
+    icon: FaUserFriends,
+    title: "Personal Mentorship",
     description:
-      "Small batch sizes ensure individual attention and personalized guidance for every student's growth.",
+      "Small batches and one-on-one guidance so no doubt stays unresolved.",
   },
   {
-    icon: FaBullseye,
-    title: "Exam-Oriented Strategy",
+    icon: FaClipboardList,
+    title: "Test Series",
     description:
-      "Focused approach on exam patterns, mock tests, and strategic preparation for guaranteed success.",
+      "Full-length mocks, analysis sessions, and pacing drills aligned with the latest pattern.",
   },
 ];
 
-const containerVariants = {
+const container = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+const item = {
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-gray-50 py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-5 lg:px-6">
-        {/* HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <section className="bg-[#F9F9F9] py-20 lg:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Motion.div
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.55 }}
+          className="text-center max-w-3xl mx-auto mb-14 lg:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Why Choose Us for Your Career?
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+            The Architectural Advantage
           </h2>
-          <p className="text-gray-600 text-base sm:text-lg max-w-3xl mx-auto">
-            We bridge the gap between academic theory and professional
-            application, ensuring you are exam-ready and industry-prepared.
+          <p className="mt-4 text-gray-600 text-base sm:text-lg">
+            A deliberate framework—clarity first, then depth, then exam execution.
           </p>
-        </motion.div>
+        </Motion.div>
 
-        {/* FEATURES GRID */}
-        <motion.div
-          variants={containerVariants}
+        <Motion.div
+          variants={container}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
         >
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
+          {ADVANTAGES.map((adv) => {
+            const Icon = adv.icon;
             return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300"
+              <Motion.article
+                key={adv.title}
+                variants={item}
+                className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100/80 hover:shadow-lg transition-shadow duration-300"
+                whileHover={{ y: -6 }}
               >
-                {/* ICON */}
-                <div className="flex justify-center mb-6">
-                  <div className="bg-[#DC3545]/10 p-4 rounded-xl">
-                    <Icon className="text-[#DC3545] text-3xl" />
-                  </div>
+                <div className="w-12 h-12 rounded-full bg-[#DC3545] flex items-center justify-center text-white shadow-md shadow-red-500/25 mb-6">
+                  <Icon className="text-xl" />
                 </div>
-
-                {/* TITLE */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
-                  {feature.title}
-                </h3>
-
-                {/* DESCRIPTION */}
-                <p className="text-gray-600 leading-relaxed text-center text-sm sm:text-base">
-                  {feature.description}
+                <h3 className="text-lg font-bold text-gray-900">{adv.title}</h3>
+                <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
+                  {adv.description}
                 </p>
-              </motion.div>
+              </Motion.article>
             );
           })}
-        </motion.div>
+        </Motion.div>
       </div>
     </section>
   );
 }
-

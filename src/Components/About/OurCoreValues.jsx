@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { FaShieldAlt, FaStar, FaUserFriends } from "react-icons/fa";
 
 const coreValues = [
@@ -46,7 +46,7 @@ export default function OurCoreValues() {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-5 lg:px-6">
         {/* Header */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -59,10 +59,10 @@ export default function OurCoreValues() {
               Our Core Values
             </h2>
           </div>
-        </motion.div>
+        </Motion.div>
 
         {/* Values Grid */}
-        <motion.div
+        <Motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -72,7 +72,7 @@ export default function OurCoreValues() {
           {coreValues.map((value, index) => {
             const Icon = value.icon;
             return (
-              <motion.div
+              <Motion.div
                 key={index}
                 variants={itemVariants}
                 whileHover={{ y: -8, scale: 1.02 }}
@@ -94,10 +94,10 @@ export default function OurCoreValues() {
                 <p className="text-gray-600 leading-relaxed text-center">
                   {value.description}
                 </p>
-              </motion.div>
+              </Motion.div>
             );
           })}
-        </motion.div>
+        </Motion.div>
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { FaHistory, FaAward, FaUsers } from "react-icons/fa";
 
 const milestones = [
@@ -27,7 +27,7 @@ export default function OurStory() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-5 lg:px-6">
         {/* Header */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -40,14 +40,14 @@ export default function OurStory() {
           <p className="text-gray-600 text-lg max-w-3xl mx-auto">
             From humble beginnings to becoming a trusted name in commerce education, our journey is a testament to our commitment to excellence.
           </p>
-        </motion.div>
+        </Motion.div>
 
         {/* Timeline */}
         <div className="max-w-4xl mx-auto">
           {milestones.map((milestone, index) => {
             const Icon = milestone.icon;
             return (
-              <motion.div
+              <Motion.div
                 key={index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -79,7 +79,7 @@ export default function OurStory() {
                 {index < milestones.length - 1 && (
                   <div className="hidden md:block absolute left-6 top-20 w-0.5 h-full bg-gray-200"></div>
                 )}
-              </motion.div>
+              </Motion.div>
             );
           })}
         </div>

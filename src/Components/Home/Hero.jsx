@@ -1,155 +1,165 @@
-import { motion } from "framer-motion";
-import { FaCheck, FaArrowRight, FaPlay, FaCalendar } from "react-icons/fa";
-import Stats from "./Stats";
+import { Link } from "react-router-dom";
+import { motion as Motion } from "framer-motion";
+import { FaArrowRight, FaPlay } from "react-icons/fa";
+
+const RED = "#DC3545";
+
+/** Fanned row: outer frames sit lower; inner pair lifts for a subtle arc */
+const FAN_IMAGES = [
+  {
+    src: "https://yasiraliclasses.in/assets/images/sliders/unnamed.webp",
+    alt: "Students collaborating in a classroom",
+    className:
+      "-rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=560&fit=crop",
+    alt: "Focused study session with notes",
+    className:
+      "-rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=560&fit=crop",
+    alt: "Graduation celebration",
+    className:
+      "rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=560&fit=crop",
+    alt: "Group learning and discussion",
+    className:
+      "rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
+  },
+];
+
+function HeroSquiggles() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <svg
+        className="absolute -left-[8%] -top-[5%] h-[min(55vh,420px)] w-[min(70vw,520px)] text-amber-400/50"
+        viewBox="0 0 400 400"
+        fill="none"
+      >
+        <path
+          d="M40 20 C120 80 80 180 160 220 S280 260 320 340"
+          stroke="currentColor"
+          strokeWidth="28"
+          strokeLinecap="round"
+        />
+        <path
+          d="M20 120 C100 100 140 200 100 280"
+          stroke="currentColor"
+          strokeWidth="18"
+          strokeLinecap="round"
+          opacity="0.65"
+        />
+      </svg>
+      <svg
+        className="absolute -right-[12%] top-[18%] h-[min(50vh,380px)] w-[min(75vw,560px)] text-amber-400/45"
+        viewBox="0 0 400 400"
+        fill="none"
+      >
+        <path
+          d="M360 40 C280 120 340 200 260 260 S120 300 60 380"
+          stroke="currentColor"
+          strokeWidth="32"
+          strokeLinecap="round"
+        />
+        <path
+          d="M380 200 C300 220 240 320 180 360"
+          stroke="currentColor"
+          strokeWidth="20"
+          strokeLinecap="round"
+          opacity="0.6"
+        />
+      </svg>
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
-    <section className="bg-white pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-5 lg:px-6">
-        {/* MAIN GRID */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
-          {/* LEFT COLUMN - TEXT CONTENT */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="text-center lg:text-left"
-          >
-            {/* RANKED BADGE */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center gap-2 border-2 border-[#DC3545] rounded-full px-4 py-2 mb-6"
-            >
-              <FaCheck className="text-[#DC3545] text-sm" />
-              <span className="text-sm font-semibold text-[#DC3545]">
-                Ranked #1 Commerce Coaching
-              </span>
-            </motion.div>
+    <section className="relative overflow-hidden bg-white pt-28 pb-16 md:pb-24">
+      <HeroSquiggles />
 
-            {/* HEADLINE */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900 mb-6"
-            >
-              Empowering the{" "}
-              <span className="text-[#DC3545]">Next Generation</span> of
-              Commerce Leaders
-            </motion.h1>
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Motion.div
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center max-w-3xl mx-auto"
+        >
+          <p className="font-serif-display text-sm sm:text-base md:text-lg font-medium uppercase tracking-[0.28em] text-gray-700">
+            Commerce coaching
+          </p>
 
-            {/* SUBTEXT */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-base sm:text-lg text-gray-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0"
+          <h1 className="mt-5 sm:mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] font-bold text-gray-900 leading-[1.08] tracking-tight">
+            Crack Your Exams with{" "}
+            <span
+              className="font-serif-display italic font-semibold"
+              style={{ color: RED }}
             >
-              Comprehensive coaching for CA, CS, and CMA. Learn from industry
-              experts with proven track records and secure your financial future
-              today.
-            </motion.p>
+              Clarity
+            </span>{" "}
+            & Confidence
+          </h1>
 
-            {/* CTA BUTTONS */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#DC3545] text-white px-8 py-4 rounded-xl font-semibold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition"
+          <p className="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+            Join 5,000+ learners who chose structured mentorship, updated
+            material, and exam-focused coaching—online and offline in Aligarh.
+          </p>
+
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center">
+            <Motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/courses"
+                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full px-9 py-3.5 text-base font-semibold text-white shadow-md transition hover:opacity-95"
+                style={{ backgroundColor: RED }}
               >
+                Enroll Now Today
+                <FaArrowRight className="text-sm" />
+              </Link>
+            </Motion.div>
+            <Motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+              <Link
+                to="/courses"
+                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full border-2 border-gray-900 bg-white px-9 py-3.5 text-base font-semibold text-gray-900 hover:bg-gray-50 transition"
+              >
+                <FaPlay className="text-sm text-gray-700" />
                 Explore Courses
-                <FaArrowRight />
-              </motion.button>
+              </Link>
+            </Motion.div>
+          </div>
+        </Motion.div>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold text-base sm:text-lg border-2 border-gray-300 flex items-center justify-center gap-2 hover:border-gray-400 transition"
-              >
-                <FaPlay className="text-gray-900" />
-                Watch Demo
-              </motion.button>
-            </motion.div>
-
-            {/* FEATURE HIGHLIGHTS */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="flex flex-wrap gap-6 justify-center lg:justify-start"
-            >
-              {["Expert Faculty", "Updated Syllabus"].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
-                  className="flex items-center gap-2"
-                >
-                  <FaCheck className="text-[#DC3545] text-sm" />
-                  <span className="text-gray-700 font-medium text-sm sm:text-base">
-                    {feature}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* RIGHT COLUMN - IMAGE WITH OVERLAY */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="relative mt-12 lg:mt-0"
-          >
-            {/* MAIN IMAGE */}
-            <motion.div
-              className="relative rounded-3xl overflow-hidden shadow-2xl"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop"
-                alt="Students learning together"
-                className="w-full h-auto object-cover"
-              />
-              
-              {/* OVERLAY CARD */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
+        {/* Fanned image strip — arc via per-frame rotate + translateY */}
+        <div className="relative mx-auto mt-14 md:mt-16 max-w-4xl px-2">
+          <div className="flex justify-center items-end gap-2 sm:gap-3 md:gap-5 min-h-[200px] sm:min-h-[240px] md:min-h-[280px]">
+            {FAN_IMAGES.map((item, i) => (
+              <Motion.div
+                key={item.src}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.8 }}
-                className="absolute bottom-6 left-6 right-6 bg-white rounded-2xl p-5 shadow-xl"
+                transition={{
+                  duration: 0.55,
+                  delay: 0.12 + i * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="shrink-0 w-[28%] max-w-[160px] sm:max-w-[180px] md:max-w-[200px]"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[#DC3545] text-xs font-bold uppercase mb-1">
-                      UPCOMING BATCH
-                    </p>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      CA Foundation 2024
-                    </h3>
-                  </div>
-                  <div className="bg-[#DC3545]/10 p-3 rounded-xl">
-                    <FaCalendar className="text-[#DC3545] text-xl" />
-                  </div>
+                <div
+                  className={`rounded-2xl border-2 border-gray-900 overflow-hidden shadow-lg bg-white ${item.className}`}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className="w-full h-full aspect-[3/4] object-cover block"
+                    loading={i === 0 ? "eager" : "lazy"}
+                  />
                 </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* STATS SECTION */}
-        <div className="mt-20 lg:mt-32">
-          <Stats />
+              </Motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
