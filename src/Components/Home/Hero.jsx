@@ -13,19 +13,19 @@ const FAN_IMAGES = [
       "-rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
   },
   {
-    src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=560&fit=crop",
+    src: "https://yasiraliclasses.in/assets/images/sliders/slider-2.webp",
     alt: "Focused study session with notes",
     className:
       "-rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
   },
   {
-    src: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=560&fit=crop",
+    src: "https://yasiraliclasses.in/assets/images/sliders/slider-4.webp",
     alt: "Graduation celebration",
     className:
       "rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
   },
   {
-    src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=560&fit=crop",
+    src: "https://yasiraliclasses.in/assets/images/sliders/slider-3.webp",
     alt: "Group learning and discussion",
     className:
       "rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
@@ -36,7 +36,7 @@ function HeroSquiggles() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <svg
-        className="absolute -left-[8%] -top-[5%] h-[min(55vh,420px)] w-[min(70vw,520px)] text-amber-400/50"
+        className="absolute -left-[8%] -top-[5%] h-[min(55vh,420px)] w-[min(70vw,520px)] text-red-400/20"
         viewBox="0 0 400 400"
         fill="none"
       >
@@ -55,7 +55,7 @@ function HeroSquiggles() {
         />
       </svg>
       <svg
-        className="absolute -right-[12%] top-[18%] h-[min(50vh,380px)] w-[min(75vw,560px)] text-amber-400/45"
+        className="absolute -right-[12%] top-[18%] h-[min(50vh,380px)] w-[min(75vw,560px)] text-red-400/25"
         viewBox="0 0 400 400"
         fill="none"
       >

@@ -1,15 +1,18 @@
-import React from 'react'
+import React from "react";
+import FacultyHero from "../Components/Faculty/FacultyHero";
+import FacultyPanel from "../Components/Faculty/FacultyPanel";
+import FacultyWhy from "../Components/Faculty/FacultyWhy";
+import FacultyCTA from "../Components/Faculty/FacultyCTA";
 
 const Faculty = () => {
   return (
-    <main className="pt-24 min-h-screen">
-      <div className="max-w-7xl mx-auto px-5 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Our Faculty</h1>
-        <p className="text-gray-600 text-lg">Meet our experienced and dedicated faculty members...</p>
-      </div>
+    <main className="min-h-screen bg-white">
+      <FacultyHero />
+      <FacultyPanel />
+      <FacultyWhy />
+      <FacultyCTA />
     </main>
-  )
-}
+  );
+};
 
-export default Faculty
-
+export default Faculty;

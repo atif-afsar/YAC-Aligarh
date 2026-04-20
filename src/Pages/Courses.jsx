@@ -1,15 +1,22 @@
-import React from 'react'
+import { useState } from "react";
+import CoursesHero from "../Components/Courses/CoursesHero";
+import CoursesGrid from "../Components/Courses/CoursesGrid";
+import CoursesWhyArchitect from "../Components/Courses/CoursesWhyArchitect";
+import CoursesVoices from "../Components/Courses/CoursesVoices";
+import CoursesJourneyCTA from "../Components/Courses/CoursesJourneyCTA";
 
-const Courses = () => {
+const DEFAULT_FILTER = "all";
+
+export default function Courses() {
+  const [filter, setFilter] = useState(DEFAULT_FILTER);
+
   return (
-    <main className="pt-24 min-h-screen">
-      <div className="max-w-7xl mx-auto px-5 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Our Courses</h1>
-        <p className="text-gray-600 text-lg">Explore our comprehensive course offerings...</p>
-      </div>
+    <main className="min-h-screen bg-white">
+      <CoursesHero active={filter} onChange={setFilter} />
+      <CoursesGrid filter={filter} />
+      <CoursesWhyArchitect />
+      <CoursesVoices />
+      <CoursesJourneyCTA />
     </main>
-  )
+  );
 }
-
-export default Courses
-

@@ -8,7 +8,7 @@ const IMAGES = {
   main: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&h=1200&fit=crop",
   topL: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
   topR:
-    "https://images.unsplash.com/photo-1564981797816-1042734bc264?w=600&h=400&fit=crop",
+    "https://i.pinimg.com/1200x/85/c7/4c/85c74c1360db760634652f7d3a553553.jpg",
   bottom:
     "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&h=500&fit=crop",
 };
