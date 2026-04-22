@@ -3,30 +3,61 @@ import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaArrowRight } from "react-icons/fa";
+import {
+  FaArrowRight,
+  FaBullseye,
+  FaCalendarCheck,
+  FaChartLine,
+  FaFlask,
+} from "react-icons/fa";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const COURSES = [
+const RED = "#DC3545";
+const RED_DARK = "#b02a37";
+const RED_SOFT = "rgba(220, 53, 69, 0.09)";
+
+/** Four institute streams—unified red theme to match YAC brand. */
+const STREAMS = [
   {
-    title: "CA Foundation",
-    blurb: "Concept-first coaching for entry-level CA with mocks & mentorship.",
-    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=360&fit=crop",
+    id: "commerce",
+    pill: "Commerce",
+    title: "Commerce",
+    intro: "From boards to professional papers",
+    blurb:
+      "CA, CS, B.Com & 11th–12th Commerce with concept-first classes, industry-aligned notes, and test series that match the real paper.",
+    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=500&fit=crop",
+    Icon: FaChartLine,
   },
   {
-    title: "CA Intermediate",
-    blurb: "Group-wise strategy, papers, and revision labs for serious aspirants.",
-    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&h=360&fit=crop",
+    id: "science",
+    pill: "Science",
+    title: "Science",
+    intro: "Clear concepts for every chapter",
+    blurb:
+      "Physics, Chemistry, Biology & Maths tracks with lab-style problem solving, board-focused drills, and revision that turns doubt into speed.",
+    img: "https://images.unsplash.com/photo-1532094349884-543bc3b0d68e?w=800&h=500&fit=crop",
+    Icon: FaFlask,
   },
   {
-    title: "B.Com & allied",
-    blurb: "University sync, practical accounting, and career-ready projects.",
-    img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=360&fit=crop",
+    id: "entrance",
+    pill: "Entrance",
+    title: "Entrance",
+    intro: "Strategy for competitive lanes",
+    blurb:
+      "CUET, law, management & other entrance programs—pattern analysis, timed mocks, and mentor feedback so you own exam day, not the other way around.",
+    img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=500&fit=crop",
+    Icon: FaBullseye,
   },
   {
-    title: "Class 11–12 Commerce",
-    blurb: "Board-focused clarity with early CA/CS orientation when you are ready.",
-    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=360&fit=crop",
+    id: "regular",
+    pill: "Regular",
+    title: "Regular",
+    intro: "Steady batches, strong foundations",
+    blurb:
+      "Year-round school-style batches for 5th–10th and bridge programs—disciplined pace, regular assessments, and doubt support that keeps families in the loop.",
+    img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=500&fit=crop",
+    Icon: FaCalendarCheck,
   },
 ];
 
@@ -36,14 +67,14 @@ export default function CoursesSection() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".course-card", {
-        y: 40,
+        y: 36,
         opacity: 0,
-        duration: 0.75,
-        stagger: 0.12,
+        duration: 0.7,
+        stagger: 0.1,
         ease: "power3.out",
         scrollTrigger: {
           trigger: rootRef.current,
-          start: "top 82%",
+          start: "top 80%",
           once: true,
         },
       });
@@ -52,58 +83,111 @@ export default function CoursesSection() {
   }, []);
 
   return (
-    <section ref={rootRef} className="bg-white py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 lg:mb-16">
-          <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
-              Our Specialized Courses
+    <section
+      ref={rootRef}
+      className="relative overflow-hidden bg-gradient-to-b from-red-50/40 via-white to-rose-50/30 py-20 lg:py-28"
+    >
+      <div
+        className="pointer-events-none absolute -left-24 top-16 h-80 w-80 rounded-full bg-red-200/20 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -right-20 bottom-8 h-72 w-72 rounded-full bg-rose-300/15 blur-3xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-800">
+              What we teach
+            </p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl md:text-5xl">
+              Commerce · Science ·{" "}
+              <span
+                className="font-serif-display italic"
+                style={{ color: RED }}
+              >
+                Entrance
+              </span>{" "}
+              · Regular
             </h2>
-            <p className="mt-3 text-gray-600 max-w-xl text-base sm:text-lg">
-              Pick a track that matches your goal—each program blends live classes,
-              structured notes, and assessments.
+            <p className="mt-4 text-base leading-relaxed text-gray-600 sm:text-lg">
+              Four clear streams so you can pick a rhythm that matches your class,
+              your exam, and your ambition—without the noise.
             </p>
           </div>
           <Link
             to="/courses"
-            className="inline-flex items-center gap-2 text-[#DC3545] font-semibold hover:gap-3 transition-all shrink-0"
+            className="group inline-flex shrink-0 items-center gap-2 self-start rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-red-900/20 transition hover:opacity-[0.96] lg:self-auto"
+            style={{ backgroundColor: RED }}
           >
-            View all here
-            <FaArrowRight className="text-sm" />
+            Browse full catalogue
+            <FaArrowRight className="text-xs transition group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {COURSES.map((c) => (
-            <Motion.article
-              key={c.title}
-              className="course-card group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300"
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            >
-              <div className="relative h-40 sm:h-44 bg-slate-900">
-                <img
-                  src={c.img}
-                  alt=""
-                  className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-gray-900">{c.title}</h3>
-                <p className="mt-2 text-sm text-gray-600 leading-relaxed">
-                  {c.blurb}
-                </p>
-                <Link
-                  to="/courses"
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#DC3545] group-hover:gap-2 transition-all"
-                >
-                  Read More
-                  <FaArrowRight className="text-xs" />
-                </Link>
-              </div>
-            </Motion.article>
-          ))}
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-6">
+          {STREAMS.map((s) => {
+            const Icon = s.Icon;
+            return (
+              <Motion.article
+                key={s.id}
+                className="course-card group relative flex h-full flex-col overflow-hidden rounded-2xl border border-red-100/90 bg-white shadow-[0_2px_24px_rgba(180,30,50,0.06)] transition-shadow duration-300 hover:border-red-200 hover:shadow-[0_20px_44px_-14px_rgba(180,40,50,0.18)] border-l-[3px] border-l-[#DC3545]"
+                whileHover={{
+                  y: -5,
+                  transition: { type: "spring", stiffness: 380, damping: 26 },
+                }}
+                style={{
+                  background: `linear-gradient(180deg, #ffffff 0%, ${RED_SOFT} 100%)`,
+                }}
+              >
+                <div className="relative h-40 overflow-hidden sm:h-44">
+                  <img
+                    src={s.img}
+                    alt=""
+                    className="h-full w-full object-cover transition duration-600 ease-out group-hover:scale-105"
+                  />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-red-950/75 via-red-950/15 to-transparent"
+                    aria-hidden
+                  />
+                  <div className="absolute left-3 top-3">
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/12 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md backdrop-blur-sm sm:text-xs"
+                      style={{ backgroundColor: `${RED}ee` }}
+                    >
+                      <Icon className="text-[0.7rem] sm:text-xs" />
+                      {s.pill}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <h3 className="text-lg font-bold text-gray-900 sm:text-xl">
+                    {s.title}
+                  </h3>
+                  <p
+                    className="mt-1 text-xs font-semibold sm:text-sm"
+                    style={{ color: RED_DARK }}
+                  >
+                    {s.intro}
+                  </p>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-gray-600">
+                    {s.blurb}
+                  </p>
+                  <Link
+                    to="/courses"
+                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition hover:opacity-90"
+                    style={{ color: RED }}
+                  >
+                    Explore stream
+                    <FaArrowRight className="text-xs opacity-90 transition group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+              </Motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

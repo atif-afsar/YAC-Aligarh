@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Results", to: "/results" },
   { label: "Admissions", to: "/admissions" },
   { label: "Mobile App", to: "/mobile-app" },
+  { label: "YouTube", to: "/youtube" },
   { label: "Blog", to: "/blog" },
 ];
 const courseOptions = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];

@@ -10,6 +10,7 @@ import Blog from './Pages/Blog'
 import Results from './Pages/Results'
 import Admissions from './Pages/Admissions'
 import MobileApp from './Pages/MobileApp'
+import Youtube from './Pages/Youtube'
 import Loader from './Components/common/Loader'
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="/results" element={<Results />} />
         <Route path="/admissions" element={<Admissions />} />
         <Route path="/mobile-app" element={<MobileApp />} />
+        <Route path="/youtube" element={<Youtube />} />
       </Routes>
       <Footer />
     </>
