@@ -9,6 +9,7 @@ import Testimonials from "../Components/Home/Testimonials";
 import LearningLabs from "../Components/Home/LearningLabs";
 import AdmissionsCTA from "../Components/Home/AdmissionsCTA";
 import YoutubeMobileCTA from "../Components/Home/YoutubeMobileCTA";
+import FaqsSection from "../Components/Home/FaqsSection";
 
 const Home = () => {
   return (
@@ -22,6 +23,7 @@ const Home = () => {
       <Methodology />
       <Testimonials />
       <LearningLabs />
+      <FaqsSection />
       <AdmissionsCTA />
     </main>
   );

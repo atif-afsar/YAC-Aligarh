@@ -1,4 +1,5 @@
 import { motion as Motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import { FEATURED_POST } from "./blogData";
 
@@ -44,13 +45,13 @@ export default function BlogsHero() {
                 <p className="font-semibold text-gray-900">{FEATURED_POST.author}</p>
                 <p className="text-sm text-gray-500">{FEATURED_POST.role}</p>
               </div>
-              <button
-                type="button"
+              <Link
+                to={`/blog/${FEATURED_POST.slug}`}
                 className="inline-flex items-center gap-2 text-[#DC3545] font-semibold hover:gap-3 transition-all"
               >
                 Read Article
                 <FaArrowRight className="text-xs" />
-              </button>
+              </Link>
             </div>
           </div>
         </article>

@@ -11,6 +11,7 @@ import Results from './Pages/Results'
 import Admissions from './Pages/Admissions'
 import MobileApp from './Pages/MobileApp'
 import Youtube from './Pages/Youtube'
+import BlogPost from './Pages/BlogPost'
 import Loader from './Components/common/Loader'
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/about" element={<About />} />
         <Route path="/faculty" element={<Faculty />} />
         <Route path="/courses" element={<Courses />} />
