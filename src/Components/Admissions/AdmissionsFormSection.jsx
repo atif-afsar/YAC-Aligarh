@@ -1,7 +1,7 @@
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { BENEFITS } from "./admissionsData";
 
-const COURSE_OPTIONS = ["CA", "CS", "B.Com", "11-12th"];
+const COURSE_OPTIONS = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];
 
 export default function AdmissionsFormSection() {
   return (
@@ -42,7 +42,7 @@ export default function AdmissionsFormSection() {
 
             <div>
               <span className="text-sm font-semibold text-gray-700">Select Course</span>
-              <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="mt-3 grid grid-cols-2 gap-3">
                 {COURSE_OPTIONS.map((course) => (
                   <button
                     key={course}
