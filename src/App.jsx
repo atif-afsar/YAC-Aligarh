@@ -13,6 +13,7 @@ import MobileApp from './Pages/MobileApp'
 import Youtube from './Pages/Youtube'
 import BlogPost from './Pages/BlogPost'
 import Loader from './Components/common/Loader'
+import FloatingQuickActions from './Components/common/FloatingQuickActions'
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/mobile-app" element={<MobileApp />} />
         <Route path="/youtube" element={<Youtube />} />
       </Routes>
+      <FloatingQuickActions />
       <Footer />
     </>
   )
