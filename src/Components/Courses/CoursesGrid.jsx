@@ -1,14 +1,31 @@
-import { useMemo } from "react";
 import { AnimatePresence, motion as Motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa";
-import { BADGE_CLASSES, COURSES } from "./courseData";
+import { BADGE_CLASSES } from "./courseData";
 
-export default function CoursesGrid({ filter }) {
-  const visible = useMemo(() => {
-    if (filter === "all") return COURSES;
-    return COURSES.filter((c) => c.category === filter);
-  }, [filter]);
+const TYPE_LABEL = {
+  "school-prep": "School Prep",
+  entrance: "Entrance",
+  professional: "Professional",
+  graduation: "Graduation",
+};
 
+const CLASS_LABEL = {
+  junior: "Junior (5–10)",
+  senior: "Senior (11–12)",
+  postK12: "Post-12",
+};
+
+const STREAM_LABEL = {
+  science: "Science",
+  commerce: "Commerce",
+  humanities: "Humanities",
+};
+
+/**
+ * @param {object} props
+ * @param {import('./courseData').CourseCard[]} props.courses
+ */
+export default function CoursesGrid({ courses }) {
   return (
     <section
       className="relative py-14 md:py-20 px-6 sm:px-8 lg:px-10 overflow-hidden"
@@ -20,14 +37,25 @@ export default function CoursesGrid({ filter }) {
       }}
     >
       <div className="max-w-7xl mx-auto relative z-[1]">
-        {visible.length === 0 ? (
-          <p className="text-center text-gray-500 py-12">
-            No courses in this category yet.
-          </p>
+        {courses.length === 0 ? (
+          <Motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto max-w-md rounded-2xl border border-gray-200/80 bg-white px-8 py-14 text-center shadow-sm"
+            role="status"
+            aria-live="polite"
+          >
+            <p className="text-lg font-semibold text-gray-900">No courses found</p>
+            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+              Try a different class, stream, or course type, or set filters to
+              &quot;All&quot; to see every programme.
+            </p>
+          </Motion.div>
         ) : (
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 list-none p-0 m-0">
             <AnimatePresence mode="popLayout">
-              {visible.map((course, index) => (
+              {courses.map((course, index) => (
                 <Motion.li
                   key={course.id}
                   layout
@@ -36,17 +64,38 @@ export default function CoursesGrid({ filter }) {
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{
                     duration: 0.4,
-                    delay: index * 0.05,
+                    delay: index * 0.04,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                   className="h-full"
                 >
-                  <article className="h-full flex flex-col bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] border border-gray-100/80 p-7 md:p-8 hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.12)] transition-shadow duration-300">
+                  <article className="h-full flex flex-col overflow-hidden rounded-2xl border border-gray-100/80 bg-white p-7 shadow-[0_8px_28px_-10px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-14px_rgba(0,0,0,0.16)] md:p-8">
                     <span
                       className={`inline-flex self-start px-3 py-1 rounded-md text-[10px] sm:text-xs font-bold tracking-wide uppercase ${BADGE_CLASSES[course.badgeTone]}`}
                     >
                       {course.badge}
                     </span>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="inline-flex rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-[#DC3545]">
+                        {TYPE_LABEL[course.courseType]}
+                      </span>
+                      {course.classLevels.map((level) => (
+                        <span
+                          key={level}
+                          className="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-700"
+                        >
+                          {CLASS_LABEL[level]}
+                        </span>
+                      ))}
+                      {course.streams.map((stream) => (
+                        <span
+                          key={stream}
+                          className="inline-flex rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700"
+                        >
+                          {STREAM_LABEL[stream]}
+                        </span>
+                      ))}
+                    </div>
                     <h3 className="mt-5 text-xl font-bold text-gray-900 tracking-tight">
                       {course.title}
                     </h3>

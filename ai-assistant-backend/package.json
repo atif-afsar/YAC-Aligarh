@@ -1,0 +1,12 @@
+{
+  "name": "yac-aligarh-ai-assistant-backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "vercel-build": "echo 'No build step; Vercel deploys /api as serverless functions.'"
+  }
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion as Motion } from "framer-motion";
 import { FaPhoneAlt, FaRobot, FaTimes, FaWhatsapp } from "react-icons/fa";
+import AiAssistantPanel from "./AiAssistantPanel";
 
 const RED = "#DC3545";
 
@@ -43,6 +44,7 @@ function LeftAction({ icon: Icon, label, tone = "red", href, delay = 0 }) {
 
 export default function FloatingQuickActions() {
   const [openLeft, setOpenLeft] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   return (
     <>
@@ -91,13 +93,15 @@ export default function FloatingQuickActions() {
 
       <Motion.button
         type="button"
+        onClick={() => setAiOpen((v) => !v)}
         initial={{ opacity: 0, x: 20, scale: 0.96 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 0.48, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
         whileHover={{ y: -4, scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        aria-label="AI assistant"
-        className="group fixed bottom-4 right-3 z-[100] inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-red-300/45 bg-white/95 text-gray-900 shadow-[0_16px_36px_-16px_rgba(220,53,69,0.55)] backdrop-blur sm:bottom-5 sm:right-5 sm:h-auto sm:w-auto sm:px-5 sm:py-2.5"
+        aria-label={aiOpen ? "Close AI assistant" : "Open AI assistant"}
+        aria-expanded={aiOpen}
+        className={`group fixed bottom-4 right-3 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-red-300/45 bg-white/95 text-gray-900 shadow-[0_16px_36px_-16px_rgba(220,53,69,0.55)] backdrop-blur sm:bottom-5 sm:right-5 sm:h-auto sm:w-auto sm:px-5 sm:py-2.5 ${aiOpen ? "z-[210]" : "z-[100]"}`}
       >
         <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(220,53,69,0.1),transparent,rgba(220,53,69,0.16))] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="relative flex items-center justify-center gap-2.5">
@@ -105,13 +109,15 @@ export default function FloatingQuickActions() {
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-white"
             style={{ backgroundColor: RED }}
           >
-            <FaRobot className="text-sm" />
+            {aiOpen ? <FaTimes className="text-sm" /> : <FaRobot className="text-sm" />}
           </span>
           <span className="hidden text-xs font-semibold uppercase tracking-[0.1em] sm:inline sm:text-[0.78rem]">
-            AI Assistant
+            {aiOpen ? "Close" : "AI Assistant"}
           </span>
         </span>
       </Motion.button>
+
+      <AiAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />
     </>
   );
 }

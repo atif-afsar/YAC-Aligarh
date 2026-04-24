@@ -4,5 +4,14 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(),  tailwindcss(),],
+  plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      // `vercel dev` in `ai-assistant-backend` (default :3000) exposes `/api/chat`
+      "/api": {
+        target: "http://127.0.0.1:3000",
+        changeOrigin: true,
+      },
+    },
+  },
 })
