@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -13,18 +13,28 @@ const navLinks = [
   { label: "Blog", to: "/blog" },
 ];
 const courseOptions = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];
+const mobileMenuVariants = {
+  hidden: { opacity: 0, y: -14, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1], when: "beforeChildren", staggerChildren: 0.045 },
+  },
+  exit: { opacity: 0, y: -10, scale: 0.985, transition: { duration: 0.2 } },
+};
+
+const mobileItemVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.24, ease: "easeOut" } },
+};
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("/");
   const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("Science");
 
-  const handleNavClick = (to) => {
-    setActiveLink(to);
-    setOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const closeMenu = () => setOpen(false);
 
   const handleOpenInquiry = () => {
     setOpen(false);
@@ -49,6 +59,15 @@ export default function Navbar() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [showInquiryForm]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const prevBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+    };
+  }, [open]);
 
   return (
     <>
@@ -162,7 +181,7 @@ export default function Navbar() {
         <div className="relative w-full px-4 sm:px-6 lg:px-10 flex items-center justify-between" style={{ height: 60 }}>
 
           {/* Left: Brand */}
-          <Link to="/" onClick={() => handleNavClick("/")}>
+          <Link to="/" onClick={closeMenu}>
             <Motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -215,13 +234,14 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * i, duration: 0.35 }}
               >
-                <Link
+                <NavLink
                   to={to}
-                  onClick={() => handleNavClick(to)}
-                  className={`nav-link${activeLink === to ? " active" : ""}`}
+                  end={to === "/"}
+                  onClick={closeMenu}
+                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
                 >
                   {label}
-                </Link>
+                </NavLink>
               </Motion.div>
             ))}
           </nav>
@@ -244,13 +264,27 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             type="button"
-            className="md:hidden p-1.5 rounded-lg"
-            style={{ color: "#fff", background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)" }}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/25 bg-white/10 text-white backdrop-blur transition hover:bg-white/15"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
-            <span style={{ fontSize: "1.1rem", lineHeight: 1, display: "block" }}>
-              {open ? "✕" : "☰"}
+            <span className="relative block h-4 w-5">
+              <span
+                className={`absolute left-0 top-0 block h-[2px] w-5 rounded bg-white transition-all duration-300 ${
+                  open ? "translate-y-[7px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-[7px] block h-[2px] w-5 rounded bg-white transition-all duration-300 ${
+                  open ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-[14px] block h-[2px] w-5 rounded bg-white transition-all duration-300 ${
+                  open ? "-translate-y-[7px] -rotate-45" : ""
+                }`}
+              />
             </span>
           </button>
         </div>
@@ -258,37 +292,63 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <AnimatePresence>
           {open && (
-            <Motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="md:hidden mobile-menu-bg overflow-hidden relative"
-              style={{ borderTop: "1px solid rgba(255,255,255,0.12)" }}
-            >
-              <nav className="flex flex-col px-6 py-4">
-                {navLinks.map(({ label, to }) => (
-                  <Link
-                    key={label}
-                    to={to}
-                    onClick={() => handleNavClick(to)}
-                    className="mobile-nav-link"
+            <>
+              <Motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-[58] bg-black/35 backdrop-blur-[1px] md:hidden"
+                onClick={() => setOpen(false)}
+              />
+              <Motion.div
+                variants={mobileMenuVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="fixed left-3 right-3 top-[68px] z-[60] max-h-[calc(100dvh-84px)] overflow-hidden rounded-2xl border border-white/20 bg-[linear-gradient(165deg,rgba(196,30,30,0.98),rgba(153,27,27,0.98))] shadow-[0_22px_46px_-20px_rgba(0,0,0,0.65)] md:hidden"
+              >
+                <nav className="max-h-[calc(100dvh-84px)] overflow-y-auto px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
+                  <Motion.div
+                    variants={mobileItemVariants}
+                    className="mb-2 px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/65"
                   >
-                    {label}
-                  </Link>
-                ))}
-                <div className="pt-4 mt-2">
-                  <button
-                    type="button"
-                    className="enroll-btn w-full"
-                    style={{ textAlign: "center" }}
-                    onClick={handleOpenInquiry}
-                  >
-                    Enroll Now →
-                  </button>
-                </div>
-              </nav>
-            </Motion.div>
+                    Navigation
+                  </Motion.div>
+                  <ul className="space-y-1.5">
+                    {navLinks.map(({ label, to }) => (
+                      <Motion.li key={label} variants={mobileItemVariants}>
+                        <NavLink
+                          to={to}
+                          end={to === "/"}
+                          onClick={closeMenu}
+                          className={({ isActive }) =>
+                            [
+                              "flex items-center justify-between rounded-xl border px-3.5 py-3 text-sm font-semibold transition",
+                              isActive
+                                ? "border-white/30 bg-white/16 text-white"
+                                : "border-transparent bg-white/6 text-white/90 hover:bg-white/12",
+                            ].join(" ")
+                          }
+                        >
+                          <span>{label}</span>
+                          <span className="text-xs text-white/70">→</span>
+                        </NavLink>
+                      </Motion.li>
+                    ))}
+                  </ul>
+                  <Motion.div variants={mobileItemVariants} className="mt-3.5 pb-2 pt-2">
+                    <button
+                      type="button"
+                      className="w-full rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#B91C1C] shadow-[0_10px_24px_-14px_rgba(0,0,0,0.55)] transition hover:bg-rose-50"
+                      onClick={handleOpenInquiry}
+                    >
+                      Enroll Now →
+                    </button>
+                  </Motion.div>
+                </nav>
+              </Motion.div>
+            </>
           )}
         </AnimatePresence>
 

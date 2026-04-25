@@ -52,11 +52,12 @@ export default function FacultyHero() {
           className="mt-12 md:mt-16 bg-white rounded-2xl md:rounded-3xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)] border border-gray-100/90 overflow-hidden"
         >
           <div className="grid lg:grid-cols-[minmax(0,380px)_1fr] gap-0">
-            <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[420px]">
+            <div className="relative h-72 bg-gradient-to-b from-gray-100 to-gray-50 sm:h-80 md:h-96 lg:h-auto lg:min-h-[420px]">
               <img
                 src={LEAD_FACULTY.image}
                 alt={LEAD_FACULTY.name}
-                className="absolute inset-0 w-full h-full object-cover object-top"
+                className="h-full w-full object-contain object-top"
+                loading="eager"
               />
             </div>
             <div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">

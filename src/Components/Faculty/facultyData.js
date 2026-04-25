@@ -11,13 +11,12 @@ export const DEPARTMENTS = [
 ];
 
 export const LEAD_FACULTY = {
-  name: "Dr. Sarah Henderson",
-  role: "Lead Faculty, Advanced Physics & Mathematics",
-  badge1: "Dean of Sciences",
-  badge2: "15+ Years Experience",
-  bio: "Dr. Henderson blends research-grade rigor with classroom clarity—mentoring thousands from fundamentals to national-level competitive exams with empathy and precision.",
-  image:
-    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop&face",
+  name: "Yasir Ali",
+  role: "Founder & Teacher",
+  badge1: "YAC Founder",
+  badge2: "Lead Mentor",
+  bio: "Founder of YAC and an active classroom teacher, guiding students with practical concepts, disciplined practice, and exam-focused mentoring.",
+  image: "/faculty/1.jpg",
   accolades: [
     {
       line: "PhD Astrophysics, Stanford University",
@@ -45,8 +44,7 @@ export const FACULTY_MEMBERS = [
     subject: "Mathematics",
     department: "mathematics",
     years: 12,
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=720&fit=crop&face",
+    image: "/faculty/2.jpg",
   },
   {
     id: "patel",
@@ -54,8 +52,7 @@ export const FACULTY_MEMBERS = [
     subject: "Commerce & Accounts",
     department: "commerce",
     years: 16,
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=720&fit=crop&face",
+    image: "/faculty/3.jpg",
   },
   {
     id: "singh",
@@ -63,8 +60,7 @@ export const FACULTY_MEMBERS = [
     subject: "Physics",
     department: "science",
     years: 14,
-    image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=720&fit=crop&face",
+    image: "/faculty/4.jpg",
   },
   {
     id: "menon",
@@ -72,8 +68,7 @@ export const FACULTY_MEMBERS = [
     subject: "English & Reasoning",
     department: "languages",
     years: 9,
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=720&fit=crop&face",
+    image: "/faculty/5.jpg",
   },
   {
     id: "reddy",
@@ -81,8 +76,7 @@ export const FACULTY_MEMBERS = [
     subject: "Chemistry",
     department: "science",
     years: 11,
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=720&fit=crop&face",
+    image: "/faculty/6.jpg",
   },
   {
     id: "kapoor",
@@ -90,7 +84,14 @@ export const FACULTY_MEMBERS = [
     subject: "Entrance Prep (VI / IX / XI)",
     department: "entrance",
     years: 10,
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=720&fit=crop&face",
+    image: "/faculty/7.jpg",
+  },
+  {
+    id: "sharma",
+    name: "Prof. Aman Sharma",
+    subject: "Commerce & Business Studies",
+    department: "commerce",
+    years: 8,
+    image: "/faculty/8.jpg",
   },
 ];

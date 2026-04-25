@@ -22,31 +22,52 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-/** Fanned row: outer frames sit lower; inner pair lifts for a subtle arc */
+/** Showcase cards inspired by stacked gaming-card layout */
 const FAN_IMAGES = [
   {
-    src: "https://yasiraliclasses.in/assets/images/sliders/unnamed.webp",
-    alt: "Students collaborating in a classroom",
+    src: "/hero/img1.jpeg",
+    alt: "Commerce batch performance highlights",
+    title: "Commerce Pro",
+    subtitle: "Class 11-12",
+    score: "4.8",
     className:
-      "-rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
+      "-rotate-[14deg] translate-y-6 sm:translate-y-7 md:translate-y-8 z-[1]",
   },
   {
-    src: "https://yasiraliclasses.in/assets/images/sliders/slider-2.webp",
-    alt: "Focused study session with notes",
+    src: "/hero/img5.jpeg",
+    alt: "Science learning group sessions",
+    title: "Science Edge",
+    subtitle: "XI-XII",
+    score: "4.9",
     className:
-      "-rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
+      "-rotate-[7deg] translate-y-2 sm:translate-y-3 md:translate-y-4 z-[2]",
   },
   {
-    src: "https://yasiraliclasses.in/assets/images/sliders/slider-4.webp",
-    alt: "Graduation celebration",
+    src: "/hero/img3.jpeg",
+    alt: "Top achievers and rankers",
+    title: "Top Rankers",
+    subtitle: "YAC Results",
+    score: "5.0",
     className:
-      "rotate-[6deg] -translate-y-2 sm:-translate-y-3 md:-translate-y-4",
+      "rotate-0 -translate-y-6 sm:-translate-y-8 md:-translate-y-10 z-[5]",
   },
   {
-    src: "https://yasiraliclasses.in/assets/images/sliders/slider-3.webp",
-    alt: "Group learning and discussion",
+    src: "/hero/img4.jpeg",
+    alt: "Students solving mock test papers",
+    title: "Mock Master",
+    subtitle: "Test Series",
+    score: "4.7",
     className:
-      "rotate-[13deg] translate-y-4 sm:translate-y-5 md:translate-y-6",
+      "rotate-[7deg] translate-y-2 sm:translate-y-3 md:translate-y-4 z-[2]",
+  },
+  {
+    src: "/hero/img2.jpeg",
+    alt: "Mentorship and personal guidance at YAC",
+    title: "Mentor Plus",
+    subtitle: "Personal Care",
+    score: "4.8",
+    className:
+      "rotate-[14deg] translate-y-6 sm:translate-y-7 md:translate-y-8 z-[1]",
   },
 ];
 
@@ -441,39 +462,53 @@ export default function Hero() {
           </Motion.div>
         </Motion.div>
 
-        {/* Fanned image strip — arc via per-frame rotate + translateY */}
-        <div className="relative mx-auto mt-14 md:mt-16 max-w-4xl px-2">
+        {/* Cards-only layout (no dark panel/background) */}
+        <div className="relative mx-auto mt-12 md:mt-14 max-w-7xl px-1 sm:px-2 pb-8 md:pb-12">
           <div ref={imageRowRef} className="will-change-transform">
             <div
               ref={imageRowParallaxRef}
-              className="flex justify-center items-end gap-2 sm:gap-3 md:gap-5 min-h-[200px] sm:min-h-[240px] md:min-h-[280px] will-change-transform"
+              className="relative min-h-[210px] sm:min-h-[360px] md:min-h-[460px] will-change-transform"
             >
-            {FAN_IMAGES.map((item, i) => (
-              <Motion.div
-                key={item.src}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.25, margin: "-40px" }}
-                variants={fanStagger(i)}
-                className="shrink-0 w-[28%] max-w-[160px] sm:max-w-[180px] md:max-w-[200px]"
-              >
-                <Motion.div
-                  className={`rounded-2xl border-2 border-gray-900 overflow-hidden shadow-lg bg-white ${item.className}`}
-                  whileHover={
-                    reduced
-                      ? undefined
-                      : { y: -6, transition: { type: "spring", stiffness: 400, damping: 18 } }
-                  }
-                >
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="w-full h-full aspect-[3/4] object-cover block"
-                    loading={i === 0 ? "eager" : "lazy"}
-                  />
-                </Motion.div>
-              </Motion.div>
-            ))}
+              <div className="relative z-[2] pt-14 sm:pt-14 md:pt-20">
+                <div className="flex justify-center items-end gap-0 sm:gap-1.5 md:gap-2 min-h-[185px] sm:min-h-[330px] md:min-h-[420px]">
+                  {FAN_IMAGES.map((item, i) => (
+                    <Motion.div
+                      key={`${item.src}-${i}`}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.25, margin: "-40px" }}
+                      variants={fanStagger(i)}
+                      className={`relative -mx-1.5 sm:-mx-3.5 md:-mx-5 w-[38%] min-w-[122px] sm:min-w-[210px] md:min-w-[270px] max-w-[160px] sm:max-w-[320px] ${i === 2 ? "scale-[1.03] md:scale-[1.08]" : ""} ${
+                        i === 0 || i === 4 ? "hidden sm:block" : ""
+                      } ${item.className}`}
+                    >
+                      <Motion.div
+                        className="rounded-[1.35rem] overflow-hidden border border-white/40 bg-white shadow-[0_28px_60px_-26px_rgba(17,24,39,0.58)] ring-1 ring-slate-900/5 backdrop-blur-sm"
+                        whileHover={
+                          reduced
+                            ? undefined
+                            : {
+                                y: -8,
+                                transition: {
+                                  type: "spring",
+                                  stiffness: 380,
+                                  damping: 20,
+                                },
+                              }
+                        }
+                      >
+                        <img
+                          src={item.src}
+                          alt={item.alt}
+                          className="w-full h-[148px] sm:h-[270px] md:h-[350px] object-cover block"
+                          loading={i === 0 ? "eager" : "lazy"}
+                        />
+                        {/* Footer metadata removed: image-only cards */}
+                      </Motion.div>
+                    </Motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

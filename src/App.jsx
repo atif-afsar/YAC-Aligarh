@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from './Pages/Home'
 import Navbar from './Components/common/Navbar'
 import Footer from './Components/Home/Footer'
@@ -14,6 +14,14 @@ import Youtube from './Pages/Youtube'
 import BlogPost from './Pages/BlogPost'
 import Loader from './Components/common/Loader'
 import FloatingQuickActions from './Components/common/FloatingQuickActions'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+  return null
+}
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -32,6 +40,7 @@ const App = () => {
 
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -93,6 +93,9 @@ export default function Footer() {
                 <Link
                   to={item.to}
                   className="transition hover:text-red-300"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+                  }}
                 >
                   {item.label}
                 </Link>

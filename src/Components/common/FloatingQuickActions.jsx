@@ -101,7 +101,12 @@ export default function FloatingQuickActions() {
         whileTap={{ scale: 0.97 }}
         aria-label={aiOpen ? "Close AI assistant" : "Open AI assistant"}
         aria-expanded={aiOpen}
-        className={`group fixed bottom-4 right-3 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-red-300/45 bg-white/95 text-gray-900 shadow-[0_16px_36px_-16px_rgba(220,53,69,0.55)] backdrop-blur sm:bottom-5 sm:right-5 sm:h-auto sm:w-auto sm:px-5 sm:py-2.5 ${aiOpen ? "z-[210]" : "z-[100]"}`}
+        className={[
+          "group fixed bottom-4 right-3 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-red-300/45 bg-white/95 text-gray-900 shadow-[0_16px_36px_-16px_rgba(220,53,69,0.55)] backdrop-blur transition-opacity duration-200 sm:bottom-5 sm:right-5 sm:h-auto sm:w-auto sm:px-5 sm:py-2.5",
+          aiOpen
+            ? "z-[80] pointer-events-none opacity-0 sm:z-[210] sm:pointer-events-auto sm:opacity-100"
+            : "z-[100] opacity-100",
+        ].join(" ")}
       >
         <span className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(220,53,69,0.1),transparent,rgba(220,53,69,0.16))] opacity-70 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="relative flex items-center justify-center gap-2.5">

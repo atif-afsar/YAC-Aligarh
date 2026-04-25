@@ -5,40 +5,55 @@ export const STATS = [
   { label: "Toppers Produced", value: "10+" },
 ];
 
-export const RANKERS = [
-  {
-    name: "Ravi Sharma",
-    rank: "AIR 12",
-    score: "97.8%",
-    exam: "CA Foundation",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=520&h=640&fit=crop&face",
-  },
-  {
-    name: "Priya Verma",
-    rank: "AIR 7",
-    score: "98.1%",
-    exam: "CS Executive",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=520&h=640&fit=crop&face",
-  },
-  {
-    name: "Arjun Mehta",
-    rank: "AIR 18",
-    score: "96.9%",
-    exam: "CA Inter",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=520&h=640&fit=crop&face",
-  },
-  {
-    name: "Aditi Gupta",
-    rank: "AIR 9",
-    score: "97.5%",
-    exam: "Class 12 Boards",
-    image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=520&h=640&fit=crop&face",
-  },
-];
+export const RESULT_CATEGORIES = ["Bcom", "BALLb", "BA toppers", "MBA toppers"];
+
+function publicUrl(relativePath) {
+  const base = import.meta.env.BASE_URL ?? "/";
+  const p = relativePath.replace(/^\//, "");
+  const b = base.endsWith("/") ? base : `${base}/`;
+  return `${b}${p}`;
+}
+
+/** Public URL paths — files live in public/results/... */
+const bcom = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({
+  name: `B.Com achiever ${n}`,
+  rank: `Top ${n}`,
+  score: "—",
+  exam: "B.Com Final Year",
+  year: "2025",
+  image: publicUrl(`results/bcom/${n}.jpg`),
+}));
+const ballb = [1, 2, 3, 4, 5, 6, 7].map((n) => ({
+  name: `B.A.LL.B achiever ${n}`,
+  rank: `Top ${n}`,
+  score: "—",
+  exam: "B.A.LL.B Semester VIII",
+  year: "2025",
+  image: publicUrl(`results/ballb/${n}.jpg`),
+}));
+const ba = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({
+  name: `BA achiever ${n}`,
+  rank: `Top ${n}`,
+  score: "—",
+  exam: "BA Final Year",
+  year: "2025",
+  image: publicUrl(`results/ba/${n}.jpg`),
+}));
+const mba = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
+  name: `MBA achiever ${n}`,
+  rank: `Top ${n}`,
+  score: "—",
+  exam: "MBA Final Semester",
+  year: "2025",
+  image: publicUrl(`results/mba/${n}.jpg`),
+}));
+
+export const RANKERS_BY_CATEGORY = {
+  Bcom: bcom,
+  BALLb: ballb,
+  "BA toppers": ba,
+  "MBA toppers": mba,
+};
 
 export const HALL_OF_FAME = [
   "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&h=700&fit=crop",
