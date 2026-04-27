@@ -38,7 +38,7 @@ const SOCIALS = [
     href: "https://instagram.com/yasiraliclasses",
     label: "Instagram",
   },
-  { icon: FaFacebookF, href: "https://facebook.com/", label: "Facebook" },
+  { icon: FaFacebookF, href: "https://www.facebook.com/yasiraliclasses/", label: "Facebook" },
 ];
 
 export default function Footer() {

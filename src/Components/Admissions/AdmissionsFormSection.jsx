@@ -110,13 +110,15 @@ export default function AdmissionsFormSection() {
             </div>
           </div>
 
-          <button
-            type="button"
+          <a
+            href="https://wa.me/919045417079"
+            target="_blank"
+            rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-5 py-2.5 text-sm font-semibold hover:brightness-95 transition"
           >
             <FaWhatsapp />
             Chat on WhatsApp
-          </button>
+          </a>
         </article>
       </div>
     </section>

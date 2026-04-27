@@ -1,5 +1,6 @@
 import { AnimatePresence, motion as Motion } from "framer-motion";
 import { FaCheck } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { BADGE_CLASSES } from "./courseData";
 
 const TYPE_LABEL = {
@@ -115,12 +116,12 @@ export default function CoursesGrid({ courses }) {
                         </li>
                       ))}
                     </ul>
-                    <button
-                      type="button"
+                    <Link
+                      to="/admissions"
                       className="mt-8 w-full py-3 rounded-xl border border-gray-200 text-[#DC3545] font-semibold text-sm hover:bg-gray-50 hover:border-gray-300 transition-colors"
                     >
                       Enroll Now
-                    </button>
+                    </Link>
                   </article>
                 </Motion.li>
               ))}

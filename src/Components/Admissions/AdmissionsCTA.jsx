@@ -1,4 +1,5 @@
 import { motion as Motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function AdmissionsCTA() {
   return (
@@ -17,18 +18,22 @@ export default function AdmissionsCTA() {
           the top commerce community in Aligarh.
         </p>
         <div className="mt-9 flex flex-col sm:flex-row justify-center gap-4">
+          <Link to="/Admissions">
           <button
             type="button"
             className="rounded-lg bg-[#DC3545] px-7 py-3.5 font-semibold hover:bg-[#c82333] transition"
           >
             Enroll Now
           </button>
+          </Link>
+          <Link to="/">
           <button
             type="button"
             className="rounded-lg border border-white/35 px-7 py-3.5 font-semibold hover:bg-white/10 transition"
           >
-            Contact Support
+            Home Page
           </button>
+          </Link>
         </div>
       </Motion.div>
     </section>

@@ -25,7 +25,7 @@ export default function AdmissionsCTA() {
           whileTap={{ scale: 0.97 }}
         >
           <Link
-            to="/courses"
+            to="/Admissions"
             className="inline-flex items-center gap-2 rounded-2xl bg-[#DC3545] text-white px-10 py-4 font-semibold text-lg shadow-lg shadow-red-900/30 hover:bg-red-600 transition-colors"
           >
             Enroll Now

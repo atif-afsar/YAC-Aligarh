@@ -43,6 +43,7 @@ export default function AboutCTA() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
+            <Link to="/Admissions">
             <Motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -51,6 +52,7 @@ export default function AboutCTA() {
               Enquire Now
               <FaArrowRight />
             </Motion.button>
+            </Link>
 
             <Link to="/courses">
               <Motion.button

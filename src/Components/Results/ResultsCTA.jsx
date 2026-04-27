@@ -1,4 +1,5 @@
 import { motion as Motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function ResultsCTA() {
   return (
@@ -17,12 +18,14 @@ export default function ResultsCTA() {
           Architect and achieved exceptional outcomes.
         </p>
         <div className="mt-9 flex flex-col sm:flex-row justify-center gap-4">
+          <Link to="/Admissions">
           <button
             type="button"
             className="rounded-full bg-white text-[#DC3545] px-8 py-3.5 font-semibold hover:bg-gray-100 transition"
           >
-            Start My Journey
+            Start Your Journey
           </button>
+          </Link>
           <button
             type="button"
             className="rounded-full border-2 border-white px-8 py-3.5 font-semibold hover:bg-white/10 transition"

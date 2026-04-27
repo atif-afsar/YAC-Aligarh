@@ -424,7 +424,7 @@ export default function Hero() {
               transition={btnSpring}
             >
               <Link
-                to="/courses"
+                to="/Admissions"
                 className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full px-9 py-3.5 text-base font-semibold text-white shadow-md transition hover:opacity-95"
                 style={{ backgroundColor: RED }}
               >

@@ -21,7 +21,7 @@ export default function FacultyCTA() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
             <Link
-              to="/courses"
+              to="/Admissions"
               className="inline-flex items-center justify-center min-w-[200px] rounded-full bg-[#DC3545] text-white px-8 py-3.5 font-semibold text-sm sm:text-base shadow-lg shadow-red-500/20 hover:bg-[#c82333] transition-colors"
             >
               Enroll Now

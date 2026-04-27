@@ -104,7 +104,7 @@ export default function VideoEnrollSection() {
               className="mt-6 sm:mt-8 flex justify-center md:justify-start"
             >
               <Link
-                to="/courses"
+                to="/Admissions"
                 className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full bg-[#DC3545] px-7 py-3.5 text-sm sm:text-base font-semibold text-white shadow-lg shadow-red-900/40 transition-all hover:bg-red-600 hover:translate-y-[-1px]"
               >
                 Enroll Now

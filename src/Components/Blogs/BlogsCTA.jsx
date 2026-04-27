@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function BlogsCTA() {
   return (
     <section className="pb-16 md:pb-20 px-6 sm:px-8 lg:px-10 bg-white">
@@ -10,12 +12,14 @@ export default function BlogsCTA() {
             Join the academy that shapes the leaders of tomorrow.
           </p>
         </div>
+        <Link to="/Admissions">
         <button
           type="button"
           className="rounded-lg bg-white px-6 py-3 font-semibold text-[#DC3545] hover:bg-gray-100 transition"
         >
           Enroll Now
         </button>
+        </Link>
       </div>
     </section>
   );
