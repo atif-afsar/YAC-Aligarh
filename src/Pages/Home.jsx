@@ -10,6 +10,8 @@ import LearningLabs from "../Components/Home/LearningLabs";
 import AdmissionsCTA from "../Components/Home/AdmissionsCTA";
 import YoutubeMobileCTA from "../Components/Home/YoutubeMobileCTA";
 import FaqsSection from "../Components/Home/FaqsSection";
+import VideoEnrollSection from "../Components/Home/VideoEnrollSection";
+import YoutubeVideosMarquee from "../Components/Home/YoutubeVideosMarquee";
 
 const Home = () => {
   return (
@@ -17,12 +19,14 @@ const Home = () => {
       <Hero />
       <Stats />
       <CoursesSection />
+      <YoutubeVideosMarquee />
       <WhyChooseUs />
       <InstaReelsMarquee />
       <YoutubeMobileCTA />
       <Methodology />
       <Testimonials />
       <LearningLabs />
+      <VideoEnrollSection />
       <FaqsSection />
       <AdmissionsCTA />
     </main>

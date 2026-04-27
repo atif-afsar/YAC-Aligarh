@@ -3,48 +3,43 @@ import { motion as Motion, useReducedMotion } from "framer-motion";
 import { FaInstagram, FaPlay } from "react-icons/fa";
 
 const RED = "#DC3545";
+const INSTAGRAM_PROFILE = "https://www.instagram.com/yasiraliclasses/";
 
 /** Replace `href` with your reel or profile URLs when ready */
 const REELS = [
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://yasiraliclasses.in/assets/images/sliders/slider-2.webp",
-    caption: "Classroom moments",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img3.jpeg",
+    caption: "Reel placeholder 1",
   },
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://yasiraliclasses.in/assets/images/sliders/slider-4.webp",
-    caption: "Revision drills",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img1.jpeg",
+    caption: "Reel placeholder 2",
   },
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://yasiraliclasses.in/assets/images/sliders/slider-3.webp",
-    caption: "Faculty bytes",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img2.jpeg",
+    caption: "Reel placeholder 3",
   },
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://yasiraliclasses.in/assets/images/sliders/unnamed.webp",
-    caption: "Student wins",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img4.jpeg",
+    caption: "Reel placeholder 4",
   },
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=480&h=854&fit=crop",
-    caption: "Campus life",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img5.jpeg",
+    caption: "Reel placeholder 5",
   },
   {
-    href: "https://www.instagram.com/",
-    poster:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=480&h=854&fit=crop",
-    caption: "Exam strategy",
+    href: INSTAGRAM_PROFILE,
+    poster: "/hero/img2.jpeg",
+    caption: "Reel placeholder 6",
   },
 ];
 
-function ReelCard({ href, poster, caption }) {
+function ReelCard({ href, embedSrc, poster, caption }) {
   return (
     <Motion.a
       href={href}
@@ -70,16 +65,27 @@ function ReelCard({ href, poster, caption }) {
       >
         <div className="relative overflow-hidden rounded-[1.05rem] bg-gray-900">
           <div className="relative aspect-[9/16]">
-            <img
-              src={poster}
-              alt=""
-              width={360}
-              height={640}
-              loading="lazy"
-              decoding="async"
-              draggable={false}
-              className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
-            />
+            {embedSrc ? (
+              <iframe
+                src={embedSrc}
+                title={caption}
+                loading="lazy"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                allowFullScreen
+                className="h-full w-full border-0"
+              />
+            ) : (
+              <img
+                src={poster}
+                alt={caption}
+                width={360}
+                height={640}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
+              />
+            )}
             {/* Vignette + readability */}
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.12)_55%,rgba(0,0,0,0.45)_100%)]"
@@ -189,7 +195,7 @@ export default function InstaReelsMarquee() {
             </p>
           </div>
           <Motion.a
-            href="https://www.instagram.com/"
+            href={INSTAGRAM_PROFILE}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex shrink-0 items-center justify-center gap-2 self-center rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-95 sm:self-auto"
