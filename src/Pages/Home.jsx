@@ -12,6 +12,7 @@ import YoutubeMobileCTA from "../Components/Home/YoutubeMobileCTA";
 import FaqsSection from "../Components/Home/FaqsSection";
 import VideoEnrollSection from "../Components/Home/VideoEnrollSection";
 import YoutubeVideosMarquee from "../Components/Home/YoutubeVideosMarquee";
+import BestResultsPreview from "../Components/Home/BestResultsPreview";
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
       <Stats />
       <CoursesSection />
       <YoutubeVideosMarquee />
+      <BestResultsPreview />
       <WhyChooseUs />
       <InstaReelsMarquee />
       <YoutubeMobileCTA />

@@ -6,64 +6,64 @@ const STORIES = [
   {
     quote:
       "YAC mock tests and analysis sessions improved my speed and confidence for the final paper.",
-    name: "Aarav Sharma",
-    role: "B.Com Entrance Topper",
+    name: "Rehan Ahmad",
+    role: "B.Com Achiever",
     avatar: "/results/bcom/1.jpg",
     batch: "Aligarh",
   },
   {
     quote:
       "Concept clarity for CA Foundation became easy because every topic was taught from an exam-focused perspective.",
-    name: "Ritika Jain",
-    role: "Commerce Achiever",
+    name: "Nargis",
+    role: "B.Com Achiever",
     avatar: "/results/bcom/4.jpg",
     batch: "Kanpur",
   },
   {
     quote:
       "Regular tests and personalized feedback kept my preparation consistent throughout the entire session.",
-    name: "Mohd Faizan",
-    role: "Science Performer",
+    name: "Mohmmad Zayan",
+    role: "BA Rank 6",
     avatar: "/results/ba/2.jpg",
     batch: "Lucknow",
   },
   {
     quote:
       "The faculty mentorship and revision strategy helped me convert weaknesses into scoring areas.",
-    name: "Priya Verma",
-    role: "BALLB Selection",
+    name: "Aamra Najam",
+    role: "BALLB Rank 14 (CE)",
     avatar: "/results/ballb/2.jpg",
     batch: "Delhi",
   },
   {
     quote:
       "Doubt-solving speed and chapter-wise practice at YAC made my entrance preparation focused and calm.",
-    name: "Zaid Ahmad",
-    role: "MBA Entrance Ranker",
+    name: "Ilsa Israil",
+    role: "MBA 64th Gen · Cat 3*",
     avatar: "/results/mba/3.jpg",
     batch: "Noida",
   },
   {
     quote:
       "From basics to advanced questions, the structured routine helped me perform much better in mocks.",
-    name: "Sana Khan",
-    role: "BA Program Topper",
+    name: "Sayyada Faiza Saleem",
+    role: "BA Rank 53",
     avatar: "/results/ba/7.jpg",
     batch: "Agra",
   },
   {
     quote:
       "I improved my score with weekly tests, feedback loops, and disciplined revision sessions.",
-    name: "Nikhil Gupta",
-    role: "B.Com Merit List",
+    name: "Mohammad Zayan",
+    role: "B.Com Achiever",
     avatar: "/results/bcom/8.jpg",
     batch: "Mathura",
   },
   {
     quote:
       "The test environment felt exactly like real exams, so I entered the final paper with confidence.",
-    name: "Hina Siddiqui",
-    role: "MBA Achiever",
+    name: "Jatin Pratap",
+    role: "MBA Rank 8",
     avatar: "/results/mba/9.jpg",
     batch: "Aligarh",
   },
