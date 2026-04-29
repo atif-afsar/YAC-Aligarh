@@ -158,6 +158,8 @@ export default function CoursesSection() {
                     <img
                       src={s.img}
                       alt={`${s.title} stream`}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
                     />
                   </div>

@@ -473,9 +473,9 @@ export default function YoutubeVideosMarquee() {
             }}
           >
             {[
-              { val: `${YOUTUBE_PLACEHOLDERS.length}+`, label: "Videos" },
-              { val: "50K+",  label: "Subscribers" },
-              { val: "100K+", label: "Views" },
+              { val: "1000+", label: "Videos" },
+              { val: "105K+",  label: "Subscribers" },
+              { val: "5M+", label: "Views" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
                 <p style={{ fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 800, color: RED, margin: 0, letterSpacing: "-0.02em" }}>

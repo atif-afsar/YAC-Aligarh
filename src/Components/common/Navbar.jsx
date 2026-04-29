@@ -5,11 +5,11 @@ import { motion as Motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { label: "Home", to: "/" },
   { label: "Courses", to: "/courses" },
+  { label: "Online Courses", to: "/online-courses" },
   { label: "Faculty", to: "/faculty" },
   { label: "Results", to: "/results" },
   { label: "Admissions", to: "/admissions" },
-  { label: "Mobile App", to: "/mobile-app" },
-  { label: "YouTube", to: "/youtube" },
+  { label: "YouTube + App", to: "/youtube" },
   { label: "Blog", to: "/blog" },
 ];
 const courseOptions = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];

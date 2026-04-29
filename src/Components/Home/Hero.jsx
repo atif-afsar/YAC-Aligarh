@@ -207,10 +207,24 @@ export default function Hero() {
   const imageRowParallaxRef = useRef(null);
   const pointerRef = useRef({ x: 0, y: 0, active: false });
   const reduced = usePrefersReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
   const textVariants = buildTextVariants(reduced);
 
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const apply = () => setIsMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  const visibleFanImages = FAN_IMAGES.filter((_, i) => {
+    if (!isMobile) return true;
+    return i !== 0 && i !== 4;
+  });
+
   useLayoutEffect(() => {
-    if (reduced || !sectionRef.current) return;
+    if (reduced || isMobile || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       const layer = squiggleLayerRef.current;
@@ -261,10 +275,10 @@ export default function Hero() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [reduced]);
+  }, [reduced, isMobile]);
 
   useEffect(() => {
-    if (reduced || !sectionRef.current) return;
+    if (reduced || isMobile || !sectionRef.current) return;
 
     const section = sectionRef.current;
     const layer = squiggleLayerRef.current;
@@ -335,7 +349,7 @@ export default function Hero() {
       section.removeEventListener("touchend", onTouchEnd);
       section.removeEventListener("touchcancel", onTouchEnd);
     };
-  }, [reduced]);
+  }, [reduced, isMobile]);
 
   return (
     <section
@@ -358,20 +372,20 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Motion.div
-          className="text-center max-w-3xl mx-auto"
+          className="mx-auto max-w-4xl px-1 text-center sm:px-2"
           initial="hidden"
           animate="visible"
           variants={textVariants.container}
         >
           <Motion.p
             variants={textVariants.item}
-            className="font-serif-display text-sm sm:text-base md:text-lg font-medium uppercase tracking-[0.28em] text-red-700"
+            className="font-serif-display text-[11px] font-medium uppercase tracking-[0.22em] text-red-700 sm:text-sm sm:tracking-[0.26em] md:text-lg"
           >
             Yasir Ali Classes · YAC
           </Motion.p>
 
           <Motion.h1
-            className="mt-5 sm:mt-6 text-3xl sm:text-4xl md:text-5xl lg:text-[2.9rem] font-bold text-gray-900 leading-[1.1] tracking-tight"
+            className="mt-4 text-[1.95rem] font-bold leading-[1.2] tracking-tight text-gray-900 sm:mt-5 sm:text-4xl sm:leading-[1.14] md:mt-6 md:text-5xl lg:text-[2.9rem]"
             variants={textVariants.headline}
           >
             <Motion.span
@@ -381,7 +395,7 @@ export default function Hero() {
               A name students across
             </Motion.span>
             <Motion.span
-              className="block mt-1.5 sm:mt-2"
+              className="mt-2 block sm:mt-2.5"
               variants={textVariants.h1line}
             >
               <span
@@ -398,7 +412,7 @@ export default function Hero() {
           </Motion.h1>
 
           <Motion.p
-            className="mt-4 sm:mt-5 text-lg sm:text-xl md:text-2xl font-serif-display italic text-gray-800 leading-snug max-w-2xl mx-auto"
+            className="mx-auto mt-5 max-w-[21.5rem] text-[1.1rem] font-serif-display italic leading-[1.45] text-gray-800 sm:mt-6 sm:max-w-2xl sm:text-xl md:text-2xl"
             aria-label="YAC tagline"
             variants={textVariants.line}
           >
@@ -406,7 +420,7 @@ export default function Hero() {
           </Motion.p>
 
           <Motion.p
-            className="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto"
+            className="mx-auto mt-5 max-w-[22rem] text-[15px] leading-[1.8] text-gray-600 sm:mt-6 sm:max-w-2xl sm:text-lg"
             variants={textVariants.line}
           >
             From our roots in Aligarh to learners nationwide, YAC brings
@@ -415,7 +429,7 @@ export default function Hero() {
           </Motion.p>
 
           <Motion.div
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center"
+            className="mt-8 flex flex-col items-stretch justify-center gap-3.5 sm:mt-10 sm:flex-row sm:items-center sm:gap-4"
             variants={textVariants.item}
           >
             <Motion.div
@@ -471,19 +485,21 @@ export default function Hero() {
             >
               <div className="relative z-[2] pt-14 sm:pt-14 md:pt-20">
                 <div className="flex justify-center items-end gap-0 sm:gap-1.5 md:gap-2 min-h-[185px] sm:min-h-[330px] md:min-h-[420px]">
-                  {FAN_IMAGES.map((item, i) => (
+                  {visibleFanImages.map((item, i) => (
                     <Motion.div
                       key={`${item.src}-${i}`}
                       initial="hidden"
                       whileInView="visible"
                       viewport={{ once: true, amount: 0.25, margin: "-40px" }}
                       variants={fanStagger(i)}
-                      className={`relative -mx-1.5 sm:-mx-3.5 md:-mx-5 w-[38%] min-w-[122px] sm:min-w-[210px] md:min-w-[270px] max-w-[160px] sm:max-w-[320px] ${i === 2 ? "scale-[1.03] md:scale-[1.08]" : ""} ${
-                        i === 0 || i === 4 ? "hidden sm:block" : ""
+                      className={`relative -mx-1.5 sm:-mx-3.5 md:-mx-5 w-[38%] min-w-[122px] sm:min-w-[210px] md:min-w-[270px] max-w-[160px] sm:max-w-[320px] ${
+                        i === Math.floor(visibleFanImages.length / 2)
+                          ? "scale-[1.03] md:scale-[1.08]"
+                          : ""
                       } ${item.className}`}
                     >
                       <Motion.div
-                        className="rounded-[1.35rem] overflow-hidden border border-white/40 bg-white shadow-[0_28px_60px_-26px_rgba(17,24,39,0.58)] ring-1 ring-slate-900/5 backdrop-blur-sm"
+                        className="rounded-[1.35rem] overflow-hidden border border-white/40 bg-white shadow-[0_24px_44px_-24px_rgba(17,24,39,0.5)] ring-1 ring-slate-900/5"
                         whileHover={
                           reduced
                             ? undefined
@@ -501,7 +517,13 @@ export default function Hero() {
                           src={item.src}
                           alt={item.alt}
                           className="w-full h-[148px] sm:h-[270px] md:h-[350px] object-cover block"
-                          loading={i === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          loading="eager"
+                          fetchPriority={
+                            i === Math.floor(visibleFanImages.length / 2)
+                              ? "high"
+                              : "auto"
+                          }
                         />
                         {/* Footer metadata removed: image-only cards */}
                       </Motion.div>

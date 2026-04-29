@@ -52,6 +52,8 @@ export default function LearningLabs() {
             <img
               src={IMAGES.main}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover hover:scale-105 transition duration-700"
             />
           </div>
@@ -59,6 +61,8 @@ export default function LearningLabs() {
             <img
               src={IMAGES.topL}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover hover:scale-105 transition duration-700"
             />
           </div>
@@ -66,6 +70,8 @@ export default function LearningLabs() {
             <img
               src={IMAGES.topR}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover hover:scale-105 transition duration-700"
             />
           </div>
@@ -73,6 +79,8 @@ export default function LearningLabs() {
             <img
               src={IMAGES.bottom}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover hover:scale-105 transition duration-700"
             />
           </div>

@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
@@ -54,6 +55,42 @@ const PREVIEW_RESULTS = [
 ];
 
 export default function BestResultsPreview() {
+  const sliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const syncActiveDot = () => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const firstCard = slider.firstElementChild;
+    if (!firstCard) return;
+
+    const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap || "16");
+    const itemSpan = firstCard.clientWidth + gap;
+    if (!itemSpan) return;
+
+    const nextIndex = Math.round(slider.scrollLeft / itemSpan);
+    const safeIndex = Math.max(0, Math.min(PREVIEW_RESULTS.length - 1, nextIndex));
+    setActiveIndex(safeIndex);
+  };
+
+  const scrollToIndex = (index) => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const firstCard = slider.firstElementChild;
+    if (!firstCard) return;
+
+    const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap || "16");
+    const itemSpan = firstCard.clientWidth + gap;
+
+    slider.scrollTo({
+      left: index * itemSpan,
+      behavior: "smooth",
+    });
+    setActiveIndex(index);
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/40 to-white py-16 sm:py-20 lg:py-24">
       <div
@@ -85,7 +122,11 @@ export default function BestResultsPreview() {
           </p>
         </Motion.div>
 
-        <div className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 sm:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div
+          ref={sliderRef}
+          onScroll={syncActiveDot}
+          className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 sm:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {PREVIEW_RESULTS.map((result, index) => (
             <Motion.article
               key={`${result.name}-${result.image}`}
@@ -123,11 +164,15 @@ export default function BestResultsPreview() {
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-1.5 sm:hidden">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <span
+          {Array.from({ length: PREVIEW_RESULTS.length }).map((_, i) => (
+            <button
+              type="button"
               key={`dot-${i}`}
-              className={`h-1.5 rounded-full ${i === 0 ? "w-5 bg-[#DC3545]" : "w-1.5 bg-red-200"}`}
-              aria-hidden
+              onClick={() => scrollToIndex(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === activeIndex ? "w-5 bg-[#DC3545]" : "w-1.5 bg-red-200"
+              }`}
+              aria-label={`Go to result ${i + 1}`}
             />
           ))}
         </div>
