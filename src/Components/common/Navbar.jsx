@@ -72,8 +72,6 @@ export default function Navbar() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@400;500;600&display=swap');
-
         .nav-root {
           font-family: 'DM Sans', sans-serif;
         }

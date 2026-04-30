@@ -21,8 +21,7 @@ export const FEATURED_POST = {
   author: "Yasir Ali Faculty Desk",
   role: "Academic Team",
   date: "May 14, 2024",
-  image:
-    "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1400&h=900&fit=crop",
+  image: "/courses/commerce.jpeg",
   seoTitle:
     "CA Finals Preparation Strategy 2024: Study Plan, Mock Test Routine & Revision Tips",
   seoDescription:
@@ -54,7 +53,7 @@ export const BLOG_POSTS = [
     date: "July 20, 2024",
     readTime: "10 min read",
     image:
-      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&h=560&fit=crop",
+      "/blogs/image1.png",
     seoTitle:
       "Pomodoro Study Method for Entrance, Commerce & Science Students",
     seoDescription:
@@ -81,7 +80,8 @@ export const BLOG_POSTS = [
     date: "July 19, 2024",
     readTime: "12 min read",
     image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900&h=560&fit=crop",
+    "/blogs/image2.png",
+
     seoTitle:
       "Entrance Exam Preparation Roadmap: Syllabus Plan, Mocks and Revision",
     seoDescription:
@@ -109,7 +109,7 @@ export const BLOG_POSTS = [
     date: "July 17, 2024",
     readTime: "11 min read",
     image:
-      "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=900&h=560&fit=crop",
+      "/blogs/image3.png",
     seoTitle:
       "ICAI Revised Rules Explained: What Commerce Students Should Do Next",
     seoDescription:
@@ -136,7 +136,8 @@ export const BLOG_POSTS = [
     date: "July 13, 2024",
     readTime: "11 min read",
     image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&h=560&fit=crop",
+    "/blogs/image4.png",
+
     seoTitle:
       "Commerce After 12th: CA, CS, B.Com, BBA and Career Planning Guide",
     seoDescription:
@@ -163,7 +164,7 @@ export const BLOG_POSTS = [
     date: "July 11, 2024",
     readTime: "10 min read",
     image:
-      "https://images.unsplash.com/photo-1532094349884-543bc3b0d68e?w=900&h=560&fit=crop",
+      "/blogs/image5.png",
     seoTitle:
       "Class 11-12 Science Board Preparation Strategy for PCM and PCB",
     seoDescription:
@@ -190,7 +191,7 @@ export const BLOG_POSTS = [
     date: "July 9, 2024",
     readTime: "9 min read",
     image:
-      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&h=560&fit=crop",
+      "/blogs/image6.png",
     seoTitle:
       "Regular School Batch Study Plan: Daily Routine for Better Marks",
     seoDescription:
@@ -217,7 +218,7 @@ export const BLOG_POSTS = [
     date: "July 10, 2024",
     readTime: "10 min read",
     image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&h=560&fit=crop",
+    "/blogs/image7.png",
     seoTitle:
       "From Student to Partner: Long-Term Career Roadmap in Commerce",
     seoDescription:

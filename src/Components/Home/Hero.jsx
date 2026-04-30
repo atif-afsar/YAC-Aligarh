@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { gsap } from "gsap";
@@ -25,7 +25,7 @@ function usePrefersReducedMotion() {
 /** Showcase cards inspired by stacked gaming-card layout */
 const FAN_IMAGES = [
   {
-    src: "/hero/img1.jpeg",
+    src: "/hero/img1.jpg",
     alt: "Commerce batch performance highlights",
     title: "Commerce Pro",
     subtitle: "Class 11-12",
@@ -34,7 +34,7 @@ const FAN_IMAGES = [
       "-rotate-[14deg] translate-y-6 sm:translate-y-7 md:translate-y-8 z-[1]",
   },
   {
-    src: "/hero/img5.jpeg",
+    src: "/hero/img5.jpg",
     alt: "Science learning group sessions",
     title: "Science Edge",
     subtitle: "XI-XII",
@@ -43,7 +43,7 @@ const FAN_IMAGES = [
       "-rotate-[7deg] translate-y-2 sm:translate-y-3 md:translate-y-4 z-[2]",
   },
   {
-    src: "/hero/img3.jpeg",
+    src: "/hero/img3.jpg",
     alt: "Top achievers and rankers",
     title: "Top Rankers",
     subtitle: "YAC Results",
@@ -52,7 +52,7 @@ const FAN_IMAGES = [
       "rotate-0 -translate-y-6 sm:-translate-y-8 md:-translate-y-10 z-[5]",
   },
   {
-    src: "/hero/img4.jpeg",
+    src: "/hero/img4.png",
     alt: "Students solving mock test papers",
     title: "Mock Master",
     subtitle: "Test Series",
@@ -61,7 +61,7 @@ const FAN_IMAGES = [
       "rotate-[7deg] translate-y-2 sm:translate-y-3 md:translate-y-4 z-[2]",
   },
   {
-    src: "/hero/img2.jpeg",
+    src: "/hero/img2.jpg",
     alt: "Mentorship and personal guidance at YAC",
     title: "Mentor Plus",
     subtitle: "Personal Care",
@@ -71,7 +71,7 @@ const FAN_IMAGES = [
   },
 ];
 
-function HeroSquiggles() {
+const HeroSquiggles = memo(function HeroSquiggles() {
   return (
     <>
       <svg
@@ -116,7 +116,7 @@ function HeroSquiggles() {
       </svg>
     </>
   );
-}
+});
 
 const contentEase = [0.22, 1, 0.36, 1];
 
@@ -153,30 +153,27 @@ function buildTextVariants(reduceMotion) {
       },
     },
     item: {
-      hidden: { opacity: 0, y: 28, filter: "blur(10px)" },
+      hidden: { opacity: 0, y: 22 },
       visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { duration: 0.75, ease: contentEase },
+        transition: { duration: 0.52, ease: contentEase },
       },
     },
     line: {
-      hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
+      hidden: { opacity: 0, y: 18 },
       visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { duration: 0.72, ease: contentEase },
+        transition: { duration: 0.5, ease: contentEase },
       },
     },
     h1line: {
-      hidden: { opacity: 0, y: 32, filter: "blur(6px)" },
+      hidden: { opacity: 0, y: 24 },
       visible: {
         opacity: 1,
         y: 0,
-        filter: "blur(0px)",
-        transition: { duration: 0.78, ease: contentEase },
+        transition: { duration: 0.56, ease: contentEase },
       },
     },
   };
@@ -208,7 +205,7 @@ export default function Hero() {
   const pointerRef = useRef({ x: 0, y: 0, active: false });
   const reduced = usePrefersReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
-  const textVariants = buildTextVariants(reduced);
+  const textVariants = useMemo(() => buildTextVariants(reduced), [reduced]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -218,10 +215,14 @@ export default function Hero() {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  const visibleFanImages = FAN_IMAGES.filter((_, i) => {
-    if (!isMobile) return true;
-    return i !== 0 && i !== 4;
-  });
+  const visibleFanImages = useMemo(
+    () =>
+      FAN_IMAGES.filter((_, i) => {
+        if (!isMobile) return true;
+        return i !== 0 && i !== 4;
+      }),
+    [isMobile]
+  );
 
   useLayoutEffect(() => {
     if (reduced || isMobile || !sectionRef.current) return;
@@ -294,21 +295,32 @@ export default function Hero() {
       ? gsap.quickTo(rowParallax, "y", { duration: 1, ease: "power3.out" })
       : null;
 
-    const onMove = (e) => {
+    let frameId = 0;
+    let latestMoveEvent = null;
+    const updateFromPointer = (clientX, clientY) => {
       const { left, top, width, height } = section.getBoundingClientRect();
       pointerRef.current = {
-        x: e.clientX - left,
-        y: e.clientY - top,
+        x: clientX - left,
+        y: clientY - top,
         active: true,
       };
-      const x = (e.clientX - left) / width - 0.5;
-      const y = (e.clientY - top) / height - 0.5;
+      const x = (clientX - left) / width - 0.5;
+      const y = (clientY - top) / height - 0.5;
       xTo(x * 32);
       yTo(y * 24);
       if (xRow && yRow) {
         xRow(x * 10);
         yRow(y * 8);
       }
+    };
+    const onMove = (e) => {
+      latestMoveEvent = e;
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        if (!latestMoveEvent) return;
+        updateFromPointer(latestMoveEvent.clientX, latestMoveEvent.clientY);
+      });
     };
 
     const onLeave = () => {
@@ -342,6 +354,9 @@ export default function Hero() {
     section.addEventListener("touchend", onTouchEnd);
     section.addEventListener("touchcancel", onTouchEnd);
     return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
       section.removeEventListener("mousemove", onMove);
       section.removeEventListener("mouseleave", onLeave);
       section.removeEventListener("touchmove", onTouch);
@@ -373,7 +388,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Motion.div
           className="mx-auto max-w-4xl px-1 text-center sm:px-2"
-          initial="hidden"
+          initial={false}
           animate="visible"
           variants={textVariants.container}
         >
@@ -489,8 +504,7 @@ export default function Hero() {
                     <Motion.div
                       key={`${item.src}-${i}`}
                       initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.25, margin: "-40px" }}
+                      animate="visible"
                       variants={fanStagger(i)}
                       className={`relative -mx-1.5 sm:-mx-3.5 md:-mx-5 w-[38%] min-w-[122px] sm:min-w-[210px] md:min-w-[270px] max-w-[160px] sm:max-w-[320px] ${
                         i === Math.floor(visibleFanImages.length / 2)
@@ -513,18 +527,30 @@ export default function Hero() {
                               }
                         }
                       >
-                        <img
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-[148px] sm:h-[270px] md:h-[350px] object-cover block"
-                          decoding="async"
-                          loading="eager"
-                          fetchPriority={
-                            i === Math.floor(visibleFanImages.length / 2)
-                              ? "high"
-                              : "auto"
-                          }
-                        />
+                        <picture>
+                          <source
+                            type="image/webp"
+                            srcSet={item.src.replace(/\.(png|jpe?g)$/i, ".webp")}
+                          />
+                          <img
+                            src={item.src}
+                            srcSet={`${item.src} 1x`}
+                            sizes="(max-width: 640px) 38vw, (max-width: 1024px) 30vw, 270px"
+                            alt={item.alt}
+                            className="w-full h-[148px] sm:h-[270px] md:h-[350px] object-cover block"
+                            decoding="async"
+                            loading={
+                              i === Math.floor(visibleFanImages.length / 2)
+                                ? "eager"
+                                : "lazy"
+                            }
+                            fetchPriority={
+                              i === Math.floor(visibleFanImages.length / 2)
+                                ? "high"
+                                : "auto"
+                            }
+                          />
+                        </picture>
                         {/* Footer metadata removed: image-only cards */}
                       </Motion.div>
                     </Motion.div>

@@ -84,7 +84,7 @@ export default function FacultyHero() {
                 {LEAD_FACULTY.bio}
               </p>
               <div className="mt-8 grid sm:grid-cols-2 gap-6 border-t border-gray-100 pt-8">
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                   <div className="shrink-0 w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center text-[#DC3545]">
                     <FaGraduationCap className="text-xl" />
                   </div>
@@ -92,7 +92,7 @@ export default function FacultyHero() {
                     {LEAD_FACULTY.accolades[0].line}
                   </p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex items-center gap-4">
                   <div className="shrink-0 w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center text-[#DC3545]">
                     <FaAward className="text-lg" />
                   </div>

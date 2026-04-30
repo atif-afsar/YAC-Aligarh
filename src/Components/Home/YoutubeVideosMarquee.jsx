@@ -8,6 +8,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const RED = "#DC3545";
 
+const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";          // smooth expo-out
+const EASE_IN = "cubic-bezier(0.4, 0, 1, 1)";
+const EASE_HOVER = [0.22, 1, 0.36, 1];                   // framer variant
+
 const YOUTUBE_PLACEHOLDERS = [
   { href: "https://youtu.be/CaesvPJHK4A?si=zlVIjtyiVl-w3L08", title: "Student Success Highlight 01", meta: "Admissions Insights", speed: 0.86 },
   { href: "https://youtu.be/WQd3JdweB1s?si=azwzM6Pjon_kPxOQ", title: "Student Success Highlight 02", meta: "Commerce Batch",       speed: 1    },
@@ -32,7 +36,8 @@ function getYoutubeThumb(url) {
   return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : "";
 }
 
-const cardSpring = { type: "spring", stiffness: 380, damping: 26 };
+// Silky spring — low stiffness, higher damping = no bounce, pure fluid
+const cardSpring = { type: "spring", stiffness: 280, damping: 32, mass: 0.8 };
 
 function VideoCard({ item, index }) {
   const [hovered, setHovered] = useState(false);
@@ -49,19 +54,20 @@ function VideoCard({ item, index }) {
       whileHover="hover"
       whileTap="tap"
       animate={hovered ? "hover" : "rest"}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
       variants={{
-        rest:  { y: 0,  scale: 1,     transition: cardSpring },
-        hover: { y: -9, scale: 1.022, transition: cardSpring },
-        tap:   { scale: 0.978,         transition: { type: "spring", stiffness: 500, damping: 36 } },
+        rest:  { y: 0,   scale: 1,     transition: cardSpring },
+        hover: { y: -10, scale: 1.018, transition: cardSpring },
+        tap:   { scale: 0.982, transition: { type: "spring", stiffness: 420, damping: 38, mass: 0.6 } },
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         display: "block",
         textDecoration: "none",
         width: "clamp(270px, 84vw, 390px)",
         flexShrink: 0,
         willChange: "transform",
+        transformStyle: "preserve-3d",   // enables GPU layer
       }}
     >
       {/* Card shell */}
@@ -70,24 +76,26 @@ function VideoCard({ item, index }) {
           background: "#ffffff",
           borderRadius: 20,
           overflow: "hidden",
-          border: hovered ? `1px solid ${RED}33` : "1px solid #e5e7eb",
+          border: hovered ? `1px solid ${RED}40` : "1px solid #e5e7eb",
           boxShadow: hovered
-            ? `0 20px 48px -10px rgba(220,53,69,0.13), 0 4px 16px -4px rgba(0,0,0,0.07)`
-            : "0 2px 12px -2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04)",
-          transition: "box-shadow 0.32s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.28s ease",
+            ? `0 24px 56px -12px rgba(220,53,69,0.15), 0 8px 24px -6px rgba(0,0,0,0.06)`
+            : "0 2px 12px -2px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.03)",
+          // single transition covers all properties — custom expo-out curve
+          transition: `box-shadow 0.45s ${EASE}, border-color 0.35s ${EASE}`,
           position: "relative",
+          willChange: "box-shadow",
         }}
       >
-        {/* Red top-edge sweep */}
+        {/* Red top-edge sweep — pure CSS transform, no reflow */}
         <div
           style={{
             position: "absolute",
             top: 0, left: 0, right: 0,
             height: 3,
-            background: RED,
+            background: `linear-gradient(90deg, ${RED}, #ff6b7a)`,
             transformOrigin: "left",
             transform: `scaleX(${hovered ? 1 : 0})`,
-            transition: "transform 0.32s cubic-bezier(0.25,0.46,0.45,0.94)",
+            transition: `transform 0.45s ${EASE}`,
             zIndex: 10,
           }}
         />
@@ -100,14 +108,14 @@ function VideoCard({ item, index }) {
             overflow: "hidden",
           }}
         >
-          {/* Skeleton */}
+          {/* Skeleton shimmer */}
           {!loaded && (
             <div
               style={{
                 position: "absolute", inset: 0,
-                background: "linear-gradient(90deg, #f3f4f6 25%, #eaebec 50%, #f3f4f6 75%)",
-                backgroundSize: "200% 100%",
-                animation: "shimmer 1.5s infinite",
+                background: "linear-gradient(90deg, #f3f4f6 25%, #ebebeb 50%, #f3f4f6 75%)",
+                backgroundSize: "300% 100%",
+                animation: "shimmer 1.8s ease-in-out infinite",
               }}
             />
           )}
@@ -118,35 +126,36 @@ function VideoCard({ item, index }) {
             loading="lazy"
             onLoad={() => setLoaded(true)}
             variants={{
-              rest:  { scale: 1,    transition: { duration: 0.5, ease: [0.25,0.46,0.45,0.94] } },
-              hover: { scale: 1.06, transition: { duration: 0.5, ease: [0.25,0.46,0.45,0.94] } },
+              rest:  { scale: 1,    transition: { duration: 0.55, ease: EASE_HOVER } },
+              hover: { scale: 1.07, transition: { duration: 0.55, ease: EASE_HOVER } },
             }}
             style={{
               width: "100%", height: "100%",
               objectFit: "cover", display: "block",
               opacity: loaded ? 1 : 0,
-              transition: "opacity 0.35s ease",
+              transition: `opacity 0.5s ${EASE}`,
+              willChange: "transform",
             }}
           />
 
-          {/* Gradient overlay */}
+          {/* Dark gradient overlay */}
           <div
             style={{
               position: "absolute", inset: 0,
-              background: "linear-gradient(to top, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.18) 48%, transparent 100%)",
+              background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)",
               pointerEvents: "none",
             }}
           />
 
-          {/* Red tint on hover */}
+          {/* Red tint — opacity only (GPU) */}
           <Motion.div
             variants={{
-              rest:  { opacity: 0, transition: { duration: 0.22 } },
-              hover: { opacity: 1, transition: { duration: 0.22 } },
+              rest:  { opacity: 0, transition: { duration: 0.3, ease: "easeOut" } },
+              hover: { opacity: 1, transition: { duration: 0.3, ease: "easeOut" } },
             }}
             style={{
               position: "absolute", inset: 0,
-              background: `linear-gradient(to top, ${RED}20 0%, transparent 55%)`,
+              background: `linear-gradient(to top, ${RED}25 0%, transparent 55%)`,
               pointerEvents: "none",
             }}
           />
@@ -156,12 +165,12 @@ function VideoCard({ item, index }) {
             style={{
               position: "absolute", top: 12, left: 12,
               display: "flex", alignItems: "center", gap: 5,
-              background: "rgba(255,255,255,0.93)",
-              border: "1px solid rgba(0,0,0,0.06)",
-              borderRadius: 999,
-              padding: "4px 10px 4px 8px",
+              background: "rgba(255,255,255,0.95)",
               backdropFilter: "blur(6px)",
               WebkitBackdropFilter: "blur(6px)",
+              border: "1px solid rgba(0,0,0,0.07)",
+              borderRadius: 999,
+              padding: "4px 10px 4px 8px",
             }}
           >
             <FaYoutube style={{ color: "#FF0000", fontSize: 12 }} />
@@ -193,15 +202,16 @@ function VideoCard({ item, index }) {
           >
             <Motion.div
               variants={{
-                rest:  { scale: 1,    opacity: 0.9, transition: { duration: 0.2 } },
-                hover: { scale: 1.12, opacity: 1,   transition: { type: "spring", stiffness: 380, damping: 18 } },
+                rest:  { scale: 1,    opacity: 0.88, transition: { duration: 0.25, ease: "easeOut" } },
+                hover: { scale: 1.14, opacity: 1,    transition: { type: "spring", stiffness: 320, damping: 20, mass: 0.7 } },
               }}
               style={{
                 width: 52, height: 52,
                 borderRadius: "50%",
                 background: "#fff",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.22)",
+                willChange: "transform",
               }}
             >
               <FaPlay style={{ color: RED, fontSize: 15, marginLeft: 2 }} />
@@ -213,7 +223,14 @@ function VideoCard({ item, index }) {
         <div style={{ padding: "clamp(14px, 3.2vw, 18px) clamp(14px, 3.6vw, 20px) clamp(14px, 3.6vw, 20px)" }}>
           {/* Meta */}
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
-            <div style={{ width: 3, height: 11, borderRadius: 2, background: RED, flexShrink: 0 }} />
+            <div
+              style={{
+                width: 3, height: 11, borderRadius: 2, background: RED, flexShrink: 0,
+                transform: `scaleY(${hovered ? 1.3 : 1})`,
+                transition: `transform 0.35s ${EASE}`,
+                transformOrigin: "bottom",
+              }}
+            />
             <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#9ca3af" }}>
               {item.meta}
             </span>
@@ -234,9 +251,10 @@ function VideoCard({ item, index }) {
           >
             <span style={{ fontSize: 11, color: "#d1d5db", fontWeight: 500 }}>YAC Channel</span>
             <Motion.div
-              animate={hovered ? { x: 0, opacity: 1 } : { x: -5, opacity: 0 }}
-              transition={{ duration: 0.18, ease: "easeOut" }}
-              style={{ display: "flex", alignItems: "center", gap: 5, color: RED }}
+              // x shift + opacity — both GPU composited
+              animate={hovered ? { x: 0, opacity: 1 } : { x: -6, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              style={{ display: "flex", alignItems: "center", gap: 5, color: RED, willChange: "transform, opacity" }}
             >
               <span style={{ fontSize: 11, fontWeight: 700 }}>Watch now</span>
               <FaExternalLinkAlt style={{ fontSize: 9 }} />
@@ -263,16 +281,20 @@ export default function YoutubeVideosMarquee() {
       const cards     = gsap.utils.toArray(".yt-card");
       const getTravel = () => Math.max(0, trackRef.current.scrollWidth - window.innerWidth + 48);
 
-      gsap.set([trackRef.current, ...cards], { willChange: "transform", force3D: true });
+      // Promote track to its own GPU layer before animation starts
+      gsap.set(trackRef.current, { willChange: "transform", force3D: true });
+      gsap.set(cards, { force3D: true });
 
-      // Entrance stagger
+      // Entrance — smoother stagger, gentler overshoot
       gsap.from(cards, {
-        y: 36, x: 16, opacity: 0,
-        duration: 0.65,
-        stagger: { each: 0.09, ease: "power2.out" },
-        ease: "power3.out",
+        y: 40,
+        x: 20,
+        opacity: 0,
+        duration: 0.75,
+        stagger: { each: 0.08, ease: "power2.out" },
+        ease: "expo.out",
         clearProps: "willChange",
-        scrollTrigger: { trigger: rootRef.current, start: "top 80%", once: true },
+        scrollTrigger: { trigger: rootRef.current, start: "top 82%", once: true },
       });
 
       if (reduceMotion) return;
@@ -285,42 +307,49 @@ export default function YoutubeVideosMarquee() {
             pin: true,
             start: `top top+=${PIN_TOP}`,
             end: () => `+=${getTravel()}`,
-            scrub: 1.2,
+            // Higher scrub = more lag but silkier feel; 0.9 is the sweet spot
+            scrub: 0.9,
             invalidateOnRefresh: true,
             anticipatePin: 1,
             pinSpacing: true,
             fastScrollEnd: true,
-            preventOverlaps: true,
+            preventOverlaps: false,
           },
         });
 
-        tl.fromTo(trackRef.current, { x: 32 }, { x: () => -getTravel() }, 0);
-
-        cards.forEach((card) => {
-          const speed = Number(card.dataset.speed || 1);
-          const drift = -32 * (speed - 1);
-          if (Math.abs(drift) < 0.5) return;
-          tl.to(card, { x: drift, ease: "none" }, 0);
-        });
+        tl.fromTo(
+          trackRef.current,
+          { x: 32 },
+          {
+            x: () => -getTravel(),
+            ease: "power1.inOut",   // very slight S-curve gives smooth start & end
+          },
+          0
+        );
       });
     }, rootRef);
 
     return () => { ctx.revert(); mm.revert(); };
   }, [reduceMotion]);
 
+  // Framer Motion variants reused for header stagger
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 18 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  });
+
   return (
     <>
       <style>{`
         @keyframes shimmer {
-          0%   { background-position: -200% 0; }
-          100% { background-position:  200% 0; }
+          0%   { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
         }
-        .yt-pin-wrap {
-          overflow: hidden;
-        }
-        .yt-track {
-          width: max-content;
-        }
+        .yt-pin-wrap { overflow: hidden; }
+        .yt-track    { width: max-content; }
+
         @media (max-width: 639px) {
           .yt-pin-wrap {
             overflow-x: auto;
@@ -329,19 +358,16 @@ export default function YoutubeVideosMarquee() {
             -webkit-mask-image: none !important;
             -webkit-overflow-scrolling: touch;
             scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
             padding-bottom: 6px;
           }
-          .yt-pin-wrap::-webkit-scrollbar {
-            display: none;
-          }
+          .yt-pin-wrap::-webkit-scrollbar { display: none; }
           .yt-track {
             transform: none !important;
             padding-top: 8px !important;
             padding-bottom: 14px !important;
           }
-          .yt-track > .yt-card {
-            scroll-snap-align: center;
-          }
+          .yt-track > .yt-card { scroll-snap-align: center; }
         }
       `}</style>
 
@@ -362,7 +388,7 @@ export default function YoutubeVideosMarquee() {
           style={{
             position: "absolute", top: 0, left: 0, right: 0,
             height: "40%",
-            background: `linear-gradient(180deg, ${RED}08 0%, transparent 100%)`,
+            background: `linear-gradient(180deg, ${RED}07 0%, transparent 100%)`,
             pointerEvents: "none",
           }}
         />
@@ -392,14 +418,11 @@ export default function YoutubeVideosMarquee() {
         >
           {/* Eyebrow pill */}
           <Motion.div
-            initial={{ opacity: 0, y: 14, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, ease: [0.25,0.46,0.45,0.94] }}
+            {...fadeUp(0)}
             style={{
               display: "inline-flex", alignItems: "center", gap: 7,
-              background: `${RED}0e`,
-              border: `1px solid ${RED}28`,
+              background: `${RED}0d`,
+              border: `1px solid ${RED}26`,
               borderRadius: 999,
               padding: "5px 14px",
               marginBottom: 18,
@@ -413,10 +436,7 @@ export default function YoutubeVideosMarquee() {
 
           {/* Headline */}
           <Motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.07, ease: [0.25,0.46,0.45,0.94] }}
+            {...fadeUp(0.06)}
             style={{
               fontSize: "clamp(2rem, 5vw, 3.25rem)",
               fontWeight: 800, letterSpacing: "-0.03em",
@@ -430,7 +450,7 @@ export default function YoutubeVideosMarquee() {
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.42, ease: [0.25,0.46,0.45,0.94] }}
+                transition={{ duration: 0.55, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
                 style={{
                   position: "absolute",
                   bottom: -3, left: 0, right: 0,
@@ -446,10 +466,7 @@ export default function YoutubeVideosMarquee() {
 
           {/* Sub */}
           <Motion.p
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.13, ease: [0.25,0.46,0.45,0.94] }}
+            {...fadeUp(0.12)}
             style={{
               fontSize: "clamp(0.875rem, 2vw, 0.975rem)",
               color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7,
@@ -460,10 +477,7 @@ export default function YoutubeVideosMarquee() {
 
           {/* Stats */}
           <Motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45, delay: 0.2 }}
+            {...fadeUp(0.18)}
             style={{
               display: "flex", justifyContent: "center", alignItems: "center",
               gap: "clamp(1.5rem, 4vw, 3rem)",
@@ -474,8 +488,8 @@ export default function YoutubeVideosMarquee() {
           >
             {[
               { val: "1000+", label: "Videos" },
-              { val: "105K+",  label: "Subscribers" },
-              { val: "5M+", label: "Views" },
+              { val: "105K+", label: "Subscribers" },
+              { val: "5M+",   label: "Views" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
                 <p style={{ fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 800, color: RED, margin: 0, letterSpacing: "-0.02em" }}>
@@ -497,8 +511,8 @@ export default function YoutubeVideosMarquee() {
             position: "relative",
             minHeight: "clamp(300px, 58vw, 380px)",
             paddingTop: 12, paddingBottom: 24,
-            maskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
-            WebkitMaskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+            maskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 5%, black 95%, transparent)",
           }}
         >
           <div
@@ -511,8 +525,10 @@ export default function YoutubeVideosMarquee() {
               paddingRight: "clamp(16px, 4vw, 48px)",
               paddingTop: 16, paddingBottom: 24,
               width: "max-content",
+              // translateZ(0) promotes to compositor layer — no main-thread repaints
               transform: "translateZ(0)",
               backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
             }}
           >
             {YOUTUBE_PLACEHOLDERS.map((item, idx) => (
@@ -523,10 +539,7 @@ export default function YoutubeVideosMarquee() {
 
         {/* ── Scroll hint ── */}
         <Motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          {...fadeUp(0.28)}
           style={{
             display: "flex", justifyContent: "center", alignItems: "center",
             gap: 8, marginTop: 4,
@@ -540,6 +553,7 @@ export default function YoutubeVideosMarquee() {
                 width: i === 1 ? 20 : 5, height: 5,
                 borderRadius: 999,
                 background: i === 1 ? RED : "#e5e7eb",
+                transition: `all 0.4s ${EASE}`,
               }}
             />
           ))}

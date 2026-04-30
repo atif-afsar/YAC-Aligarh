@@ -1,6 +1,16 @@
 import { motion as Motion } from "framer-motion";
-import { FaPlay } from "react-icons/fa";
-import { HALL_OF_FAME, STORIES, VIDEOS } from "./resultsData";
+import { HALL_OF_FAME, STORIES } from "./resultsData";
+
+const INSTAGRAM_REELS = [
+  {
+    id: "DW80uKnhcRN",
+    title: "Student Success Reel 1",
+  },
+  {
+    id: "DW8oFEoEZ7D",
+    title: "Student Success Reel 2",
+  },
+];
 
 export default function ResultsGallery() {
   return (
@@ -16,20 +26,28 @@ export default function ResultsGallery() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {HALL_OF_FAME.map((img, i) => (
+          {HALL_OF_FAME.map((item, i) => (
             <Motion.div
-              key={img}
+              key={item.image}
               initial={{ opacity: 0, scale: 0.98 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.35, delay: i * 0.05 }}
-              className="rounded-2xl overflow-hidden border border-gray-100"
+              className="rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-sm"
             >
               <img
-                src={img}
-                alt="Student achievement moment"
-                className="w-full h-44 sm:h-52 object-cover"
+                src={item.image}
+                alt={`${item.name} - ${item.category}`}
+                className="w-full h-56 sm:h-64 object-contain bg-gray-50"
               />
+              <div className="px-4 py-3 border-t border-gray-100">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#DC3545]">
+                  {item.category}
+                </p>
+                <p className="mt-1 text-sm font-bold text-gray-900 line-clamp-1">
+                  {item.name}
+                </p>
+              </div>
             </Motion.div>
           ))}
         </div>
@@ -61,36 +79,30 @@ export default function ResultsGallery() {
             <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
               Video Success Stories
             </h3>
-            <button
-              type="button"
+            <a
+              href="https://www.instagram.com/yasiraliclasses/"
+              target="_blank"
+              rel="noreferrer"
               className="text-sm font-semibold text-[#DC3545] hover:underline"
             >
-              View All Videos
-            </button>
+              View Instagram
+            </a>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {VIDEOS.map((v) => (
+          <div className="grid md:grid-cols-2 gap-6">
+            {INSTAGRAM_REELS.map((reel) => (
               <article
-                key={v.title}
-                className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-white"
+                key={reel.id}
+                className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-white p-3 sm:p-4"
               >
-                <div className="relative">
-                  <img
-                    src={v.thumb}
-                    alt={v.title}
-                    className="w-full h-44 object-cover"
+                <div className="overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+                  <iframe
+                    src={`https://www.instagram.com/reel/${reel.id}/embed`}
+                    title={reel.title}
+                    className="w-full h-[620px]"
+                    frameBorder="0"
+                    scrolling="no"
+                    allowTransparency
                   />
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="w-12 h-12 rounded-full bg-white/90 text-[#DC3545] flex items-center justify-center shadow">
-                      <FaPlay className="ml-0.5" />
-                    </span>
-                  </span>
-                  <span className="absolute right-3 bottom-3 text-xs text-white bg-black/70 px-2 py-1 rounded">
-                    {v.duration}
-                  </span>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-gray-900">{v.title}</h4>
                 </div>
               </article>
             ))}

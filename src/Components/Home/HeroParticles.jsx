@@ -46,8 +46,8 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Denser field: more dots on large screens, capped for perf
-      const n = Math.min(180, Math.max(56, Math.floor((w * h) / 9500)));
+      // Keep particles lighter to avoid animation jank on mid-range devices.
+      const n = Math.min(110, Math.max(38, Math.floor((w * h) / 13500)));
       particlesRef.current = makeParticles(w, h, n);
     };
 
@@ -73,9 +73,7 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
 
       for (let i = 0; i < P.length; i++) {
         const p = P[i];
-        p.phase += 0.012 + Math.random() * 0.008;
-        p.vx += (Math.random() - 0.5) * 0.08;
-        p.vy += (Math.random() - 0.5) * 0.08;
+        p.phase += 0.014;
         p.vx += Math.sin(p.phase) * 0.02;
         p.vy += Math.cos(p.phase * 0.8) * 0.02;
 

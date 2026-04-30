@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
   { end: 80000, suffix: "+", label: "Students Mentored" },
-  { end: 2000, suffix: "+", label: "Final Selections" },
+  { end: 20000, suffix: "+", label: "Final Selections" },
   { end: 15, suffix: "+", label: "Years Experience" },
 ];
 

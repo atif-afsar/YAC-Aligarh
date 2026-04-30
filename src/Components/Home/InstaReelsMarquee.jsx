@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { motion as Motion, useReducedMotion } from "framer-motion";
 import { FaInstagram, FaPlay } from "react-icons/fa";
 
@@ -9,37 +9,37 @@ const INSTAGRAM_PROFILE = "https://www.instagram.com/yasiraliclasses/";
 const REELS = [
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img3.jpeg",
+    poster: "/hero/img3.jpg",
     caption: "Reel placeholder 1",
   },
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img1.jpeg",
+    poster: "/hero/img1.jpg",
     caption: "Reel placeholder 2",
   },
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img2.jpeg",
+    poster: "/hero/img2.jpg",
     caption: "Reel placeholder 3",
   },
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img4.jpeg",
+    poster: "/hero/img4.png",
     caption: "Reel placeholder 4",
   },
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img5.jpeg",
+    poster: "/hero/img5.jpg",
     caption: "Reel placeholder 5",
   },
   {
     href: INSTAGRAM_PROFILE,
-    poster: "/hero/img2.jpeg",
+    poster: "/hero/img2.jpg",
     caption: "Reel placeholder 6",
   },
 ];
 
-function ReelCard({ href, embedSrc, poster, caption }) {
+const ReelCard = memo(function ReelCard({ href, embedSrc, poster, caption }) {
   return (
     <Motion.a
       href={href}
@@ -75,16 +75,24 @@ function ReelCard({ href, embedSrc, poster, caption }) {
                 className="h-full w-full border-0"
               />
             ) : (
-              <img
-                src={poster}
-                alt={caption}
-                width={360}
-                height={640}
-                loading="lazy"
-                decoding="async"
-                draggable={false}
-                className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
-              />
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet={poster.replace(/\.(png|jpe?g)$/i, ".webp")}
+                />
+                <img
+                  src={poster}
+                  srcSet={`${poster} 1x`}
+                  sizes="(max-width: 640px) 148px, (max-width: 1024px) 172px, 180px"
+                  alt={caption}
+                  width={360}
+                  height={640}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
+                />
+              </picture>
             )}
             {/* Vignette + readability */}
             <div
@@ -98,13 +106,13 @@ function ReelCard({ href, embedSrc, poster, caption }) {
 
             {/* Top bar */}
             <div className="absolute inset-x-0 top-0 flex items-center justify-between px-2.5 pt-2.5 pb-1">
-              <span className="flex gap-1 rounded-full bg-black/25 px-2 py-1 backdrop-blur-md">
+              <span className="flex gap-1 rounded-full bg-black/25 px-2 py-1">
                 <span className="h-1 w-1 rounded-full bg-white/90" />
                 <span className="h-1 w-1 rounded-full bg-white/50" />
                 <span className="h-1 w-1 rounded-full bg-white/35" />
               </span>
               <span
-                className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[13px] text-white shadow-md backdrop-blur-sm"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[13px] text-white shadow-md"
                 style={{
                   background: `linear-gradient(135deg, #f58529, #dd2a7b 45%, ${RED} 100%)`,
                 }}
@@ -126,7 +134,7 @@ function ReelCard({ href, embedSrc, poster, caption }) {
 
             {/* Caption */}
             <div className="absolute inset-x-2 bottom-2 sm:inset-x-2.5 sm:bottom-2.5">
-              <p className="rounded-lg bg-black/40 px-2.5 py-1.5 text-center text-[11px] font-medium leading-snug text-white/95 backdrop-blur-md ring-1 ring-white/10 sm:text-xs">
+              <p className="rounded-lg bg-black/40 px-2.5 py-1.5 text-center text-[11px] font-medium leading-snug text-white/95 ring-1 ring-white/10 sm:text-xs">
                 {caption}
               </p>
             </div>
@@ -135,11 +143,34 @@ function ReelCard({ href, embedSrc, poster, caption }) {
       </div>
     </Motion.a>
   );
-}
+});
 
 export default function InstaReelsMarquee() {
   const reduceMotion = useReducedMotion();
   const loop = useMemo(() => [...REELS, ...REELS], []);
+  const marqueeTrackRef = useRef(null);
+
+  useEffect(() => {
+    if (reduceMotion || !marqueeTrackRef.current) return;
+    const el = marqueeTrackRef.current;
+    let frameId = 0;
+    let prev = performance.now();
+    let x = 0;
+    const speed = 26;
+
+    const tick = (now) => {
+      const dt = (now - prev) / 1000;
+      prev = now;
+      const resetAt = el.scrollWidth / 2;
+      x += speed * dt;
+      if (x >= resetAt) x = 0;
+      el.style.transform = `translate3d(${-x}px,0,0)`;
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [reduceMotion, loop]);
 
   return (
     <section
@@ -221,20 +252,14 @@ export default function InstaReelsMarquee() {
           </div>
         ) : (
           <div className="overflow-hidden py-3 md:py-4">
-            <Motion.div
+            <div
+              ref={marqueeTrackRef}
               className="flex w-max gap-6 sm:gap-7 md:gap-8 will-change-transform"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{
-                duration: 52,
-                ease: "linear",
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
             >
               {loop.map((item, i) => (
                 <ReelCard key={`${item.caption}-${i}`} {...item} />
               ))}
-            </Motion.div>
+            </div>
           </div>
         )}
       </div>
