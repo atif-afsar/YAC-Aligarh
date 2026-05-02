@@ -16,13 +16,12 @@ const container = {
 };
 
 const cardItem = {
-  hidden: { opacity: 0, y: 22, scale: 0.97, filter: "blur(5px)" },
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: "blur(0px)",
-    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.54, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -162,10 +161,10 @@ export default function YoutubeMobileCTA() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Motion.div
-          initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto mb-10 max-w-3xl text-center md:mb-12"
         >
           <p className="font-serif-display text-sm font-medium uppercase tracking-[0.26em] text-gray-600">

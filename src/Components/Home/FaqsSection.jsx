@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { FaMinus, FaPlus } from "react-icons/fa";
 
 const RED = "#DC3545";
@@ -120,22 +120,20 @@ export default function FaqsSection() {
                   </span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <Motion.div
-                      id={`faq-panel-${idx}`}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.28, ease: "easeOut" }}
-                      className="overflow-hidden"
-                    >
-                      <p className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6 sm:pb-5 sm:text-[0.98rem]">
-                        {item.a}
-                      </p>
-                    </Motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  id={`faq-panel-${idx}`}
+                  role="region"
+                  aria-hidden={!isOpen}
+                  className={`grid overflow-hidden motion-reduce:transition-none transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] ${
+                    isOpen ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
+                  }`}
+                >
+                  <div className={`min-h-0 ${isOpen ? "" : "pointer-events-none"}`}>
+                    <p className="px-4 pb-4 text-sm leading-relaxed text-gray-600 sm:px-6 sm:pb-5 sm:text-[0.98rem]">
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
               </Motion.div>
             );
           })}

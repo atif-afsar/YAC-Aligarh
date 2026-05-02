@@ -8,6 +8,7 @@ import {
   FaMobileAlt,
 } from "react-icons/fa";
 import joinYacAppPoster from "../../assets/join-yac-app.png";
+import joinYacAppPosterWebp from "../../assets/join-yac-app.webp";
 
 const RED = "#DC3545";
 const YAC_APP_PLAY_URL =
@@ -137,12 +138,16 @@ export default function MobileAppSection() {
             <div className="relative overflow-hidden rounded-b-[0.85rem] bg-gradient-to-b from-gray-900 to-black p-1.5">
               <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-black">
                 <div className="pointer-events-none absolute left-1/2 top-0 z-20 h-5 w-24 -translate-x-1/2 rounded-b-2xl bg-black/95" />
-                <img
-                  src={joinYacAppPoster}
-                  alt="YAC mobile app preview on a phone"
-                  className="h-[min(560px,70vh)] w-full object-cover object-center"
-                  loading="lazy"
-                />
+                <picture>
+                  <source type="image/webp" srcSet={joinYacAppPosterWebp} />
+                  <img
+                    src={joinYacAppPoster}
+                    alt="YAC mobile app preview on a phone"
+                    className="h-[min(560px,70vh)] w-full object-cover object-center"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                 <div className="absolute inset-x-3 bottom-3 rounded-xl border border-white/25 bg-white/10 p-3.5 shadow-lg backdrop-blur-md">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/95">

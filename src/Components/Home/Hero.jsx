@@ -197,7 +197,7 @@ const fanStagger = (i) => ({
   },
 });
 
-export default function Hero() {
+function Hero() {
   const sectionRef = useRef(null);
   const squiggleLayerRef = useRef(null);
   const imageRowRef = useRef(null);
@@ -268,7 +268,9 @@ export default function Hero() {
               trigger: sectionRef.current,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1.1,
+              // 1:1 with scroll position — avoids double-smoothing vs Lenis (scrub lag reads as jitter)
+              scrub: true,
+              invalidateOnRefresh: true,
             },
           }
         );
@@ -496,7 +498,7 @@ export default function Hero() {
           <div ref={imageRowRef} className="will-change-transform">
             <div
               ref={imageRowParallaxRef}
-              className="relative min-h-[210px] sm:min-h-[360px] md:min-h-[460px] will-change-transform"
+              className="relative min-h-[210px] sm:min-h-[360px] md:min-h-[460px]"
             >
               <div className="relative z-[2] pt-14 sm:pt-14 md:pt-20">
                 <div className="flex justify-center items-end gap-0 sm:gap-1.5 md:gap-2 min-h-[185px] sm:min-h-[330px] md:min-h-[420px]">
@@ -564,3 +566,5 @@ export default function Hero() {
     </section>
   );
 }
+
+export default memo(Hero);

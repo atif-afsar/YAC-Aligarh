@@ -3,10 +3,10 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -20,26 +20,20 @@ function prefersReducedMotion() {
 }
 
 /**
- * Site-wide smooth scrolling (Lenis) synced with GSAP ScrollTrigger.
- * Tuned for moderate smoothing — lower lerp / wheel multiplier avoids heavy “floaty” lag.
- * Touch keeps native momentum (smoothTouch: false) for snappier mobile feel.
+ * Lenis + GSAP ScrollTrigger — same pattern as https://github.com/darkroomengineering/lenis#gsap-scrolltrigger
+ * Avoid extra tween scrub smoothing on ScrollTriggers here; Lenis already eases wheel scroll.
  */
 export function SmoothScrollProvider({ children }) {
   const [lenis, setLenis] = useState(null);
-  const resizeCleanupRef = useRef(null);
 
   useEffect(() => {
-    if (prefersReducedMotion()) {
-      return;
-    }
+    if (prefersReducedMotion()) return;
 
     const instance = new Lenis({
-      // Lower lerp = closer to native, less rubber-banding (try 0.06–0.12)
-      lerp: 0.078,
+      lerp: 0.1,
       smoothWheel: true,
-      // syncTouch off = native touch scroll on mobile (less lag than smoothed touch)
       syncTouch: false,
-      wheelMultiplier: 0.82,
+      wheelMultiplier: 1,
       touchMultiplier: 1,
       infinite: false,
       stopInertiaOnNavigate: true,
@@ -47,28 +41,22 @@ export function SmoothScrollProvider({ children }) {
 
     setLenis(instance);
 
-    const onScroll = () => ScrollTrigger.update();
-    const unsubScroll = instance.on("scroll", onScroll);
+    const unsubScroll = instance.on("scroll", ScrollTrigger.update);
 
-    const tickerFn = (time) => {
+    const onTick = (time) => {
       instance.raf(time * 1000);
     };
-    gsap.ticker.add(tickerFn);
+    gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
-    const onResize = () => {
-      ScrollTrigger.refresh();
-    };
+    const onResize = () => ScrollTrigger.refresh();
     window.addEventListener("resize", onResize, { passive: true });
-    resizeCleanupRef.current = () =>
-      window.removeEventListener("resize", onResize);
 
     requestAnimationFrame(() => ScrollTrigger.refresh());
 
     return () => {
-      resizeCleanupRef.current?.();
-      resizeCleanupRef.current = null;
-      gsap.ticker.remove(tickerFn);
+      window.removeEventListener("resize", onResize);
+      gsap.ticker.remove(onTick);
       unsubScroll();
       instance.destroy();
       setLenis(null);
@@ -85,7 +73,6 @@ export function SmoothScrollProvider({ children }) {
   );
 }
 
-/** Active Lenis instance, or null if reduced motion / not ready */
 export function useSmoothScroll() {
   return useContext(SmoothScrollContext);
 }

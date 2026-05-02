@@ -12,3 +12,9 @@ body {
 .font-serif-display {
   font-family: var(--font-serif-display);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

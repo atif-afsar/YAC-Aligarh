@@ -1,9 +1,10 @@
-import { useLayoutEffect, useRef } from "react";
+import { memo, useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaArrowRight } from "react-icons/fa";
+import OptimizedPicture from "../common/OptimizedPicture";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -70,21 +71,22 @@ const STREAMS = [
   },
 ];
 
-export default function CoursesSection() {
+function CoursesSection() {
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(".course-card", {
-        y: 36,
+        y: 28,
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.1,
+        duration: 0.58,
+        stagger: 0.08,
         ease: "power3.out",
         scrollTrigger: {
           trigger: rootRef.current,
           start: "top 80%",
           once: true,
+          toggleActions: "play none none none",
         },
       });
     }, rootRef);
@@ -155,12 +157,12 @@ export default function CoursesSection() {
 
                 <div className="relative z-[1]">
                   <div className="h-44 w-full overflow-hidden rounded-2xl border border-red-100 bg-red-50 sm:h-48 md:h-52">
-                    <img
+                    <OptimizedPicture
                       src={s.img}
                       alt={`${s.title} stream`}
+                      sizes="(max-width:640px) 100vw, 50vw"
                       loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                      className="h-full w-full object-cover motion-reduce:transition-none transition-transform duration-500 ease-out motion-reduce:group-hover:scale-100 group-hover:scale-[1.04]"
                     />
                   </div>
                   <p
@@ -213,3 +215,5 @@ export default function CoursesSection() {
     </section>
   );
 }
+
+export default memo(CoursesSection);

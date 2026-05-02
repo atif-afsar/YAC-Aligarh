@@ -55,11 +55,10 @@ export default function CoursesGrid({ courses }) {
           </Motion.div>
         ) : (
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 list-none p-0 m-0">
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence mode="sync">
               {courses.map((course, index) => (
                 <Motion.li
                   key={course.id}
-                  layout
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96 }}

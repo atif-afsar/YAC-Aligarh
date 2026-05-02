@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import OptimizedPicture from "../common/OptimizedPicture";
 import { BLOG_POSTS } from "./blogData";
 
 export default function BlogsGrid({ activeFilter, onSelectFilter, filters }) {
@@ -34,9 +35,11 @@ export default function BlogsGrid({ activeFilter, onSelectFilter, filters }) {
               className="rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white"
             >
               <Link to={`/blog/${post.slug}`} className="block">
-                <img
+                <OptimizedPicture
                   src={post.image}
                   alt={post.title}
+                  sizes="(max-width:768px) 100vw, 33vw"
+                  loading="lazy"
                   className="w-full h-44 object-cover"
                 />
                 <div className="p-5">

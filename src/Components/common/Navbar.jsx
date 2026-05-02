@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
+import OptimizedPicture from "./OptimizedPicture";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -194,10 +195,14 @@ export default function Navbar() {
                   border: "1px solid rgba(255,255,255,0.18)",
                 }}
               >
-                <img
+                <OptimizedPicture
                   src="/images/Logo.png"
                   alt="YAC Aligarh"
-                  style={{ height: 34, width: "auto", objectFit: "contain", display: "block" }}
+                  fetchPriority="high"
+                  loading="eager"
+                  className="h-[34px] w-auto max-w-none object-contain"
+                  decoding="sync"
+                  style={{ display: "block" }}
                 />
               </div>
               <div>
@@ -365,13 +370,14 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.98 }}
                 transition={{ duration: 0.24, ease: "easeOut" }}
-                className="relative my-2 w-full max-w-2xl rounded-2xl border border-red-100 bg-white p-4 shadow-2xl max-h-[calc(100dvh-1rem)] overflow-y-auto sm:my-0 sm:max-h-[85vh] sm:p-7"
+                data-lenis-prevent
+                className="relative my-2 w-full max-w-2xl min-h-0 rounded-2xl border border-red-100 bg-white p-4 shadow-2xl max-h-[calc(100dvh-1rem)] overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] sm:my-0 sm:max-h-[85vh] sm:p-7"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
                   type="button"
                   aria-label="Close inquiry form"
-                  className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-red-200 hover:text-[#DC3545] sm:right-4 sm:top-4"
+                  className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition hover:border-red-200 hover:text-[#DC3545] sm:right-4 sm:top-4 md:left-[403px] md:right-auto"
                   onClick={() => setShowInquiryForm(false)}
                 >
                   ✕

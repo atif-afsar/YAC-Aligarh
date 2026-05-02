@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import {
   FaEnvelope,
   FaFacebookF,
@@ -47,7 +47,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-[#121417] pt-12 text-white sm:pt-14">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 pb-10 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-10 lg:px-8">
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -76,9 +76,9 @@ export default function Footer() {
           <p className="mt-4 text-xs uppercase tracking-[0.14em] text-red-300">
             We Debit Efforts, to Credit Your Success
           </p>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -102,9 +102,9 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -118,9 +118,9 @@ export default function Footer() {
               <li key={stream}>{stream}</li>
             ))}
           </ul>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -155,7 +155,7 @@ export default function Footer() {
             {SOCIALS.map((s) => {
               const Icon = s.icon;
               return (
-                <motion.a
+                <Motion.a
                   key={s.label}
                   href={s.href}
                   target="_blank"
@@ -166,11 +166,11 @@ export default function Footer() {
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-700 text-gray-200 transition hover:border-red-400 hover:text-red-300"
                 >
                   <Icon size={14} />
-                </motion.a>
+                </Motion.a>
               );
             })}
           </div>
-        </motion.div>
+        </Motion.div>
       </div>
 
       <div className="border-t border-white/10">

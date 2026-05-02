@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { memo, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,7 +10,7 @@ const STATS = [
   { end: 15, suffix: "+", label: "Years Experience" },
 ];
 
-function StatItem({ end, suffix, label, index }) {
+const StatItem = memo(function StatItem({ end, suffix, label, index }) {
   const numRef = useRef(null);
   const wrapRef = useRef(null);
 
@@ -25,7 +25,7 @@ function StatItem({ end, suffix, label, index }) {
       { val: 0 },
       {
         val: end,
-        duration: 2.1,
+        duration: 1.85,
         ease: "power2.out",
         scrollTrigger: {
           trigger: wrap,
@@ -49,7 +49,7 @@ function StatItem({ end, suffix, label, index }) {
   return (
     <article
       ref={wrapRef}
-      className="group relative overflow-hidden rounded-2xl border border-red-100/80 bg-white px-5 py-8 text-center shadow-[0_8px_26px_-16px_rgba(0,0,0,0.2)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(220,53,69,0.32)] sm:px-6 sm:py-9"
+      className="group relative overflow-hidden rounded-2xl border border-red-100/80 bg-white px-5 py-8 text-center shadow-[0_8px_26px_-16px_rgba(0,0,0,0.2)] motion-reduce:transition-none transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(220,53,69,0.32)] sm:px-6 sm:py-9"
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       <div
@@ -63,12 +63,12 @@ function StatItem({ end, suffix, label, index }) {
       <p className="mt-2 text-sm sm:text-base font-semibold uppercase tracking-[0.08em] text-[#b02a37]">
         {label}
       </p>
-      <div className="mx-auto mt-4 h-[3px] w-12 rounded-full bg-[#DC3545]/80 transition-all duration-300 group-hover:w-16" />
+      <div className="mx-auto mt-4 h-[3px] w-12 origin-center rounded-full bg-[#DC3545]/80 transition-transform duration-300 group-hover:scale-x-[1.333]" />
     </article>
   );
-}
+});
 
-export default function Stats() {
+function Stats() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white via-red-50/35 to-white py-14 md:py-16">
       <div
@@ -95,3 +95,5 @@ export default function Stats() {
     </section>
   );
 }
+
+export default memo(Stats);

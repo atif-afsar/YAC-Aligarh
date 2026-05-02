@@ -80,10 +80,10 @@ export default function Methodology() {
       />
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Motion.div
-          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-14"
         >
           <span className="text-[#DC3545] text-sm font-bold uppercase tracking-wider">
@@ -111,10 +111,10 @@ export default function Methodology() {
             return (
               <Motion.div
                 key={step.title}
-                initial={{ opacity: 0, y: 30, scale: 0.98, filter: "blur(5px)" }}
-                whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                initial={{ opacity: 0, y: 26, scale: 0.99 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.12, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: i * 0.12, duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -6 }}
                 whileTap={{ scale: 0.99 }}
                 className="relative rounded-2xl border border-red-100/70 bg-white/95 p-5 text-left shadow-sm sm:p-6 md:border-none md:bg-transparent md:p-2 md:text-center md:shadow-none"

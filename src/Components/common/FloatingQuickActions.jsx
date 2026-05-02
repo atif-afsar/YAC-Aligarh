@@ -5,7 +5,8 @@ import AiAssistantPanel from "./AiAssistantPanel";
 
 const RED = "#DC3545";
 
-function LeftAction({ icon: Icon, label, tone = "red", href, delay = 0 }) {
+function LeftAction({ icon, label, tone = "red", href, delay = 0 }) {
+  const SvgIcon = icon;
   const isWhatsapp = tone === "whatsapp";
   const accent = isWhatsapp ? "#25D366" : RED;
   return (
@@ -33,7 +34,7 @@ function LeftAction({ icon: Icon, label, tone = "red", href, delay = 0 }) {
         className="relative inline-flex h-10 w-10 items-center justify-center rounded-full"
         style={{ backgroundColor: `${accent}1a` }}
       >
-        <Icon className="text-[1.2rem] sm:text-[1.25rem]" style={{ color: accent }} />
+        <SvgIcon className="text-[1.2rem] sm:text-[1.25rem]" style={{ color: accent }} />
       </span>
       <span className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-md bg-[#161a1f] px-2 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-white opacity-0 transition group-hover:opacity-100 sm:block">
         {label}
