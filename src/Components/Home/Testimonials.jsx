@@ -74,12 +74,12 @@ export default function Testimonials() {
   const secondRow = useMemo(() => STORIES.slice(4), []);
 
   const renderRow = (items, className) => (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden" style={{ contain: "layout paint" }}>
       <div className={`testimonial-marquee ${className}`}>
         {[...items, ...items].map((s, index) => (
           <article
             key={`${s.name}-${index}`}
-            className="testimonial-card group w-[86vw] shrink-0 rounded-3xl border border-red-100/80 bg-white/95 p-5 shadow-[0_10px_30px_-20px_rgba(17,24,39,0.5)] backdrop-blur-sm sm:w-[440px] sm:p-6"
+            className="testimonial-card group w-[86vw] shrink-0 rounded-3xl border border-red-100/80 bg-white p-5 shadow-[0_10px_30px_-20px_rgba(17,24,39,0.5)] sm:w-[440px] sm:p-6"
           >
             <div className="mb-4 flex items-center justify-between">
               <div className="flex items-center gap-0.5 text-[#DC3545]">
@@ -117,13 +117,16 @@ export default function Testimonials() {
   );
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/35 to-white py-16 sm:py-20 lg:py-28">
+    <section
+      className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/35 to-white py-16 sm:py-20 lg:py-28"
+      style={{ contain: "paint" }}
+    >
       <div
-        className="pointer-events-none absolute -left-20 top-12 h-64 w-64 rounded-full bg-red-200/25 blur-3xl"
+        className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-red-200/25 blur-3xl"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute -right-20 bottom-8 h-64 w-64 rounded-full bg-rose-200/20 blur-3xl"
+        className="pointer-events-none absolute -right-20 bottom-8 h-56 w-56 rounded-full bg-rose-200/20 blur-3xl"
         aria-hidden
       />
 

@@ -148,7 +148,7 @@ export default function BestResultsPreview() {
                 <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-red-700 shadow">
                   {result.category}
                 </span>
-                <span className="absolute bottom-3 right-3 rounded-full border border-white/80 bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white backdrop-blur">
+                <span className="absolute bottom-3 right-3 rounded-full border border-white/80 bg-black/30 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white">
                   {result.highlight}
                 </span>
               </div>

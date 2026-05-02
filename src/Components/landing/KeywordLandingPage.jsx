@@ -119,7 +119,7 @@ export default function KeywordLandingPage({ landing }) {
           <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-gray-600">
             <span className="inline-flex items-center gap-1.5">
               <FaStar className="text-amber-500" />
-              4.9 / 5 · 260+ Google reviews
+              4.7 / 5 · 260+ Google reviews
             </span>
             <span aria-hidden>·</span>
             <span className="inline-flex items-center gap-1.5">

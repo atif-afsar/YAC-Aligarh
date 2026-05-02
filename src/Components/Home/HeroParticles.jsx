@@ -20,11 +20,18 @@ function makeParticles(w, h, count) {
 
 /**
  * Subtle red dots: Brownian drift + soft repel from pointer (expects hero-local coords in pointerRef).
+ *
+ * Perf rules:
+ *  - RAF is only started when the canvas is in the viewport (IntersectionObserver).
+ *  - Particle count is capped lower than before to keep mid-range devices smooth.
+ *  - The hero is the first thing on the page so once you scroll past it,
+ *    the canvas stops drawing entirely.
  */
 export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef(null);
   const rafRef = useRef(0);
+  const visibleRef = useRef(true);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
 
   useEffect(() => {
@@ -46,8 +53,8 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Keep particles lighter to avoid animation jank on mid-range devices.
-      const n = Math.min(110, Math.max(38, Math.floor((w * h) / 13500)));
+      // Lighter particle count → smoother on mid-range phones / older laptops.
+      const n = Math.min(70, Math.max(28, Math.floor((w * h) / 22000)));
       particlesRef.current = makeParticles(w, h, n);
     };
 
@@ -56,6 +63,12 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
     ro.observe(section);
 
     const step = () => {
+      // Stop spending CPU/GPU when the hero is scrolled out of view.
+      if (!visibleRef.current) {
+        rafRef.current = 0;
+        return;
+      }
+
       const { w, h } = sizeRef.current;
       const P = particlesRef.current;
       if (!P || w < 1) {
@@ -78,8 +91,8 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
         p.vy += Math.cos(p.phase * 0.8) * 0.02;
 
         if (ptr?.active) {
-          let dx = p.x - px;
-          let dy = p.y - py;
+          const dx = p.x - px;
+          const dy = p.y - py;
           const dist = Math.hypot(dx, dy) + 0.0001;
           if (dist < repelR) {
             const push = ((repelR - dist) / repelR) * repelG;
@@ -109,10 +122,41 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
       rafRef.current = requestAnimationFrame(step);
     };
 
-    rafRef.current = requestAnimationFrame(step);
+    const startLoop = () => {
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    // Only run the loop while the hero is visible on screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const wasVisible = visibleRef.current;
+        visibleRef.current = !!entry?.isIntersecting;
+        if (visibleRef.current && !wasVisible) startLoop();
+      },
+      { rootMargin: "120px" }
+    );
+    io.observe(section);
+
+    // Pause when the tab is hidden too.
+    const onVis = () => {
+      if (document.hidden) {
+        visibleRef.current = false;
+      } else {
+        // Recheck via the next IO tick; in the meantime, don't restart yet.
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+
+    startLoop();
+
     return () => {
+      io.disconnect();
       ro.disconnect();
-      cancelAnimationFrame(rafRef.current);
+      document.removeEventListener("visibilitychange", onVis);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
     };
   }, [sectionRef, pointerRef, reduced]);
 

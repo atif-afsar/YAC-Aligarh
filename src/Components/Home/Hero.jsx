@@ -241,7 +241,6 @@ function Hero() {
 
     const ctx = gsap.context(() => {
       const layer = squiggleLayerRef.current;
-      const row = imageRowRef.current;
       if (!layer) return;
 
       const svgs = layer.querySelectorAll("svg");
@@ -269,24 +268,9 @@ function Hero() {
         });
       }
 
-      if (row && sectionRef.current) {
-        gsap.fromTo(
-          row,
-          { y: 0 },
-          {
-            y: -56,
-            ease: "none",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              // 1:1 with scroll position — avoids double-smoothing vs Lenis (scrub lag reads as jitter)
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
-      }
+      // NOTE: the previous scrubbed parallax on the image row was removed
+      // because scrub:true + Lenis interpolation runs ScrollTrigger every
+      // single smooth-scroll frame and was the main cause of scroll jank.
     }, sectionRef);
 
     return () => ctx.revert();
@@ -387,7 +371,7 @@ function Hero() {
     >
       <div
         ref={squiggleLayerRef}
-        className="pointer-events-none absolute inset-0 z-[1] overflow-hidden will-change-transform"
+        className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
         aria-hidden
       >
         <HeroSquiggles />
@@ -548,7 +532,7 @@ function Hero() {
 
         {/* Cards-only layout (no dark panel/background) */}
         <div className="relative mx-auto mt-12 md:mt-14 max-w-7xl px-1 sm:px-2 pb-8 md:pb-12">
-          <div ref={imageRowRef} className="will-change-transform">
+          <div ref={imageRowRef}>
             <div
               ref={imageRowParallaxRef}
               className="relative min-h-[210px] sm:min-h-[360px] md:min-h-[460px]"

@@ -52,19 +52,15 @@ const item = {
 
 export default function WhyChooseUs() {
   return (
-    <section className="relative overflow-hidden bg-[#FAFAFA] py-24 lg:py-32">
-      {/* Premium Ambient Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <Motion.div
-          className="absolute -left-[10%] -top-[10%] h-[500px] w-[500px] rounded-full bg-red-100/40 blur-[120px]"
-          animate={{ x: [0, 30, 0], y: [0, 50, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        />
-        <Motion.div
-          className="absolute -right-[5%] bottom-0 h-[400px] w-[400px] rounded-full bg-rose-100/30 blur-[100px]"
-          animate={{ x: [0, -40, 0], y: [0, -30, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        />
+    <section
+      className="relative overflow-hidden bg-[#FAFAFA] py-24 lg:py-32"
+      style={{ contain: "paint" }}
+    >
+      {/* Static decorative halos — same look as before, no per-frame animation.
+          Animating 500x500 + 120px blur was the biggest scroll-cost element on the page. */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+        <div className="absolute -left-[8%] -top-[8%] h-[360px] w-[360px] rounded-full bg-red-100/40 blur-3xl" />
+        <div className="absolute -right-[4%] bottom-0 h-[320px] w-[320px] rounded-full bg-rose-100/30 blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">

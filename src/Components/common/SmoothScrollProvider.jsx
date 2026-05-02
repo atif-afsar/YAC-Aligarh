@@ -30,7 +30,10 @@ export function SmoothScrollProvider({ children }) {
     if (prefersReducedMotion()) return;
 
     const instance = new Lenis({
-      lerp: 0.1,
+      // 0.12 catches up faster than 0.1 → fewer in-between frames where
+      // ScrollTrigger / sticky / parallax elements have to re-composite,
+      // which significantly reduces perceived scroll lag.
+      lerp: 0.12,
       smoothWheel: true,
       syncTouch: false,
       wheelMultiplier: 1,

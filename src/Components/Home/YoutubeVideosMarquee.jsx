@@ -144,9 +144,7 @@ function VideoCard({ item, index }) {
             style={{
               position: "absolute", top: 12, left: 12,
               display: "flex", alignItems: "center", gap: 5,
-              background: "rgba(255,255,255,0.95)",
-              backdropFilter: "blur(6px)",
-              WebkitBackdropFilter: "blur(6px)",
+              background: "#ffffff",
               border: "1px solid rgba(0,0,0,0.07)",
               borderRadius: 999,
               padding: "4px 10px 4px 8px",

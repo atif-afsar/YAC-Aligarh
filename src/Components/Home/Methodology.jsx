@@ -71,12 +71,15 @@ export default function Methodology() {
   }, []);
 
   return (
-    <section ref={rootRef} className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24">
-      <Motion.div
-        className="pointer-events-none absolute -left-16 top-20 h-52 w-52 rounded-full bg-red-100/40 blur-3xl"
+    <section
+      ref={rootRef}
+      className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24"
+      style={{ contain: "paint" }}
+    >
+      {/* Static blur halo — kept the visual, dropped the constant animation. */}
+      <div
+        className="pointer-events-none absolute -left-16 top-20 h-52 w-52 rounded-full bg-red-100/35 blur-3xl"
         aria-hidden
-        animate={{ x: [-8, 10, -8], y: [0, -10, 0], opacity: [0.2, 0.34, 0.2] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
       />
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Motion.div

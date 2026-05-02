@@ -73,16 +73,10 @@ function ActionCard({ item, index }) {
       </span>
 
       <span
-        className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-sm shadow-red-500/25"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-sm shadow-red-500/25 transition-transform duration-300 group-hover:scale-110"
         style={{ backgroundColor: item.accent }}
       >
-        <Motion.span
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          className="inline-flex"
-        >
-          <Icon className="text-lg" />
-        </Motion.span>
+        <Icon className="text-lg" />
       </span>
       <h3 className="mt-4 text-xl font-bold text-gray-900">{item.title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
@@ -90,13 +84,7 @@ function ActionCard({ item, index }) {
       </p>
       <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#DC3545] transition group-hover:gap-2.5">
         {item.cta}
-        <Motion.span
-          animate={{ x: [0, 3, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="inline-flex"
-        >
-          <FaArrowRight className="text-xs" />
-        </Motion.span>
+        <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
       </span>
     </>
   );
@@ -146,17 +134,14 @@ export default function YoutubeMobileCTA() {
         }}
         aria-hidden
       />
-      <Motion.div
-        className="pointer-events-none absolute -left-20 top-16 h-64 w-64 rounded-full bg-red-200/35 blur-3xl"
+      {/* Static blur halos — same look, no per-frame compositor cost. */}
+      <div
+        className="pointer-events-none absolute -left-20 top-16 h-64 w-64 rounded-full bg-red-200/30 blur-3xl"
         aria-hidden
-        animate={{ x: [-8, 14, -8], y: [0, -12, 0], opacity: [0.2, 0.35, 0.2] }}
-        transition={{ duration: 10.5, repeat: Infinity, ease: "easeInOut" }}
       />
-      <Motion.div
-        className="pointer-events-none absolute -right-20 bottom-8 h-64 w-64 rounded-full bg-rose-300/30 blur-3xl"
+      <div
+        className="pointer-events-none absolute -right-20 bottom-8 h-64 w-64 rounded-full bg-rose-300/25 blur-3xl"
         aria-hidden
-        animate={{ x: [8, -12, 8], y: [0, 12, 0], opacity: [0.18, 0.32, 0.18] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
