@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaArrowRight, FaPlay } from "react-icons/fa";
+import { FaArrowRight, FaPlay, FaStar } from "react-icons/fa";
 import HeroParticles from "./HeroParticles";
 
 const RED = "#DC3545";
@@ -21,6 +21,18 @@ function usePrefersReducedMotion() {
   }, []);
   return reduced;
 }
+
+/** Stream pills shown under the hero H1 - defines YAC's full coaching scope. */
+const STREAM_PILLS = [
+  "Commerce",
+  "Science",
+  "Junior 5-10",
+  "CA",
+  "CMA",
+  "B.Com",
+  "Class 11-12",
+  "Entrance",
+];
 
 /** Showcase cards inspired by stacked gaming-card layout */
 const FAN_IMAGES = [
@@ -398,18 +410,18 @@ function Hero() {
             variants={textVariants.item}
             className="font-serif-display text-[11px] font-medium uppercase tracking-[0.22em] text-red-700 sm:text-sm sm:tracking-[0.26em] md:text-lg"
           >
-            Yasir Ali Classes · YAC
+            Yasir Ali Classes · YAC · Aligarh
           </Motion.p>
 
           <Motion.h1
-            className="mt-4 text-[1.95rem] font-bold leading-[1.2] tracking-tight text-gray-900 sm:mt-5 sm:text-4xl sm:leading-[1.14] md:mt-6 md:text-5xl lg:text-[2.9rem]"
+            className="mt-4 text-[1.95rem] font-bold leading-[1.15] tracking-tight text-gray-900 sm:mt-5 sm:text-4xl sm:leading-[1.1] md:mt-6 md:text-5xl lg:text-[2.95rem]"
             variants={textVariants.headline}
           >
             <Motion.span
               className="block"
               variants={textVariants.h1line}
             >
-              A name students across
+              Aligarh's Most Trusted
             </Motion.span>
             <Motion.span
               className="mt-2 block sm:mt-2.5"
@@ -419,14 +431,55 @@ function Hero() {
                 className="font-serif-display italic font-semibold"
                 style={{ color: RED }}
               >
-                India
+                Coaching
               </span>
               <span className="text-gray-800">
                 {" "}
-                trust for Commerce & Science
+                for Commerce, Science &amp; CA
               </span>
             </Motion.span>
           </Motion.h1>
+
+          {/* Trust strip - social proof right under the H1 */}
+          <Motion.div
+            variants={textVariants.item}
+            className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:mt-6 sm:text-[12px]"
+            aria-label="YAC at a glance"
+          >
+            <span className="inline-flex items-center gap-1.5 text-amber-600">
+              <FaStar className="text-amber-500" aria-hidden />
+              4.9★ Google
+            </span>
+            <span aria-hidden className="text-gray-300">·</span>
+            <span>16+ Years in Aligarh</span>
+            <span aria-hidden className="text-gray-300">·</span>
+            <span>80,000+ Students Mentored</span>
+          </Motion.div>
+
+          {/* Stream pills - defines the full scope of YAC coaching */}
+          <Motion.div
+            variants={textVariants.item}
+            className="mt-3.5 flex flex-wrap items-center justify-center gap-1.5 sm:mt-4 sm:gap-2"
+            aria-label="Programs at Yasir Ali Classes"
+          >
+            {STREAM_PILLS.map((label) => (
+              <span
+                key={label}
+                className="inline-flex rounded-full border border-red-100 bg-rose-50/70 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-red-700 sm:px-3 sm:text-xs"
+              >
+                {label}
+              </span>
+            ))}
+          </Motion.div>
+
+          {/* Visually-hidden SEO context for screen readers + crawlers */}
+          <span className="sr-only">
+            Yasir Ali Classes (YAC) is the best coaching in Aligarh for Commerce,
+            Science, Junior (Classes 5-10), CA Foundation, CMA, B.Com, Class
+            11-12 and Entrance exams (BBA, MBA, BA-LLB / CLAT). 16+ years of
+            mentorship, 80,000+ students mentored and a 4.9★ Google rating.
+            Online and offline batches available.
+          </span>
 
           <Motion.p
             className="mx-auto mt-5 max-w-[21.5rem] text-[1.1rem] font-serif-display italic leading-[1.45] text-gray-800 sm:mt-6 sm:max-w-2xl sm:text-xl md:text-2xl"

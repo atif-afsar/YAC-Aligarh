@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -9,6 +10,8 @@ import {
   FaWhatsapp,
   FaYoutube,
 } from "react-icons/fa";
+import Seo from "../Components/common/Seo";
+import { seoConfig, buildBreadcrumbJsonLd } from "../seo/seoConfig";
 
 const WHATSAPP_E164 = "919045417079";
 
@@ -69,8 +72,24 @@ const YOUTUBE_SECTIONS = [
 ];
 
 export default function OnlineCourses() {
+  const jsonLd = useMemo(
+    () =>
+      buildBreadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Online Courses", path: "/online-courses" },
+      ]),
+    []
+  );
+
   return (
     <main className="min-h-screen bg-white">
+      <Seo
+        title={seoConfig.onlineCourses.title}
+        description={seoConfig.onlineCourses.description}
+        keywords={seoConfig.onlineCourses.keywords}
+        path={seoConfig.onlineCourses.path}
+        jsonLd={jsonLd}
+      />
       <section className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/35 to-white pt-28 pb-16 sm:pt-32 sm:pb-20">
         <div
           className="pointer-events-none absolute -left-24 top-8 h-72 w-72 rounded-full bg-red-200/25 blur-3xl"

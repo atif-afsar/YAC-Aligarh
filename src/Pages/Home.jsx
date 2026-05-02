@@ -1,5 +1,7 @@
-import React, { Suspense, lazy, memo } from "react";
+import React, { Suspense, lazy, memo, useMemo } from "react";
 import Hero from "../Components/Home/Hero";
+import Seo from "../Components/common/Seo";
+import { seoConfig, buildBreadcrumbJsonLd } from "../seo/seoConfig";
 const Stats = lazy(() => import("../Components/Home/Stats"));
 const CoursesSection = lazy(() => import("../Components/Home/CoursesSection"));
 const WhyChooseUs = lazy(() => import("../Components/Home/WhyChooseUs"));
@@ -22,6 +24,7 @@ const VideoEnrollSection = lazy(() =>
   import("../Components/Home/VideoEnrollSection")
 );
 const FaqsSection = lazy(() => import("../Components/Home/FaqsSection"));
+const SeoLocalContent = lazy(() => import("../Components/Home/SeoLocalContent"));
 
 function SectionFallback({ className = "min-h-24 bg-white sm:min-h-[7rem]" }) {
   return <div className={className} aria-hidden />;
@@ -37,8 +40,22 @@ function StatsCoursesFallback() {
 }
 
 const Home = memo(function Home() {
+  const jsonLd = useMemo(
+    () => [
+      buildBreadcrumbJsonLd([{ name: "Home", path: "/" }]),
+    ],
+    []
+  );
+
   return (
     <main className="bg-white">
+      <Seo
+        title={seoConfig.home.title}
+        description={seoConfig.home.description}
+        keywords={seoConfig.home.keywords}
+        path={seoConfig.home.path}
+        jsonLd={jsonLd}
+      />
       <Hero />
 
       <Suspense fallback={<StatsCoursesFallback />}>
@@ -84,6 +101,10 @@ const Home = memo(function Home() {
 
       <Suspense fallback={<SectionFallback className="min-h-[28rem]" />}>
         <FaqsSection />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback className="min-h-[24rem]" />}>
+        <SeoLocalContent />
       </Suspense>
 
       <Suspense fallback={<SectionFallback className="min-h-[280px]" />}>

@@ -20,6 +20,16 @@ const FOOTER_LINKS = [
   { label: "YouTube", to: "/youtube" },
 ];
 
+const SEO_LINKS = [
+  { label: "Best Coaching in Aligarh", to: "/best-coaching-in-aligarh" },
+  { label: "Best Commerce Coaching", to: "/commerce-coaching" },
+  { label: "Best Science Coaching", to: "/best-science-coaching-in-aligarh" },
+  { label: "Best Junior Coaching (5-10)", to: "/best-junior-coaching-in-aligarh" },
+  { label: "Best CA Coaching", to: "/best-ca-coaching-in-aligarh" },
+  { label: "Best CMA Coaching", to: "/best-cma-coaching-in-aligarh" },
+  { label: "Best Entrance Coaching", to: "/best-entrance-coaching-in-aligarh" },
+];
+
 const STREAMS = [
   "Commerce Programs",
   "Science Programs",
@@ -116,6 +126,25 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-gray-300">
             {STREAMS.map((stream) => (
               <li key={stream}>{stream}</li>
+            ))}
+          </ul>
+
+          <h4 className="mt-6 mb-3 text-sm font-semibold uppercase tracking-[0.12em] text-gray-200">
+            Coaching in Aligarh
+          </h4>
+          <ul className="space-y-2 text-sm text-gray-300">
+            {SEO_LINKS.map((item) => (
+              <li key={item.label}>
+                <Link
+                  to={item.to}
+                  className="transition hover:text-red-300"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </li>
             ))}
           </ul>
         </Motion.div>

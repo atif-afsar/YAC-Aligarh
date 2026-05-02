@@ -18,6 +18,13 @@ const Admissions = lazy(() => import('./Pages/Admissions'))
 const MobileApp = lazy(() => import('./Pages/MobileApp'))
 const OnlineCourses = lazy(() => import('./Pages/OnlineCourses'))
 const Youtube = lazy(() => import('./Pages/Youtube'))
+const BestCoachingInAligarh = lazy(() => import('./Pages/BestCoachingInAligarh'))
+const CommerceCoaching = lazy(() => import('./Pages/CommerceCoaching'))
+const BestScienceCoaching = lazy(() => import('./Pages/BestScienceCoaching'))
+const BestJuniorCoaching = lazy(() => import('./Pages/BestJuniorCoaching'))
+const BestCACoaching = lazy(() => import('./Pages/BestCACoaching'))
+const BestCMACoaching = lazy(() => import('./Pages/BestCMACoaching'))
+const BestEntranceCoaching = lazy(() => import('./Pages/BestEntranceCoaching'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -63,6 +70,13 @@ const App = () => {
         <>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/best-coaching-in-aligarh" element={<BestCoachingInAligarh />} />
+            <Route path="/commerce-coaching" element={<CommerceCoaching />} />
+            <Route path="/best-science-coaching-in-aligarh" element={<BestScienceCoaching />} />
+            <Route path="/best-junior-coaching-in-aligarh" element={<BestJuniorCoaching />} />
+            <Route path="/best-ca-coaching-in-aligarh" element={<BestCACoaching />} />
+            <Route path="/best-cma-coaching-in-aligarh" element={<BestCMACoaching />} />
+            <Route path="/best-entrance-coaching-in-aligarh" element={<BestEntranceCoaching />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/about" element={<About />} />
