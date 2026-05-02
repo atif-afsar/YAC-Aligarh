@@ -1,11 +1,28 @@
 import { getSystemPrompt } from "../lib/institute-config.js";
 
-const cors = (req, res) => {
-  const allowed = process.env.ALLOWED_ORIGIN || "*";
-  res.setHeader("Access-Control-Allow-Origin", allowed);
+/** Reflect Origin only when it matches ALLOWED_ORIGINS / ALLOWED_ORIGIN (comma-separated), or use *. */
+function cors(req, res) {
+  let raw = (
+    process.env.ALLOWED_ORIGINS ||
+    process.env.ALLOWED_ORIGIN ||
+    "*"
+  ).trim();
+  if (!raw) raw = "*";
+  const requestOrigin = req.headers?.origin;
+  if (raw === "*") {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  } else {
+    const list = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    if (requestOrigin && list.includes(requestOrigin)) {
+      res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+      res.setHeader("Vary", "Origin");
+    } else if (!requestOrigin && list.length === 1) {
+      res.setHeader("Access-Control-Allow-Origin", list[0]);
+    }
+  }
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-};
+}
 
 /**
  * Vercel serverless: OpenAI-compatible chat completion (OpenAI, Groq, and similar).
@@ -35,6 +52,9 @@ export default async function handler(req, res) {
   cors(req, res);
   if (req.method === "OPTIONS") {
     return res.status(204).end();
+  }
+  if (req.method === "GET") {
+    return res.status(200).json({ ok: true, path: "/api/chat" });
   }
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
