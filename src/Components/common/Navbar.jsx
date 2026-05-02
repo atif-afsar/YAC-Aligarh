@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import OptimizedPicture from "./OptimizedPicture";
+import { useSmoothScroll } from "./SmoothScrollProvider";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -35,6 +36,11 @@ export default function Navbar() {
   const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("Science");
 
+  // Lenis (smooth-scroll) needs to be paused while a fullscreen overlay is
+  // open, otherwise it keeps interpreting touch/wheel as page scroll and
+  // moves the body underneath the overlay.
+  const lenis = useSmoothScroll();
+
   const closeMenu = () => setOpen(false);
 
   const handleOpenInquiry = () => {
@@ -42,33 +48,41 @@ export default function Navbar() {
     setShowInquiryForm(true);
   };
 
+  // Lock background scroll whenever EITHER the mobile menu OR the inquiry
+  // form is open. Combining body overflow:hidden with lenis.stop() is what
+  // actually prevents the page below from scrolling on mobile.
   useEffect(() => {
-    if (!showInquiryForm) return;
+    const shouldLock = open || showInquiryForm;
+    if (!shouldLock) return undefined;
 
     const prevBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevHtmlOverscroll = document.documentElement.style.overscrollBehavior;
 
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.overscrollBehavior = "contain";
+    lenis?.stop();
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.documentElement.style.overscrollBehavior = prevHtmlOverscroll;
+      lenis?.start();
+    };
+  }, [open, showInquiryForm, lenis]);
+
+  // Escape closes whichever overlay is currently open.
+  useEffect(() => {
+    if (!open && !showInquiryForm) return undefined;
     const onKeyDown = (event) => {
-      if (event.key === "Escape") {
-        setShowInquiryForm(false);
-      }
+      if (event.key !== "Escape") return;
+      if (showInquiryForm) setShowInquiryForm(false);
+      else if (open) setOpen(false);
     };
-
     window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [showInquiryForm]);
-
-  useEffect(() => {
-    if (!open) return undefined;
-    const prevBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prevBodyOverflow;
-    };
-  }, [open]);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, showInquiryForm]);
 
   return (
     <>
@@ -301,8 +315,10 @@ export default function Navbar() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
+                data-lenis-prevent
                 className="fixed inset-0 z-[58] bg-black/35 backdrop-blur-[1px] md:hidden"
                 onClick={() => setOpen(false)}
+                onTouchMove={(e) => e.preventDefault()}
               />
               <Motion.div
                 variants={mobileMenuVariants}
@@ -311,7 +327,10 @@ export default function Navbar() {
                 exit="exit"
                 className="fixed left-3 right-3 top-[68px] z-[60] max-h-[calc(100dvh-84px)] overflow-hidden rounded-2xl border border-white/20 bg-[linear-gradient(165deg,rgba(196,30,30,0.98),rgba(153,27,27,0.98))] shadow-[0_22px_46px_-20px_rgba(0,0,0,0.65)] md:hidden"
               >
-                <nav className="max-h-[calc(100dvh-84px)] overflow-y-auto px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3">
+                <nav
+                  data-lenis-prevent
+                  className="max-h-[calc(100dvh-84px)] overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3"
+                >
                   <Motion.div
                     variants={mobileItemVariants}
                     className="mb-2 px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/65"
@@ -362,7 +381,8 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-black/60 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
+              data-lenis-prevent
+              className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] bg-black/60 px-3 py-4 sm:items-center sm:px-4 sm:py-6"
               onClick={() => setShowInquiryForm(false)}
             >
               <Motion.div
