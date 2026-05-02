@@ -1,9 +1,11 @@
 import React, { Suspense, lazy, useEffect, useLayoutEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './Components/common/Navbar'
 import Footer from './Components/Home/Footer'
 import FloatingQuickActions from './Components/common/FloatingQuickActions'
 import Loader from './Components/common/Loader'
+import { SmoothScrollProvider, useSmoothScroll } from './Components/common/SmoothScrollProvider'
 import Home from './Pages/Home'
 
 const Blog = lazy(() => import('./Pages/Blog'))
@@ -19,9 +21,17 @@ const Youtube = lazy(() => import('./Pages/Youtube'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
+  const lenis = useSmoothScroll()
+
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [pathname])
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true })
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    }
+    requestAnimationFrame(() => ScrollTrigger.refresh())
+  }, [pathname, lenis])
+
   return null
 }
 
@@ -46,7 +56,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <SmoothScrollProvider>
       <ScrollToTop />
       <Navbar />
       <Suspense fallback={<RouteFallback />}>
@@ -68,7 +78,7 @@ const App = () => {
           <Footer />
         </>
       </Suspense>
-    </>
+    </SmoothScrollProvider>
   )
 }
 
