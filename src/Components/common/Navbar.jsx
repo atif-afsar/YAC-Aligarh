@@ -35,6 +35,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState("Science");
+  const [isSubmittingInquiry, setIsSubmittingInquiry] = useState(false);
+  const [inquiryMessage, setInquiryMessage] = useState({ type: "", text: "" });
 
   // Lenis (smooth-scroll) needs to be paused while a fullscreen overlay is
   // open, otherwise it keeps interpreting touch/wheel as page scroll and
@@ -46,6 +48,61 @@ export default function Navbar() {
   const handleOpenInquiry = () => {
     setOpen(false);
     setShowInquiryForm(true);
+    setInquiryMessage({ type: "", text: "" });
+  };
+
+  const handleSubmitInquiry = async (event) => {
+    event.preventDefault();
+    setInquiryMessage({ type: "", text: "" });
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.append("course", selectedCourse);
+    formData.append("source", "Navbar inquiry form");
+
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) {
+      setInquiryMessage({
+        type: "error",
+        text: "Web3Forms key missing. Add VITE_WEB3FORMS_ACCESS_KEY in your .env file.",
+      });
+      return;
+    }
+
+    formData.append("access_key", accessKey);
+    formData.append("subject", "New Navbar Inquiry");
+    formData.append("from_name", "YAC Aligarh Website");
+
+    try {
+      setIsSubmittingInquiry(true);
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        setInquiryMessage({
+          type: "success",
+          text: "Inquiry submitted successfully. Our team will contact you soon.",
+        });
+        form.reset();
+        setSelectedCourse("Science");
+        return;
+      }
+
+      setInquiryMessage({
+        type: "error",
+        text: result.message || "Submission failed. Please try again.",
+      });
+    } catch {
+      setInquiryMessage({
+        type: "error",
+        text: "Network error. Please try again.",
+      });
+    } finally {
+      setIsSubmittingInquiry(false);
+    }
   };
 
   // Lock background scroll whenever EITHER the mobile menu OR the inquiry
@@ -413,12 +470,14 @@ export default function Navbar() {
                   Share your details and our team will contact you shortly.
                 </p>
 
-                <form className="mt-5 space-y-3.5 sm:mt-6 sm:space-y-4">
+                <form className="mt-5 space-y-3.5 sm:mt-6 sm:space-y-4" onSubmit={handleSubmitInquiry}>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block">
                       <span className="text-sm font-semibold text-gray-700">Full Name</span>
                       <input
                         type="text"
+                        name="name"
+                        required
                         placeholder="Your full name"
                         className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                       />
@@ -427,6 +486,8 @@ export default function Navbar() {
                       <span className="text-sm font-semibold text-gray-700">Phone Number</span>
                       <input
                         type="tel"
+                        name="phone"
+                        required
                         placeholder="+91 98765 43210"
                         className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                       />
@@ -437,6 +498,8 @@ export default function Navbar() {
                     <span className="text-sm font-semibold text-gray-700">Email Address</span>
                     <input
                       type="email"
+                      name="email"
+                      required
                       placeholder="you@example.com"
                       className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                     />
@@ -465,11 +528,24 @@ export default function Navbar() {
                   <label className="block">
                     <span className="text-sm font-semibold text-gray-700">Message (Optional)</span>
                     <textarea
+                      name="message"
                       rows={3}
                       placeholder="Tell us your preferred batch/timing"
                       className="mt-2 w-full resize-none rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                     />
                   </label>
+
+                  <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
+                  {inquiryMessage.text ? (
+                    <p
+                      className={`text-sm font-medium ${
+                        inquiryMessage.type === "success" ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {inquiryMessage.text}
+                    </p>
+                  ) : null}
 
                   <div className="sticky bottom-0 -mx-4 mt-2 flex flex-col gap-2 border-t border-gray-100 bg-white/95 px-4 pt-3 pb-1 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:pt-1 sm:flex-row sm:justify-end">
                     <button
@@ -481,9 +557,10 @@ export default function Navbar() {
                     </button>
                     <button
                       type="submit"
-                      className="rounded-lg bg-[#DC3545] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c92f3f]"
+                      disabled={isSubmittingInquiry}
+                      className="rounded-lg bg-[#DC3545] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c92f3f] disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      Submit Inquiry
+                      {isSubmittingInquiry ? "Submitting..." : "Submit Inquiry"}
                     </button>
                   </div>
                 </form>

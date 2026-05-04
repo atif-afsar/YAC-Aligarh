@@ -1,9 +1,68 @@
+import { useState } from "react";
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import { BENEFITS } from "./admissionsData";
 
 const COURSE_OPTIONS = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];
 
 export default function AdmissionsFormSection() {
+  const [selectedCourse, setSelectedCourse] = useState(COURSE_OPTIONS[0]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState({ type: "", text: "" });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitMessage({ type: "", text: "" });
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    formData.append("course", selectedCourse);
+    formData.append("source", "Admissions page form");
+
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) {
+      setSubmitMessage({
+        type: "error",
+        text: "Web3Forms key missing. Add VITE_WEB3FORMS_ACCESS_KEY in your .env file.",
+      });
+      return;
+    }
+
+    formData.append("access_key", accessKey);
+    formData.append("subject", "New Admission Inquiry");
+    formData.append("from_name", "YAC Aligarh Website");
+
+    try {
+      setIsSubmitting(true);
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitMessage({
+          type: "success",
+          text: "Inquiry submitted successfully. We will contact you soon.",
+        });
+        form.reset();
+        setSelectedCourse(COURSE_OPTIONS[0]);
+        return;
+      }
+
+      setSubmitMessage({
+        type: "error",
+        text: result.message || "Submission failed. Please try again.",
+      });
+    } catch {
+      setSubmitMessage({
+        type: "error",
+        text: "Network error. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="py-14 md:py-20 px-6 sm:px-8 lg:px-10 bg-[#fafafa] border-y border-gray-100">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.25fr_1fr] gap-8 lg:gap-10 items-start">
@@ -11,12 +70,14 @@ export default function AdmissionsFormSection() {
           <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
             Admission Inquiry
           </h2>
-          <form className="mt-7 space-y-5">
+          <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
             <div className="grid sm:grid-cols-2 gap-4">
               <label className="block">
                 <span className="text-sm font-semibold text-gray-700">Full Name</span>
                 <input
                   type="text"
+                  name="name"
+                  required
                   placeholder="John Doe"
                   className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                 />
@@ -25,6 +86,8 @@ export default function AdmissionsFormSection() {
                 <span className="text-sm font-semibold text-gray-700">Phone Number</span>
                 <input
                   type="text"
+                  name="phone"
+                  required
                   placeholder="+91 98765 43210"
                   className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
                 />
@@ -35,6 +98,8 @@ export default function AdmissionsFormSection() {
               <span className="text-sm font-semibold text-gray-700">Email Address</span>
               <input
                 type="email"
+                name="email"
+                required
                 placeholder="john@example.com"
                 className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-[#DC3545] focus:bg-white"
               />
@@ -47,7 +112,12 @@ export default function AdmissionsFormSection() {
                   <button
                     key={course}
                     type="button"
-                    className="rounded-lg border border-gray-200 bg-white py-2.5 text-sm font-semibold text-gray-700 hover:border-[#DC3545] hover:text-[#DC3545] transition"
+                    onClick={() => setSelectedCourse(course)}
+                    className={`rounded-lg border py-2.5 text-sm font-semibold transition ${
+                      selectedCourse === course
+                        ? "border-[#DC3545] bg-red-50 text-[#DC3545]"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-[#DC3545] hover:text-[#DC3545]"
+                    }`}
                   >
                     {course}
                   </button>
@@ -58,17 +128,31 @@ export default function AdmissionsFormSection() {
             <label className="block">
               <span className="text-sm font-semibold text-gray-700">Message (Optional)</span>
               <textarea
+                name="message"
                 rows={4}
                 placeholder="Any specific requirement?"
                 className="mt-2 w-full rounded-lg border border-gray-200 bg-gray-50 px-3.5 py-3 text-sm text-gray-900 outline-none resize-none focus:border-[#DC3545] focus:bg-white"
               />
             </label>
 
+            <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
+            {submitMessage.text ? (
+              <p
+                className={`text-sm font-medium ${
+                  submitMessage.type === "success" ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {submitMessage.text}
+              </p>
+            ) : null}
+
             <button
               type="submit"
-              className="w-full rounded-lg bg-[#DC3545] text-white py-3.5 font-semibold hover:bg-[#c82333] transition"
+              disabled={isSubmitting}
+              className="w-full rounded-lg bg-[#DC3545] text-white py-3.5 font-semibold hover:bg-[#c82333] transition disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Submit Application
+              {isSubmitting ? "Submitting..." : "Submit Application"}
             </button>
           </form>
         </article>
