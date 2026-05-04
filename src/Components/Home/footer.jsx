@@ -212,6 +212,34 @@ export default function Footer() {
           </p>
         </div>
       </div>
+
+      {/* Credit strip — on-theme: dark surface, red accent divider, subtle brand chip */}
+      <div className="border-t border-white/10 bg-black/30">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-2 px-4 py-3.5 text-[11px] sm:flex-row sm:gap-3 sm:px-6 sm:py-4 sm:text-xs lg:px-8">
+          <span className="font-semibold uppercase tracking-[0.22em] text-gray-400">
+            Website by
+          </span>
+          <a
+            href="https://thebrandsway.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full transition hover:gap-2.5"
+          >
+            <span className="font-semibold uppercase tracking-[0.18em] text-white transition-colors group-hover:text-red-300">
+              Atif Afsar
+            </span>
+            <span
+              aria-hidden
+              className="hidden h-3 w-px bg-red-400/60 sm:inline-block"
+            />
+            <span
+              className="inline-flex items-center rounded-md border border-white/15 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-gray-900 shadow-sm transition group-hover:bg-rose-50 sm:text-[11px]"
+            >
+              The Brands<span className="text-[#DC3545]">way</span>
+            </span>
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }

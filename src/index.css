@@ -18,3 +18,21 @@ body {
     scroll-behavior: auto;
   }
 }
+
+@keyframes shine {
+  0% {
+    left: -33%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  60% {
+    left: 120%;
+    opacity: 0.9;
+  }
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}

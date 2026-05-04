@@ -41,15 +41,12 @@ const REELS = [
 
 const ReelCard = memo(function ReelCard({ href, embedSrc, poster, caption }) {
   return (
-    <Motion.a
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#DC3545] focus-visible:ring-offset-[#FAFAFA]"
+      className="group relative block shrink-0 transform-gpu transition-transform duration-300 ease-out will-change-transform hover:-translate-y-1.5 active:scale-[0.985] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#DC3545] focus-visible:ring-offset-[#FAFAFA]"
       style={{ contain: "layout paint" }}
-      whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.985 }}
-      transition={{ type: "spring", stiffness: 380, damping: 28 }}
     >
       {/* Phone-style frame: balanced size, soft depth */}
       <div
@@ -141,40 +138,91 @@ const ReelCard = memo(function ReelCard({ href, embedSrc, poster, caption }) {
           </div>
         </div>
       </div>
-    </Motion.a>
+    </a>
   );
 });
 
 export default function InstaReelsMarquee() {
   const reduceMotion = useReducedMotion();
   const loop = useMemo(() => [...REELS, ...REELS], []);
+  const sectionRef = useRef(null);
   const marqueeTrackRef = useRef(null);
 
   useEffect(() => {
-    if (reduceMotion || !marqueeTrackRef.current) return;
+    if (reduceMotion || !marqueeTrackRef.current || !sectionRef.current) return;
+
     const el = marqueeTrackRef.current;
-    let frameId = 0;
-    let prev = performance.now();
-    let x = 0;
+    const section = sectionRef.current;
     const speed = 26;
 
+    let frameId = 0;
+    let prev = 0;
+    let x = 0;
+    let inView = false;
+    let pageVisible =
+      typeof document === "undefined" ? true : !document.hidden;
+
+    const isRunning = () => inView && pageVisible;
+
     const tick = (now) => {
-      const dt = (now - prev) / 1000;
+      // dt resets when paused, so prev is set to `now` on resume.
+      const dt = prev === 0 ? 0 : (now - prev) / 1000;
       prev = now;
       const resetAt = el.scrollWidth / 2;
-      x += speed * dt;
-      if (x >= resetAt) x = 0;
-      el.style.transform = `translate3d(${-x}px,0,0)`;
+      if (resetAt > 0) {
+        x += speed * dt;
+        if (x >= resetAt) x -= resetAt;
+        el.style.transform = `translate3d(${-x}px,0,0)`;
+      }
       frameId = window.requestAnimationFrame(tick);
     };
 
-    frameId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frameId);
+    const start = () => {
+      if (frameId) return;
+      prev = 0;
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    const stop = () => {
+      if (!frameId) return;
+      window.cancelAnimationFrame(frameId);
+      frameId = 0;
+    };
+
+    const evaluate = () => {
+      if (isRunning()) start();
+      else stop();
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          inView = entry.isIntersecting;
+        }
+        evaluate();
+      },
+      { rootMargin: "120px 0px", threshold: 0 }
+    );
+    io.observe(section);
+
+    const onVisibility = () => {
+      pageVisible = !document.hidden;
+      evaluate();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      stop();
+    };
   }, [reduceMotion, loop]);
 
   return (
     <section
+      ref={sectionRef}
       className="relative overflow-hidden border-y border-gray-200/60 bg-[#FAFAFA] py-14 md:py-20"
+      style={{ contain: "layout paint style", transform: "translateZ(0)" }}
       aria-labelledby="insta-reels-heading"
     >
       <div
@@ -254,7 +302,8 @@ export default function InstaReelsMarquee() {
           <div className="overflow-hidden py-3 md:py-4">
             <div
               ref={marqueeTrackRef}
-              className="flex w-max gap-6 sm:gap-7 md:gap-8 will-change-transform"
+              className="flex w-max gap-6 transform-gpu will-change-transform sm:gap-7 md:gap-8"
+              style={{ backfaceVisibility: "hidden" }}
             >
               {loop.map((item, i) => (
                 <ReelCard key={`${item.caption}-${i}`} {...item} />

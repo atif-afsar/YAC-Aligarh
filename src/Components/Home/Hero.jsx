@@ -8,6 +8,16 @@ import HeroParticles from "./HeroParticles";
 
 const RED = "#DC3545";
 
+const COURSES = [
+  "Commerce",
+  "Science",
+  "Junior (5-10)",
+  "CA Foundation",
+  "CMA",
+  "Class 11-12",
+  "Entrance Exams",
+];
+
 gsap.registerPlugin(ScrollTrigger);
 
 function usePrefersReducedMotion() {
@@ -21,18 +31,6 @@ function usePrefersReducedMotion() {
   }, []);
   return reduced;
 }
-
-/** Stream pills shown under the hero H1 - defines YAC's full coaching scope. */
-const STREAM_PILLS = [
-  "Commerce",
-  "Science",
-  "Junior 5-10",
-  "CA",
-  "CMA",
-  "B.Com",
-  "Class 11-12",
-  "Entrance",
-];
 
 /** Showcase cards inspired by stacked gaming-card layout */
 const FAN_IMAGES = [
@@ -137,6 +135,7 @@ function buildTextVariants(reduceMotion) {
     return {
       container: { hidden: {}, visible: { transition: { staggerChildren: 0 } } },
       headline: { hidden: {}, visible: { transition: { staggerChildren: 0 } } },
+      list: { hidden: {}, visible: { transition: { staggerChildren: 0 } } },
       item: {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.2 } },
@@ -146,6 +145,10 @@ function buildTextVariants(reduceMotion) {
         visible: { opacity: 1, transition: { duration: 0.2 } },
       },
       h1line: {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.2 } },
+      },
+      pill: {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { duration: 0.2 } },
       },
@@ -162,6 +165,12 @@ function buildTextVariants(reduceMotion) {
       hidden: {},
       visible: {
         transition: { staggerChildren: 0.1, delayChildren: 0 },
+      },
+    },
+    list: {
+      hidden: {},
+      visible: {
+        transition: { staggerChildren: 0.045, delayChildren: 0.05 },
       },
     },
     item: {
@@ -186,6 +195,15 @@ function buildTextVariants(reduceMotion) {
         opacity: 1,
         y: 0,
         transition: { duration: 0.56, ease: contentEase },
+      },
+    },
+    pill: {
+      hidden: { opacity: 0, y: 8, scale: 0.92 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.42, ease: contentEase },
       },
     },
   };
@@ -367,7 +385,7 @@ function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-white pt-28 pb-16 md:pb-24"
+      className="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-36 md:pt-40 md:pb-24"
     >
       <div
         ref={squiggleLayerRef}
@@ -390,71 +408,129 @@ function Hero() {
           animate="visible"
           variants={textVariants.container}
         >
-          <Motion.p
-            variants={textVariants.item}
-            className="font-serif-display text-[11px] font-medium uppercase tracking-[0.22em] text-red-700 sm:text-sm sm:tracking-[0.26em] md:text-lg"
-          >
-            Yasir Ali Classes · YAC · Aligarh
-          </Motion.p>
-
-          <Motion.h1
-            className="mt-4 text-[1.95rem] font-bold leading-[1.15] tracking-tight text-gray-900 sm:mt-5 sm:text-4xl sm:leading-[1.1] md:mt-6 md:text-5xl lg:text-[2.95rem]"
-            variants={textVariants.headline}
-          >
-            <Motion.span
-              className="block"
-              variants={textVariants.h1line}
-            >
-              Aligarh's Most Trusted
-            </Motion.span>
-            <Motion.span
-              className="mt-2 block sm:mt-2.5"
-              variants={textVariants.h1line}
-            >
-              <span
-                className="font-serif-display italic font-semibold"
-                style={{ color: RED }}
-              >
-                Coaching
-              </span>
-              <span className="text-gray-800">
-                {" "}
-                for Commerce, Science &amp; CA
-              </span>
-            </Motion.span>
-          </Motion.h1>
-
-          {/* Trust strip - social proof right under the H1 */}
+          {/* Elegant brand wordmark — refined eyebrow above the H1 */}
           <Motion.div
             variants={textVariants.item}
-            className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 sm:mt-6 sm:text-[12px]"
-            aria-label="YAC at a glance"
+            className="mx-auto mb-5 flex w-fit max-w-full items-center justify-center gap-2 sm:mb-6 sm:gap-3.5"
+            aria-label="Yasir Ali Classes — YAC, Aligarh"
           >
-            <span className="inline-flex items-center gap-1.5 text-amber-600">
-              <FaStar className="text-amber-500" aria-hidden />
-              4.9★ Google
+            {/* Left hairline + accent dot (desktop only) */}
+            <Motion.span
+              aria-hidden
+              className="hidden h-px w-10 origin-right bg-gradient-to-r from-transparent via-red-200 to-red-400 sm:block md:w-16"
+              initial={reduced ? false : { scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, ease: contentEase, delay: 0.1 }}
+            />
+            <Motion.span
+              aria-hidden
+              className="hidden h-1.5 w-1.5 rounded-full bg-[#DC3545] sm:block"
+              initial={reduced ? false : { scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, ease: contentEase, delay: 0.35 }}
+            />
+
+            {/* Wordmark plate with soft rose glow */}
+            <span className="relative inline-flex items-center gap-1.5 sm:gap-2.5">
+              <Motion.span
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-3 -inset-y-1.5 -z-10 rounded-full bg-gradient-to-r from-rose-100/0 via-rose-100/70 to-rose-100/0 blur-sm motion-reduce:hidden"
+                initial={reduced ? false : { opacity: 0, scaleX: 0.4 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.9, ease: contentEase, delay: 0.2 }}
+              />
+              <span className="font-serif-display text-[12px] font-semibold uppercase tracking-[0.24em] text-gray-800 sm:text-[14px] sm:tracking-[0.26em] md:text-[15px]">
+                <span className="italic font-bold text-[#B91C1C]">
+                  Yasir Ali
+                </span>
+                <span className="text-gray-700"> Classes</span>
+              </span>
+              <Motion.span
+                className="inline-flex items-center rounded-md px-1.5 py-0.5 font-serif-display text-[8.5px] font-bold tracking-[0.16em] text-white shadow-[0_2px_8px_-2px_rgba(220,53,69,0.55)] sm:px-2 sm:text-[10px]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #DC3545 0%, #B91C1C 100%)",
+                }}
+                initial={reduced ? false : { opacity: 0, scale: 0.6, rotate: -6 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, ease: contentEase, delay: 0.4 }}
+              >
+                YAC
+              </Motion.span>
             </span>
-            <span aria-hidden className="text-gray-300">·</span>
-            <span>16+ Years in Aligarh</span>
-            <span aria-hidden className="text-gray-300">·</span>
-            <span>80,000+ Students Mentored</span>
+
+            {/* Right accent dot + hairline (desktop only) */}
+            <Motion.span
+              aria-hidden
+              className="hidden h-1.5 w-1.5 rounded-full bg-[#DC3545] sm:block"
+              initial={reduced ? false : { scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, ease: contentEase, delay: 0.35 }}
+            />
+            <Motion.span
+              aria-hidden
+              className="hidden h-px w-10 origin-left bg-gradient-to-l from-transparent via-red-200 to-red-400 sm:block md:w-16"
+              initial={reduced ? false : { scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, ease: contentEase, delay: 0.1 }}
+            />
           </Motion.div>
 
-          {/* Stream pills - defines the full scope of YAC coaching */}
-          <Motion.div
-            variants={textVariants.item}
-            className="mt-3.5 flex flex-wrap items-center justify-center gap-1.5 sm:mt-4 sm:gap-2"
-            aria-label="Programs at Yasir Ali Classes"
-          >
-            {STREAM_PILLS.map((label) => (
-              <span
-                key={label}
-                className="inline-flex rounded-full border border-red-100 bg-rose-50/70 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-red-700 sm:px-3 sm:text-xs"
+          {/* H1 with a soft decorative aurora behind it for premium depth */}
+          <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 -z-[1] h-[140%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(220,53,69,0.10),rgba(220,53,69,0.04)_45%,transparent_70%)] motion-reduce:hidden"
+            />
+            <Motion.h1
+              className="text-[2rem] font-bold leading-[1.12] tracking-tight text-gray-900 sm:text-[2.4rem] sm:leading-[1.08] md:text-5xl lg:text-[3rem]"
+              variants={textVariants.headline}
+            >
+              <Motion.span
+                className="block"
+                variants={textVariants.h1line}
               >
-                {label}
-              </span>
+                Aligarh's Most Trusted
+              </Motion.span>
+              <Motion.span
+                className="mt-1.5 block sm:mt-2"
+                variants={textVariants.h1line}
+              >
+                <span
+                  className="font-serif-display italic font-semibold"
+                  style={{ color: RED }}
+                >
+                  Coaching
+                </span>
+                <span className="text-gray-800">
+                  {" "}
+                  for Commerce, Science &amp; CA
+                </span>
+              </Motion.span>
+            </Motion.h1>
+          </div>
+
+          {/* Courses we offer — elegant red pill row */}
+          <Motion.ul
+            className="mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-1.5 px-2 sm:mt-7 sm:gap-2 sm:px-0 md:gap-2.5"
+            aria-label="Courses offered at YAC Aligarh"
+            variants={textVariants.list}
+          >
+            {COURSES.map((course) => (
+              <Motion.li key={course} variants={textVariants.pill}>
+                <span
+                  className="group/pill inline-flex items-center gap-1.5 rounded-full border border-red-200/80 bg-gradient-to-b from-red-50 to-rose-50/60 px-2 py-[3px] text-[0.55rem] font-semibold uppercase tracking-[0.1em] text-[#B91C1C] shadow-[0_1px_0_rgba(220,53,69,0.06)] transition-all duration-200 hover:-translate-y-0.5 hover:border-red-300 hover:bg-rose-50 hover:text-[#DC3545] hover:shadow-[0_4px_10px_-4px_rgba(220,53,69,0.25)] sm:gap-2 sm:px-3 sm:py-1.5 sm:text-[0.65rem] sm:tracking-[0.12em]"
+                  style={{ color: "#B91C1C" }}
+                >
+                  <span
+                    aria-hidden
+                    className="hidden h-1 w-1 rounded-full bg-red-300 transition-colors group-hover/pill:bg-[#DC3545] sm:inline-block"
+                  />
+                  {course}
+                </span>
+              </Motion.li>
             ))}
-          </Motion.div>
+          </Motion.ul>
 
           {/* Visually-hidden SEO context for screen readers + crawlers */}
           <span className="sr-only">
@@ -465,39 +541,38 @@ function Hero() {
             Online and offline batches available.
           </span>
 
+          {/* Single subheading — italic brand tagline */}
           <Motion.p
-            className="mx-auto mt-5 max-w-[21.5rem] text-[1.1rem] font-serif-display italic leading-[1.45] text-gray-800 sm:mt-6 sm:max-w-2xl sm:text-xl md:text-2xl"
+            className="mx-auto mt-5 max-w-[20rem] text-[1.05rem] font-serif-display italic leading-[1.45] text-gray-700 sm:mt-6 sm:max-w-xl sm:text-[1.25rem] md:text-[1.4rem]"
             aria-label="YAC tagline"
             variants={textVariants.line}
           >
-            We Debit Efforts, to Credit Your Success
+            We Debit Efforts,&nbsp;
+            <span className="text-gray-900">to Credit Your Success.</span>
           </Motion.p>
 
-          <Motion.p
-            className="mx-auto mt-5 max-w-[22rem] text-[15px] leading-[1.8] text-gray-600 sm:mt-6 sm:max-w-2xl sm:text-lg"
-            variants={textVariants.line}
-          >
-            From our roots in Aligarh to learners nationwide, YAC brings
-            structured mentorship in Commerce and Science, updated material, and
-            exam-focused teaching online and offline.
-          </Motion.p>
-
+          {/* CTAs */}
           <Motion.div
-            className="mt-8 flex flex-col items-stretch justify-center gap-3.5 sm:mt-10 sm:flex-row sm:items-center sm:gap-4"
+            className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4"
             variants={textVariants.item}
           >
             <Motion.div
-              whileHover={reduced ? undefined : { scale: 1.04 }}
-              whileTap={reduced ? undefined : { scale: 0.98 }}
+              whileHover={reduced ? undefined : { scale: 1.035 }}
+              whileTap={reduced ? undefined : { scale: 0.97 }}
               transition={btnSpring}
             >
               <Link
                 to="/Admissions"
-                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full px-9 py-3.5 text-base font-semibold text-white shadow-md transition hover:opacity-95"
+                className="group relative inline-flex w-full sm:w-auto justify-center items-center gap-2 overflow-hidden rounded-full px-9 py-3.5 text-base font-semibold text-white shadow-[0_14px_30px_-12px_rgba(220,53,69,0.6)] transition hover:shadow-[0_18px_36px_-12px_rgba(220,53,69,0.8)]"
                 style={{ backgroundColor: RED }}
               >
-                Join YAC Now
-                <FaArrowRight className="text-sm" />
+                {/* Subtle hover shine */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-700 ease-out group-hover:left-[120%] group-hover:opacity-100 motion-reduce:hidden"
+                />
+                <span className="relative">Join YAC Now</span>
+                <FaArrowRight className="relative text-sm transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
             </Motion.div>
             <Motion.div
@@ -507,26 +582,33 @@ function Hero() {
             >
               <Link
                 to="/courses"
-                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full border-2 border-gray-900 bg-white px-9 py-3.5 text-base font-semibold text-gray-900 hover:bg-gray-50 transition"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full border-2 border-gray-900/90 bg-white px-9 py-3.5 text-base font-semibold text-gray-900 transition hover:bg-gray-50 hover:border-gray-900"
               >
-                <Motion.span
-                  animate={
-                    reduced
-                      ? undefined
-                      : { x: [0, 2, 0] }
-                  }
-                  transition={{
-                    duration: 2.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="inline-flex items-center"
-                >
-                  <FaPlay className="text-sm text-gray-700" />
-                </Motion.span>
+                <FaPlay className="text-[0.7rem] text-gray-700 transition-transform duration-300 group-hover:scale-110" />
                 Explore Courses
               </Link>
             </Motion.div>
+          </Motion.div>
+
+          {/* Refined trust micro-line — sits below the CTAs as social proof */}
+          <Motion.div
+            variants={textVariants.item}
+            className="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500 sm:mt-8 sm:text-[12px]"
+            aria-label="YAC at a glance"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <FaStar className="text-amber-500" aria-hidden />
+              <span className="text-gray-700">4.9</span>
+              <span className="text-gray-400">Google</span>
+            </span>
+            <span aria-hidden className="h-3 w-px bg-gray-300" />
+            <span>
+              <span className="text-gray-700">16+</span> Years in Aligarh
+            </span>
+            <span aria-hidden className="h-3 w-px bg-gray-300" />
+            <span>
+              <span className="text-gray-700">80,000+</span> Students Mentored
+            </span>
           </Motion.div>
         </Motion.div>
 

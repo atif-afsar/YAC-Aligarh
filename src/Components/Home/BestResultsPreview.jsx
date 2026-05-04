@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { motion as Motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion as Motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 
@@ -54,60 +54,143 @@ const PREVIEW_RESULTS = [
   },
 ];
 
+const ease = [0.22, 1, 0.36, 1];
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 639px)").matches
+      : false
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 639px)");
+    const onChange = () => setIsMobile(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return isMobile;
+}
+
+function buildVariants(reduce) {
+  if (reduce) {
+    return {
+      header: {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.2 } },
+      },
+      grid: { hidden: {}, visible: { transition: { staggerChildren: 0 } } },
+      card: {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { duration: 0.2 } },
+      },
+    };
+  }
+  return {
+    header: {
+      hidden: { opacity: 0, y: 18 },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
+    },
+    grid: {
+      hidden: {},
+      visible: {
+        transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+      },
+    },
+    card: {
+      hidden: { opacity: 0, y: 18, scale: 0.97 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.5, ease },
+      },
+    },
+  };
+}
+
 export default function BestResultsPreview() {
   const sliderRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
+  const reduce = useReducedMotion();
+  const v = buildVariants(reduce);
 
-  const syncActiveDot = () => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+  // Cache the per-item span so we don't call getComputedStyle on every scroll
+  const itemSpanRef = useRef(0);
+  const rafIdRef = useRef(0);
 
-    const firstCard = slider.firstElementChild;
-    if (!firstCard) return;
+  useEffect(() => {
+    if (!isMobile) return;
+    const compute = () => {
+      const slider = sliderRef.current;
+      if (!slider) return;
+      const firstCard = slider.firstElementChild;
+      if (!firstCard) return;
+      const gap = Number.parseFloat(
+        window.getComputedStyle(slider).columnGap || "16"
+      );
+      itemSpanRef.current = firstCard.clientWidth + gap;
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, [isMobile]);
 
-    const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap || "16");
-    const itemSpan = firstCard.clientWidth + gap;
-    if (!itemSpan) return;
-
-    const nextIndex = Math.round(slider.scrollLeft / itemSpan);
-    const safeIndex = Math.max(0, Math.min(PREVIEW_RESULTS.length - 1, nextIndex));
-    setActiveIndex(safeIndex);
+  const onSliderScroll = () => {
+    if (rafIdRef.current) return;
+    rafIdRef.current = window.requestAnimationFrame(() => {
+      rafIdRef.current = 0;
+      const slider = sliderRef.current;
+      const itemSpan = itemSpanRef.current;
+      if (!slider || !itemSpan) return;
+      const next = Math.round(slider.scrollLeft / itemSpan);
+      const safe = Math.max(
+        0,
+        Math.min(PREVIEW_RESULTS.length - 1, next)
+      );
+      setActiveIndex((prev) => (prev === safe ? prev : safe));
+    });
   };
+
+  useEffect(
+    () => () => {
+      if (rafIdRef.current) window.cancelAnimationFrame(rafIdRef.current);
+    },
+    []
+  );
 
   const scrollToIndex = (index) => {
     const slider = sliderRef.current;
     if (!slider) return;
-
-    const firstCard = slider.firstElementChild;
-    if (!firstCard) return;
-
-    const gap = Number.parseFloat(window.getComputedStyle(slider).columnGap || "16");
-    const itemSpan = firstCard.clientWidth + gap;
-
-    slider.scrollTo({
-      left: index * itemSpan,
-      behavior: "smooth",
-    });
+    const itemSpan = itemSpanRef.current;
+    if (!itemSpan) return;
+    slider.scrollTo({ left: index * itemSpan, behavior: "smooth" });
     setActiveIndex(index);
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/40 to-white py-16 sm:py-20 lg:py-24">
+    <section
+      className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/40 to-white py-16 sm:py-20 lg:py-24"
+      style={{ contain: "layout paint style", transform: "translateZ(0)" }}
+    >
       <div
         className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-red-200/25 blur-3xl"
+        style={{ transform: "translateZ(0)", willChange: "transform" }}
         aria-hidden
       />
       <div
         className="pointer-events-none absolute -right-20 bottom-8 h-72 w-72 rounded-full bg-rose-200/20 blur-3xl"
+        style={{ transform: "translateZ(0)", willChange: "transform" }}
         aria-hidden
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          variants={v.header}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
           className="mx-auto mb-10 max-w-3xl text-center sm:mb-12"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-700">
@@ -122,98 +205,120 @@ export default function BestResultsPreview() {
           </p>
         </Motion.div>
 
-        <div
-          ref={sliderRef}
-          onScroll={syncActiveDot}
-          className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 sm:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {PREVIEW_RESULTS.map((result, index) => (
-            <Motion.article
-              key={`${result.name}-${result.image}`}
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        {isMobile ? (
+          <>
+            <Motion.div
+              ref={sliderRef}
+              onScroll={onSliderScroll}
+              variants={v.grid}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: index * 0.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              whileTap={{ scale: 0.985 }}
-              className="group relative w-[82vw] max-w-[320px] shrink-0 snap-center overflow-hidden rounded-[1.35rem] border border-red-100/80 bg-white shadow-[0_16px_42px_-24px_rgba(17,24,39,0.55)]"
+              className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              style={{ WebkitOverflowScrolling: "touch" }}
             >
-              <div className="relative">
-                <img
-                  src={result.image}
-                  alt={result.name}
-                  loading="lazy"
-                  className="h-72 w-full object-cover transition duration-700 group-hover:scale-[1.07]"
+              {PREVIEW_RESULTS.map((result) => (
+                <Motion.article
+                  key={`${result.name}-${result.image}`}
+                  variants={v.card}
+                  className="group relative w-[82vw] max-w-[320px] shrink-0 snap-center overflow-hidden rounded-[1.35rem] border border-red-100/80 bg-white shadow-[0_16px_42px_-24px_rgba(17,24,39,0.55)] transition-transform duration-200 active:scale-[0.985]"
+                  style={{ contain: "layout paint" }}
+                >
+                  <div className="relative">
+                    <img
+                      src={result.image}
+                      alt={result.name}
+                      width={320}
+                      height={288}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-72 w-full object-cover transition-transform duration-700 group-hover:scale-[1.07]"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent" />
+                    <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-red-700 shadow">
+                      {result.category}
+                    </span>
+                    <span className="absolute bottom-3 right-3 rounded-full border border-white/80 bg-black/30 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white">
+                      {result.highlight}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5 px-4 pb-4 pt-3">
+                    <h3 className="line-clamp-1 text-[15px] font-semibold text-gray-900">
+                      {result.name}
+                    </h3>
+                    <p className="text-xs font-medium text-gray-500">
+                      Top performer
+                    </p>
+                  </div>
+                </Motion.article>
+              ))}
+            </Motion.div>
+
+            <div className="mt-4 flex items-center justify-center gap-1.5">
+              {PREVIEW_RESULTS.map((_, i) => (
+                <button
+                  type="button"
+                  key={`dot-${i}`}
+                  onClick={() => scrollToIndex(i)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === activeIndex
+                      ? "w-5 bg-[#DC3545]"
+                      : "w-1.5 bg-red-200"
+                  }`}
+                  aria-label={`Go to result ${i + 1}`}
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent" />
-                <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-red-700 shadow">
-                  {result.category}
-                </span>
-                <span className="absolute bottom-3 right-3 rounded-full border border-white/80 bg-black/30 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-white">
-                  {result.highlight}
-                </span>
-              </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <Motion.div
+            variants={v.grid}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-40px" }}
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {PREVIEW_RESULTS.map((result) => (
+              <Motion.article
+                key={`${result.name}-${result.image}-desktop`}
+                variants={v.card}
+                className="group overflow-hidden rounded-2xl border border-red-100/80 bg-white shadow-[0_12px_35px_-24px_rgba(17,24,39,0.55)]"
+                style={{ contain: "layout paint" }}
+              >
+                <div className="relative">
+                  <img
+                    src={result.image}
+                    alt={result.name}
+                    width={400}
+                    height={256}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-64 w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-red-700 shadow">
+                    {result.category}
+                  </span>
+                </div>
 
-              <div className="space-y-1.5 px-4 pb-4 pt-3">
-                <h3 className="line-clamp-1 text-[15px] font-semibold text-gray-900">
-                  {result.name}
-                </h3>
-                <p className="text-xs font-medium text-gray-500">Top performer</p>
-              </div>
-            </Motion.article>
-          ))}
-        </div>
-
-        <div className="mt-4 flex items-center justify-center gap-1.5 sm:hidden">
-          {Array.from({ length: PREVIEW_RESULTS.length }).map((_, i) => (
-            <button
-              type="button"
-              key={`dot-${i}`}
-              onClick={() => scrollToIndex(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === activeIndex ? "w-5 bg-[#DC3545]" : "w-1.5 bg-red-200"
-              }`}
-              aria-label={`Go to result ${i + 1}`}
-            />
-          ))}
-        </div>
-
-        <div className="hidden grid-cols-1 gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-          {PREVIEW_RESULTS.map((result, index) => (
-            <Motion.article
-              key={`${result.name}-${result.image}-desktop`}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: index * 0.04, duration: 0.45 }}
-              className="group overflow-hidden rounded-2xl border border-red-100/80 bg-white shadow-[0_12px_35px_-24px_rgba(17,24,39,0.55)]"
-            >
-              <div className="relative">
-                <img
-                  src={result.image}
-                  alt={result.name}
-                  loading="lazy"
-                  className="h-64 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                />
-                <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-red-700 shadow">
-                  {result.category}
-                </span>
-              </div>
-
-              <div className="space-y-1.5 px-4 pb-4 pt-3.5">
-                <h3 className="line-clamp-1 text-base font-semibold text-gray-900">
-                  {result.name}
-                </h3>
-                <p className="text-sm font-medium text-gray-600">{result.highlight}</p>
-              </div>
-            </Motion.article>
-          ))}
-        </div>
+                <div className="space-y-1.5 px-4 pb-4 pt-3.5">
+                  <h3 className="line-clamp-1 text-base font-semibold text-gray-900">
+                    {result.name}
+                  </h3>
+                  <p className="text-sm font-medium text-gray-600">
+                    {result.highlight}
+                  </p>
+                </div>
+              </Motion.article>
+            ))}
+          </Motion.div>
+        )}
 
         <Motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15, duration: 0.45 }}
+          variants={v.header}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
           className="mt-10 flex justify-center"
         >
           <Link
