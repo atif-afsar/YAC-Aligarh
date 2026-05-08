@@ -31,15 +31,15 @@ function buildLenisOptions() {
   const touchPrimary = coarse || narrow;
 
   return {
-    // Keep desktop responsive while letting mobile feel fluid.
-    lerp: touchPrimary ? 0.1 : 0.085,
-    smoothWheel: true,
-    syncTouch: touchPrimary,
+    // Keep desktop responsive; avoid over-processing touch scroll on mobile.
+    lerp: touchPrimary ? 0.06 : 0.085,
+    smoothWheel: !touchPrimary,
+    // Native touch scrolling is usually smoother than synthetic interpolation on phones.
+    syncTouch: false,
     ...(touchPrimary
       ? {
-          syncTouchLerp: 0.16,
+          // Keep touch movement near-native to remove roughness.
           touchMultiplier: 1,
-          touchInertiaExponent: 1.7,
         }
       : {}),
     wheelMultiplier: 1,
@@ -49,7 +49,8 @@ function buildLenisOptions() {
     stopInertiaOnNavigate: true,
     overscroll: true,
     anchors: true,
-    autoRaf: true,
+    // Use GSAP ticker as the single RAF source for smoother ScrollTrigger sync.
+    autoRaf: false,
     allowNestedScroll: true,
   };
 }
@@ -99,6 +100,10 @@ export function SmoothScrollProvider({ children }) {
         gsap.registerPlugin(ScrollTrigger);
 
         const instance = new Lenis(buildLenisOptions());
+        const onTick = (time) => {
+          instance.raf(time * 1000);
+        };
+        gsap.ticker.add(onTick);
 
         setLenis(instance);
 
@@ -119,6 +124,7 @@ export function SmoothScrollProvider({ children }) {
         cleanup = () => {
           window.removeEventListener("resize", onResize);
           unsubScroll();
+          gsap.ticker.remove(onTick);
           instance.destroy();
           setLenis(null);
           ScrollTrigger.refresh();
