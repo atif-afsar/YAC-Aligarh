@@ -10,6 +10,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 /* Faculty poster set (deduped — "- Copy" duplicates removed)         */
 /* ----------------------------------------------------------------- */
 const POSTERS = [
+  "/faculty-posters/WhatsApp Image 2026-05-05 at 5.22.00 PM (2).jpeg",
+  "/faculty-posters/WhatsApp Image 2026-05-05 at 5.22.00 PM.jpeg",
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.21.57 PM.jpeg",
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.21.57 PM (1).jpeg",
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.21.57 PM (2) - Copy.jpeg",
@@ -21,7 +23,6 @@ const POSTERS = [
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.21.59 PM (2).jpeg",
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.21.59 PM (3).jpeg",
   "/faculty-posters/WhatsApp Image 2026-05-05 at 5.22.00 PM (1).jpeg",
-  "/faculty-posters/WhatsApp Image 2026-05-05 at 5.22.00 PM (2).jpeg",
 ];
 
 const AUTO_ADVANCE_MS = 4000;

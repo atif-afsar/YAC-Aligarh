@@ -41,6 +41,174 @@ export const instituteKnowledge = {
   ],
 
   /**
+   * Faculty roster — sourced directly from the official faculty posters
+   * (see /public/faculty-posters). Keep names, qualifications, subjects and
+   * experience accurate. The assistant uses this when users ask about
+   * teachers, mentors, faculty, "who teaches X", subject-wise faculty, etc.
+   */
+  faculty: {
+    founder: {
+      name: "Yasir Ali",
+      role: "Founder & Director",
+      organization: "YAC Edtech Pvt. Ltd.",
+      qualifications: ["B.Com", "CS (Professional)", "CA (Inter)"],
+      expertise: ["Mind Trainer", "Motivational Speaker"],
+      otherRoles: [
+        "Founder of Play Place International School",
+        "Co-Founder of Brandsway (PR & Marketing Agency)",
+        "Secretary of Hopewise Foundation",
+      ],
+    },
+    members: [
+      {
+        name: "Dr. Mohd Azmi Khan",
+        role: "Research Associate, Ex-Faculty FMSR-AMU & SMBS-Jamia Hamdard",
+        subjects: [
+          "Reasoning",
+          "Data Sufficiency",
+          "Data Interpretation",
+          "Research",
+          "Management",
+          "Commerce",
+        ],
+        qualifications: [
+          "PhD (AMU)",
+          "MBA (FMSR-AMU)",
+          "M.Com (AMU)",
+          "SRF/JRF Management",
+          "NET-Commerce",
+        ],
+        experience: "13+ years",
+      },
+      {
+        name: "Advocate Mohd Nasar Kazim",
+        role: "Educator (Teaching since 2015) & Registered Advocate (Delhi)",
+        subjects: [
+          "Polity (BA)",
+          "Constitution (BALLB & LLM)",
+          "Political Science (Class 9, 10, 11, 12)",
+        ],
+        qualifications: [
+          "BALLB (AMU)",
+          "LLM in Criminal Law — Gold Medalist",
+          "Qualified AIBE Exam",
+          "AMU Alumni",
+        ],
+        experience: "Teaching since 2015 · 12 years of advocacy",
+      },
+      {
+        name: "Fardeen Khan",
+        role: "Faculty of Law",
+        subjects: [
+          "Constitutional Law",
+          "LL.B & LL.M Guidance",
+          "UGC NET-JRF (Law) Mentorship",
+        ],
+        qualifications: [
+          "LLM in Constitutional Law (AMU)",
+          "BALLB (AMU)",
+          "UGC NET-JRF Qualified (Law)",
+        ],
+      },
+      {
+        name: "Zaid Uddin Farooqui",
+        role: "Faculty (Indo-Islamic & Social Sciences)",
+        subjects: [
+          "General Awareness",
+          "Current Affairs",
+          "Indo-Islamic Studies",
+          "Indian Polity",
+          "Indian Geography (Physical, Political & Economic)",
+          "Economics and Indian Economy",
+        ],
+        qualifications: [
+          "B.Com",
+          "MBA",
+          "Company Secretary (Pursuing)",
+        ],
+        focus: "Current Affairs & Concept-Based Learning",
+      },
+      {
+        name: "Salman Saleem",
+        role: "Educator · Author · Expert",
+        subjects: [
+          "Social Sciences (Geography & History)",
+          "GK / GS",
+          "Aligarh Movement",
+          "Geopolitics",
+        ],
+        qualifications: ["B.A", "M.A", "B.Ed"],
+        experience: "8+ years",
+      },
+      {
+        name: "Mazharuddin",
+        role: "Faculty of Chemistry",
+        subjects: ["Chemistry"],
+        qualifications: [
+          "M.Sc. (AMU)",
+          "B.Sc. Hons (AMU)",
+        ],
+        experience: "8+ years",
+      },
+      {
+        name: "Nida Ara (Miss Nida)",
+        role: "English Educator",
+        subjects: ["English"],
+        qualifications: [
+          "B.Sc. in Zoology",
+          "B.Ed.",
+          "Advanced English Certification (British Council)",
+        ],
+        experience: "8+ years",
+      },
+      {
+        name: "Shivam Chauhan",
+        role: "Educator & Mentor — Entrance Exams",
+        subjects: [
+          "AMU Entrance",
+          "JMI Entrance",
+          "BHU Entrance",
+          "Sainik School Entrance",
+          "Graduate-Level Entrance Exams",
+        ],
+        qualifications: ["B.Tech (AMU Alumnus)"],
+        experience: "6+ years",
+      },
+      {
+        name: "Al Aqsa",
+        role: "Faculty of Biology",
+        subjects: ["Biology", "Botany"],
+        qualifications: [
+          "PhD Plant Biotechnology (Pursuing)",
+          "M.Sc. Botany — Gold Medalist (AMU)",
+          "B.Sc. Hons — Gold Medalist (AMU)",
+          "CSIR-NET (AIR 84)",
+          "DST-INSPIRE Fellow",
+        ],
+        experience: "6+ years",
+      },
+      {
+        name: "Abdul Mabood Khan",
+        role: "Mathematics Mentor",
+        subjects: ["Mathematics"],
+        qualifications: ["M.Tech (AMU)", "B.Tech (AMU)"],
+        experience: "9+ years",
+      },
+      {
+        name: "Anam Tabassum",
+        role: "Subject Matter Expert (Commerce)",
+        subjects: ["Business Studies", "Statistics"],
+        qualifications: [
+          "B.Com",
+          "M.Com",
+          "CS (Intermediate)",
+        ],
+        experience: "9+ years",
+      },
+    ],
+  },
+
+  /**
    * Course catalogue — keep in sync with `src/Components/Courses/courseData.js` when possible.
    */
   courses: [
@@ -208,8 +376,8 @@ export const instituteKnowledge = {
   notInKnowledgeBase: [
     "Exact fee amounts and payment plans",
     "Exact batch timings, start dates, and seat availability",
-    "Street address or map pin (only city/region is listed)",
-    "Individual faculty names unless you add them here later",
+    "Faculty personal contact details (phone / email)",
+    "Faculty members not listed in the roster above",
   ],
 };
 
@@ -218,18 +386,66 @@ function courseBlock(c) {
   return `- **${c.title}** (${c.category}): ${c.summary}\n  Highlights:\n${lines}`;
 }
 
+function facultyBlock(f) {
+  const parts = [];
+  if (f.role) parts.push(`Role: ${f.role}`);
+  if (f.subjects?.length)
+    parts.push(`Subjects/Domains: ${f.subjects.join(", ")}`);
+  if (f.qualifications?.length)
+    parts.push(`Qualifications: ${f.qualifications.join(", ")}`);
+  if (f.experience) parts.push(`Experience: ${f.experience}`);
+  if (f.focus) parts.push(`Focus: ${f.focus}`);
+  return `- **${f.name}**\n    ${parts.join("\n    ")}`;
+}
+
+function buildSubjectIndex(faculty) {
+  // Reverse lookup: subject → faculty members who teach it.
+  // Helps the LLM answer "Who teaches Mathematics?" or "Faculty for Law?"
+  const map = new Map();
+  for (const m of faculty.members) {
+    if (!m.subjects) continue;
+    for (const s of m.subjects) {
+      const key = s.trim();
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(m.name);
+    }
+  }
+  return Array.from(map.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([subject, names]) => `- ${subject}: ${names.join(", ")}`)
+    .join("\n");
+}
+
 /**
  * Long text block embedded in the system prompt (Groq / any LLM).
  */
 export function getKnowledgeText() {
-  const { brand, location, contact, links, programStreams, courses, storyMilestones, faqs, notInKnowledgeBase } =
-    instituteKnowledge;
+  const {
+    brand,
+    location,
+    contact,
+    links,
+    programStreams,
+    courses,
+    faculty,
+    storyMilestones,
+    faqs,
+    notInKnowledgeBase,
+  } = instituteKnowledge;
 
   const faqBlock = faqs.map((f) => `Q: ${f.q}\nA: ${f.a}`).join("\n\n");
   const storyBlock = storyMilestones
     .map((s) => `- ${s.year} — ${s.title}: ${s.detail}`)
     .join("\n");
   const courseBlocks = courses.map(courseBlock).join("\n\n");
+
+  const founderBlock = `- **${faculty.founder.name}** — ${faculty.founder.role}, ${faculty.founder.organization}
+    Qualifications: ${faculty.founder.qualifications.join(", ")}
+    Expertise: ${faculty.founder.expertise.join(", ")}
+    Other roles: ${faculty.founder.otherRoles.join("; ")}`;
+
+  const facultyBlocks = faculty.members.map(facultyBlock).join("\n\n");
+  const subjectIndex = buildSubjectIndex(faculty);
 
   return `### KNOWLEDGE BASE (use only this for factual claims)
 **Institute:** ${brand.fullName} (${brand.shortName})
@@ -251,8 +467,23 @@ ${storyBlock}
 **Courses & programs (summary):**
 ${courseBlocks}
 
+**Faculty — Founder:**
+${founderBlock}
+
+**Faculty — Educators & Mentors (always mention each teacher's subjects when asked about faculty):**
+${facultyBlocks}
+
+**Quick subject → faculty index (use this to answer "who teaches X?"):**
+${subjectIndex}
+
 **Frequently asked questions (official wording):**
 ${faqBlock}
+
+**Faculty answer guidelines:**
+- When a user asks about faculty / teachers / mentors, list the relevant faculty along with the SUBJECT(S) they teach. Always include subjects, and where relevant, qualifications and years of experience.
+- If asked who teaches a specific subject (e.g. "who teaches Mathematics?"), use the subject index above and reply with the matching faculty name(s).
+- If a subject is not listed in the roster, say the website does not currently publish that information and offer the contact options.
+- Never invent faculty names, qualifications, or subjects beyond what is in the roster.
 
 **If users ask for details we do not have above:**
 These topics are NOT in the knowledge base—do not make them up. Say the team can confirm: ${notInKnowledgeBase.join("; ")}. Direct them to call ${contact.phone} or email ${contact.email} or use the website admissions page.
