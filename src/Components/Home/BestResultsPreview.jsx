@@ -228,7 +228,7 @@ export default function BestResultsPreview() {
                   <div className="relative">
                     <img
                       src={result.image}
-                      alt={result.name}
+                      alt={`${result.name} - ${result.category} achiever at Yasir Ali Classes Aligarh`}
                       width={320}
                       height={288}
                       loading="lazy"
@@ -290,7 +290,7 @@ export default function BestResultsPreview() {
                 <div className="relative">
                   <img
                     src={result.image}
-                    alt={result.name}
+                    alt={`${result.name} - ${result.category} achiever at Yasir Ali Classes Aligarh`}
                     width={400}
                     height={256}
                     loading="lazy"

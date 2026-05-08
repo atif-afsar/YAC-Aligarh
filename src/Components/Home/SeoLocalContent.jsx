@@ -26,7 +26,7 @@ const PROGRAMS = [
   {
     title: "Best Commerce Coaching in Aligarh",
     desc: "Class 11-12 Commerce, CA Foundation, CMA and B.Com — the strongest commerce track in Aligarh.",
-    to: "/commerce-coaching",
+    to: "/commerce-coaching-aligarh",
     anchor: "Explore commerce",
     Icon: FaChartLine,
   },
@@ -40,14 +40,14 @@ const PROGRAMS = [
   {
     title: "Best Junior Coaching (5–10)",
     desc: "NCERT-aligned Maths, Science, English and SST for Classes 5 to 10 with parent-friendly progress updates.",
-    to: "/best-junior-coaching-in-aligarh",
+    to: "/junior-wing-coaching",
     anchor: "Explore junior",
     Icon: FaBookOpen,
   },
   {
     title: "Best CA Coaching in Aligarh",
     desc: "ICAI CA Foundation — Accounts, Law, Quant and Economics with mentor-led revision marathons.",
-    to: "/best-ca-coaching-in-aligarh",
+    to: "/ca-foundation-coaching",
     anchor: "Explore CA",
     Icon: FaUserGraduate,
   },
@@ -61,7 +61,7 @@ const PROGRAMS = [
   {
     title: "Best Entrance Coaching in Aligarh",
     desc: "BBA, MBA, BA-LLB / CLAT, BAFL, BA, B.Com UG and Class 6 / 9 / 11 entrance preparation.",
-    to: "/best-entrance-coaching-in-aligarh",
+    to: "/entrance-exam-coaching",
     anchor: "Explore entrance",
     Icon: FaGraduationCap,
   },
@@ -196,7 +196,7 @@ export default function SeoLocalContent() {
             </Link>
             . We run dedicated tracks for{" "}
             <Link
-              to="/commerce-coaching"
+              to="/commerce-coaching-aligarh"
               className="font-semibold text-[#DC3545] underline-offset-2 hover:underline"
             >
               commerce
@@ -210,14 +210,14 @@ export default function SeoLocalContent() {
             </Link>{" "}
             (PCM / PCB),{" "}
             <Link
-              to="/best-junior-coaching-in-aligarh"
+              to="/junior-wing-coaching"
               className="font-semibold text-[#DC3545] underline-offset-2 hover:underline"
             >
               junior coaching
             </Link>{" "}
             (Classes 5-10),{" "}
             <Link
-              to="/best-ca-coaching-in-aligarh"
+              to="/ca-foundation-coaching"
               className="font-semibold text-[#DC3545] underline-offset-2 hover:underline"
             >
               CA
@@ -231,7 +231,7 @@ export default function SeoLocalContent() {
             </Link>
             , B.Com, Class 11-12 and{" "}
             <Link
-              to="/best-entrance-coaching-in-aligarh"
+              to="/entrance-exam-coaching"
               className="font-semibold text-[#DC3545] underline-offset-2 hover:underline"
             >
               entrance exams

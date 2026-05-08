@@ -33,12 +33,18 @@ export const SITE = {
 const k = {
   primary: "best coaching in Aligarh",
   commerce: "best commerce coaching in Aligarh",
+  commerceAlt: "Aligarh best commerce coaching",
+  commerceInstitute: "best commerce institute in Aligarh",
+  commerceClasses: "commerce coaching classes in Aligarh",
   science: "best science coaching in Aligarh",
   junior: "best junior coaching in Aligarh",
   ca: "best CA coaching in Aligarh",
+  caFoundation: "best CA Foundation coaching in Aligarh",
   cma: "best CMA coaching in Aligarh",
   bcom: "best B.Com coaching in Aligarh",
   entrance: "best entrance coaching in Aligarh",
+  instituteIndia: "commerce coaching institute India",
+  indiaBest: "India's best commerce coaching",
   class11: "best class 11 coaching in Aligarh",
   class12: "best class 12 coaching in Aligarh",
 };
@@ -46,14 +52,29 @@ const k = {
 const baseKeywords = [
   k.primary,
   k.commerce,
+  k.commerceAlt,
+  k.commerceInstitute,
+  k.commerceClasses,
   k.science,
   k.junior,
   k.ca,
+  k.caFoundation,
   k.cma,
   k.bcom,
   k.entrance,
+  k.instituteIndia,
+  k.indiaBest,
   k.class11,
   k.class12,
+  "commerce coaching for class 11 and 12",
+  "commerce classes near me",
+  "CA coaching Aligarh",
+  "junior coaching Aligarh",
+  "commerce mentor institute",
+  "commerce academy Aligarh",
+  "best commerce teachers in Aligarh",
+  "top commerce coaching",
+  "accounts coaching Aligarh",
   "Yasir Ali Classes",
   "YAC Aligarh",
   "top coaching institute Aligarh",
@@ -82,13 +103,13 @@ export const seoConfig = {
     path: "/best-coaching-in-aligarh",
   },
   commerceCoaching: {
-    title: "Best Commerce Coaching in Aligarh | CA, CMA, B.Com, 11-12 | YAC",
+    title: "Best Commerce Coaching in Aligarh | Commerce Classes 11-12, CA Foundation | YAC",
     description:
-      "Best commerce coaching in Aligarh for Class 11, 12, CA Foundation, CMA and B.Com. Concept-first teaching, weekly tests, mentor support and proven board results at Yasir Ali Classes.",
+      "Yasir Ali Classes is the best commerce institute in Aligarh for Class 11-12, CA Foundation, CMA and B.Com. Join concept-first commerce coaching classes with weekly tests, mentorship and board-focused results.",
     keywords:
-      "best commerce coaching in Aligarh, commerce coaching in Aligarh, accounts coaching in Aligarh, " +
+      "best commerce coaching in Aligarh, Aligarh best commerce coaching, best commerce institute in Aligarh, commerce coaching classes in Aligarh, commerce coaching for class 11 and 12, accounts coaching Aligarh, commerce classes near me, commerce academy Aligarh, " +
       baseKeywords,
-    path: "/commerce-coaching",
+    path: "/commerce-coaching-aligarh",
   },
   scienceCoaching: {
     title: "Best Science Coaching in Aligarh | Class 11 & 12 PCM/PCB | YAC",
@@ -106,16 +127,16 @@ export const seoConfig = {
     keywords:
       "best junior coaching in Aligarh, junior coaching in Aligarh, class 5 coaching Aligarh, class 6 coaching Aligarh, class 7 coaching Aligarh, class 8 coaching Aligarh, class 9 coaching Aligarh, class 10 coaching Aligarh, NCERT tuition Aligarh, foundation coaching Aligarh, " +
       baseKeywords,
-    path: "/best-junior-coaching-in-aligarh",
+    path: "/junior-wing-coaching",
   },
   caCoaching: {
-    title: "Best CA Coaching in Aligarh | CA Foundation by YAC",
+    title: "Best CA Foundation Coaching in Aligarh | YAC Commerce Mentors",
     description:
-      "Best CA coaching in Aligarh. ICAI CA Foundation - Accounts, Law, Quant and Economics with concept-first teaching, weekly tests and mentor-led revision marathons.",
+      "Best CA Foundation coaching in Aligarh with ICAI-focused Accounts, Law, Quant and Economics. Yasir Ali Classes delivers concept clarity, weekly tests and mentor-led revision marathons.",
     keywords:
-      "best CA coaching in Aligarh, CA coaching in Aligarh, CA Foundation coaching in Aligarh, ICAI coaching Aligarh, " +
+      "best CA Foundation coaching in Aligarh, best CA coaching in Aligarh, CA coaching Aligarh, CA Foundation coaching in Aligarh, ICAI coaching Aligarh, commerce mentor institute, " +
       baseKeywords,
-    path: "/best-ca-coaching-in-aligarh",
+    path: "/ca-foundation-coaching",
   },
   cmaCoaching: {
     title: "Best CMA Coaching in Aligarh | CMA ICMAI by YAC",
@@ -134,7 +155,7 @@ export const seoConfig = {
     keywords:
       "best entrance coaching in Aligarh, entrance coaching in Aligarh, BBA entrance coaching Aligarh, MBA entrance coaching Aligarh, BA LLB coaching Aligarh, CLAT coaching Aligarh, BAFL entrance Aligarh, " +
       baseKeywords,
-    path: "/best-entrance-coaching-in-aligarh",
+    path: "/entrance-exam-coaching",
   },
   courses: {
     title: "Courses - Commerce, Science, Junior, CA, CMA & Entrance | YAC Aligarh",
@@ -501,5 +522,67 @@ export function buildCourseListJsonLd(name, programs) {
         },
       },
     })),
+  };
+}
+
+/**
+ * Reusable organization + local business schema for pages that need explicit
+ * local intent signals.
+ */
+export function buildOrganizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "@id": `${SITE.url}/#organization`,
+    name: SITE.name,
+    url: SITE.url,
+    logo: `${SITE.url}/images/Logo.webp`,
+    image: `${SITE.url}/images/Logo.webp`,
+    telephone: SITE.phone,
+    email: SITE.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.locality,
+      addressRegion: SITE.address.region,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.country,
+    },
+    areaServed: [
+      { "@type": "City", name: "Aligarh" },
+      { "@type": "State", name: "Uttar Pradesh" },
+      { "@type": "Country", name: "India" },
+    ],
+    sameAs: [
+      "https://www.youtube.com/channel/UCUlHYg9DL5LACF_fHQI7I_g",
+      "https://www.instagram.com/yasiraliclasses",
+      "https://www.facebook.com/yasiraliclasses/",
+    ],
+  };
+}
+
+export function buildLocalBusinessJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": `${SITE.url}/#localbusiness`,
+    name: `${SITE.name} Aligarh`,
+    url: SITE.url,
+    telephone: SITE.phone,
+    priceRange: "₹₹",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.locality,
+      addressRegion: SITE.address.region,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.country,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 27.8974,
+      longitude: 78.088,
+    },
+    areaServed: ["Aligarh", "Uttar Pradesh", "India"],
   };
 }

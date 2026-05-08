@@ -14,6 +14,8 @@ import {
   buildBreadcrumbJsonLd,
   buildFaqJsonLd,
   buildCourseListJsonLd,
+  buildOrganizationJsonLd,
+  buildLocalBusinessJsonLd,
 } from "../../seo/seoConfig";
 
 const RED = "#DC3545";
@@ -33,6 +35,8 @@ export default function KeywordLandingPage({ landing }) {
         { name: "Home", path: "/" },
         { name: landing.breadcrumbName, path: cfg.path },
       ]),
+      buildOrganizationJsonLd(),
+      buildLocalBusinessJsonLd(),
       buildFaqJsonLd(landing.faqs),
       buildCourseListJsonLd(`${landing.breadcrumbName} - Programs at YAC`, landing.programs),
       {
@@ -269,10 +273,10 @@ export default function KeywordLandingPage({ landing }) {
 
 const OTHER_LINKS = [
   { label: "Best Coaching in Aligarh", path: "/best-coaching-in-aligarh" },
-  { label: "Best Commerce Coaching", path: "/commerce-coaching" },
+  { label: "Best Commerce Coaching", path: "/commerce-coaching-aligarh" },
   { label: "Best Science Coaching", path: "/best-science-coaching-in-aligarh" },
-  { label: "Best Junior Coaching (5-10)", path: "/best-junior-coaching-in-aligarh" },
-  { label: "Best CA Coaching", path: "/best-ca-coaching-in-aligarh" },
+  { label: "Best Junior Coaching (5-10)", path: "/junior-wing-coaching" },
+  { label: "Best CA Coaching", path: "/ca-foundation-coaching" },
   { label: "Best CMA Coaching", path: "/best-cma-coaching-in-aligarh" },
-  { label: "Best Entrance Coaching", path: "/best-entrance-coaching-in-aligarh" },
+  { label: "Best Entrance Coaching", path: "/entrance-exam-coaching" },
 ];

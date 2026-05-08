@@ -1,7 +1,12 @@
 import React, { Suspense, lazy, memo, useMemo } from "react";
 import Hero from "../Components/Home/Hero";
 import Seo from "../Components/common/Seo";
-import { seoConfig, buildBreadcrumbJsonLd } from "../seo/seoConfig";
+import {
+  seoConfig,
+  buildBreadcrumbJsonLd,
+  buildOrganizationJsonLd,
+  buildLocalBusinessJsonLd,
+} from "../seo/seoConfig";
 const Stats = lazy(() => import("../Components/Home/Stats"));
 const CoursesSection = lazy(() => import("../Components/Home/CoursesSection"));
 const WhyChooseUs = lazy(() => import("../Components/Home/WhyChooseUs"));
@@ -43,6 +48,8 @@ const Home = memo(function Home() {
   const jsonLd = useMemo(
     () => [
       buildBreadcrumbJsonLd([{ name: "Home", path: "/" }]),
+      buildOrganizationJsonLd(),
+      buildLocalBusinessJsonLd(),
     ],
     []
   );

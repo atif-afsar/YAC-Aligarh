@@ -22,12 +22,12 @@ const FOOTER_LINKS = [
 
 const SEO_LINKS = [
   { label: "Best Coaching in Aligarh", to: "/best-coaching-in-aligarh" },
-  { label: "Best Commerce Coaching", to: "/commerce-coaching" },
+  { label: "Best Commerce Coaching", to: "/commerce-coaching-aligarh" },
   { label: "Best Science Coaching", to: "/best-science-coaching-in-aligarh" },
-  { label: "Best Junior Coaching (5-10)", to: "/best-junior-coaching-in-aligarh" },
-  { label: "Best CA Coaching", to: "/best-ca-coaching-in-aligarh" },
+  { label: "Best Junior Coaching (5-10)", to: "/junior-wing-coaching" },
+  { label: "Best CA Coaching", to: "/ca-foundation-coaching" },
   { label: "Best CMA Coaching", to: "/best-cma-coaching-in-aligarh" },
-  { label: "Best Entrance Coaching", to: "/best-entrance-coaching-in-aligarh" },
+  { label: "Best Entrance Coaching", to: "/entrance-exam-coaching" },
 ];
 
 const STREAMS = [

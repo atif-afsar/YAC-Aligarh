@@ -8,7 +8,13 @@ import {
   FaStar,
 } from "react-icons/fa";
 import Seo from "../Components/common/Seo";
-import { seoConfig, buildBreadcrumbJsonLd, SITE } from "../seo/seoConfig";
+import {
+  seoConfig,
+  buildBreadcrumbJsonLd,
+  buildOrganizationJsonLd,
+  buildLocalBusinessJsonLd,
+  SITE,
+} from "../seo/seoConfig";
 
 const RED = "#DC3545";
 
@@ -80,6 +86,8 @@ export default function BestCoachingInAligarh() {
         { name: "Home", path: "/" },
         { name: "Best Coaching in Aligarh", path: "/best-coaching-in-aligarh" },
       ]),
+      buildOrganizationJsonLd(),
+      buildLocalBusinessJsonLd(),
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -148,7 +156,7 @@ export default function BestCoachingInAligarh() {
           <p className="mt-5 max-w-3xl text-base leading-relaxed text-gray-600 sm:text-lg">
             Looking for the <strong>best coaching in Aligarh</strong>? Yasir Ali
             Classes (YAC) is Aligarh's #1 institute for{" "}
-            <Link to="/commerce-coaching" className="font-semibold text-[#DC3545] hover:underline">
+            <Link to="/commerce-coaching-aligarh" className="font-semibold text-[#DC3545] hover:underline">
               commerce coaching
             </Link>
             ,{" "}
@@ -156,7 +164,7 @@ export default function BestCoachingInAligarh() {
               science coaching
             </Link>{" "}
             (PCM / PCB),{" "}
-            <Link to="/best-junior-coaching-in-aligarh" className="font-semibold text-[#DC3545] hover:underline">
+            <Link to="/junior-wing-coaching" className="font-semibold text-[#DC3545] hover:underline">
               junior coaching
             </Link>{" "}
             (Classes 5-10), CA Foundation, CMA, B.Com and Class 11-12. With 16+
@@ -246,7 +254,7 @@ export default function BestCoachingInAligarh() {
               </h3>
               <ul className="mt-4 space-y-3 text-sm text-gray-700">
                 <li>
-                  <Link to="/commerce-coaching" className="font-semibold text-[#DC3545] hover:underline">
+                  <Link to="/commerce-coaching-aligarh" className="font-semibold text-[#DC3545] hover:underline">
                     Best Commerce Coaching in Aligarh
                   </Link>{" "}
                   - Class 11-12 Commerce, B.Com, CA Foundation, CMA
@@ -258,13 +266,13 @@ export default function BestCoachingInAligarh() {
                   - Class 11 & 12 Science (PCM / PCB)
                 </li>
                 <li>
-                  <Link to="/best-junior-coaching-in-aligarh" className="font-semibold text-[#DC3545] hover:underline">
+                  <Link to="/junior-wing-coaching" className="font-semibold text-[#DC3545] hover:underline">
                     Best Junior Coaching in Aligarh
                   </Link>{" "}
                   - Classes 5 to 10 (NCERT-aligned)
                 </li>
                 <li>
-                  <Link to="/best-ca-coaching-in-aligarh" className="font-semibold text-[#DC3545] hover:underline">
+                  <Link to="/ca-foundation-coaching" className="font-semibold text-[#DC3545] hover:underline">
                     Best CA Coaching in Aligarh
                   </Link>{" "}
                   - ICAI CA Foundation
@@ -276,7 +284,7 @@ export default function BestCoachingInAligarh() {
                   - ICMAI Foundation & Intermediate
                 </li>
                 <li>
-                  <Link to="/best-entrance-coaching-in-aligarh" className="font-semibold text-[#DC3545] hover:underline">
+                  <Link to="/entrance-exam-coaching" className="font-semibold text-[#DC3545] hover:underline">
                     Best Entrance Coaching in Aligarh
                   </Link>{" "}
                   - BBA, MBA, BA-LLB / CLAT, BAFL, BA, B.Com UG

@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './Components/common/Navbar'
 import Footer from './Components/Home/Footer'
 import Loader from './Components/common/Loader'
@@ -87,12 +87,16 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/best-coaching-in-aligarh" element={<BestCoachingInAligarh />} />
-          <Route path="/commerce-coaching" element={<CommerceCoaching />} />
+          <Route path="/commerce-coaching-aligarh" element={<CommerceCoaching />} />
           <Route path="/best-science-coaching-in-aligarh" element={<BestScienceCoaching />} />
-          <Route path="/best-junior-coaching-in-aligarh" element={<BestJuniorCoaching />} />
-          <Route path="/best-ca-coaching-in-aligarh" element={<BestCACoaching />} />
+          <Route path="/junior-wing-coaching" element={<BestJuniorCoaching />} />
+          <Route path="/ca-foundation-coaching" element={<BestCACoaching />} />
           <Route path="/best-cma-coaching-in-aligarh" element={<BestCMACoaching />} />
-          <Route path="/best-entrance-coaching-in-aligarh" element={<BestEntranceCoaching />} />
+          <Route path="/entrance-exam-coaching" element={<BestEntranceCoaching />} />
+          <Route path="/commerce-coaching" element={<Navigate to="/commerce-coaching-aligarh" replace />} />
+          <Route path="/best-junior-coaching-in-aligarh" element={<Navigate to="/junior-wing-coaching" replace />} />
+          <Route path="/best-ca-coaching-in-aligarh" element={<Navigate to="/ca-foundation-coaching" replace />} />
+          <Route path="/best-entrance-coaching-in-aligarh" element={<Navigate to="/entrance-exam-coaching" replace />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/about" element={<About />} />

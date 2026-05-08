@@ -6,20 +6,20 @@ const RED = "#DC3545";
 
 const FAQS = [
   {
-    q: "Which courses are available at Yasir Ali Classes?",
-    a: "YAC offers structured coaching for Commerce, Science, Entrance preparation, and Regular school batches. Programs are available in both online and offline formats.",
+    q: "Which commerce and CA courses are available at Yasir Ali Classes in Aligarh?",
+    a: "YAC offers commerce coaching for Class 11-12, CA Foundation coaching, B.Com and CMA tracks, plus science, entrance and regular school programs in online and offline formats.",
   },
   {
-    q: "Do you provide coaching for both boards and competitive exams?",
-    a: "Yes. We run board-focused preparation with concept classes, test series, and revision plans, along with entrance-oriented practice and mock exam programs.",
+    q: "Do you provide coaching for both board exams and entrance preparation?",
+    a: "Yes. We run board-focused classes for Class 11-12 with concept teaching, test series and revision plans, along with entrance exam coaching for BBA, MBA and law entrance patterns.",
   },
   {
     q: "How are doubts and student progress tracked?",
     a: "Students get regular doubt-solving support, periodic tests, and performance reviews. Parents can also stay updated through progress communication and score analysis.",
   },
   {
-    q: "Can students from outside Aligarh join YAC?",
-    a: "Absolutely. Students across India can learn through online classes, recorded support material, and digital assessments, while local students can attend offline batches in Aligarh.",
+    q: "Can students from outside Aligarh or Uttar Pradesh join YAC?",
+    a: "Absolutely. Students across Uttar Pradesh and India can join online classes, recorded support material and digital assessments, while local students attend offline batches in Aligarh.",
   },
   {
     q: "How can I enroll in a YAC batch?",

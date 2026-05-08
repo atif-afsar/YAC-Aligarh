@@ -2,7 +2,13 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaCheckCircle, FaPhoneAlt } from "react-icons/fa";
 import Seo from "../Components/common/Seo";
-import { seoConfig, buildBreadcrumbJsonLd, SITE } from "../seo/seoConfig";
+import {
+  seoConfig,
+  buildBreadcrumbJsonLd,
+  buildOrganizationJsonLd,
+  buildLocalBusinessJsonLd,
+  SITE,
+} from "../seo/seoConfig";
 
 const RED = "#DC3545";
 
@@ -67,8 +73,10 @@ export default function CommerceCoaching() {
     () => [
       buildBreadcrumbJsonLd([
         { name: "Home", path: "/" },
-        { name: "Commerce Coaching", path: "/commerce-coaching" },
+        { name: "Commerce Coaching", path: "/commerce-coaching-aligarh" },
       ]),
+      buildOrganizationJsonLd(),
+      buildLocalBusinessJsonLd(),
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -135,7 +143,7 @@ export default function CommerceCoaching() {
             <Link to="/best-coaching-in-aligarh" className="font-semibold text-[#DC3545] hover:underline">
               commerce coaching in Aligarh
             </Link>{" "}
-            for Class 11, Class 12, CA Foundation, CS Executive and B.Com
+            for Class 11, Class 12, CA Foundation, CMA and B.Com
             students. Our concept-first methodology, weekly tests and personal
             mentorship build genuine subject mastery and consistent results.
           </p>
