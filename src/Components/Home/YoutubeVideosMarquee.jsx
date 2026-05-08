@@ -258,39 +258,61 @@ export default function YoutubeVideosMarquee() {
     return () => ctx.revert();
   }, []);
 
-  // Auto-scrolling marquee — uses one duplicated track so it loops seamlessly
+  // Auto-scrolling marquee on desktop only. On mobile the viewport is swipeable
+  // horizontally — GSAP must not set transform on `.yt-track` or touch scrolling breaks.
   useEffect(() => {
     if (reduceMotion) return;
     const track = trackRef.current;
     if (!track) return;
 
+    const mq = window.matchMedia("(max-width: 639px)");
+    const isMobileMarquee = () => mq.matches;
+
     let raf = 0;
-    const start = () => {
-      const halfWidth = track.scrollWidth / 2;
-      if (halfWidth <= 0) {
-        raf = requestAnimationFrame(start);
-        return;
-      }
-      tweenRef.current?.kill();
-      gsap.set(track, { x: 0 });
-      tweenRef.current = gsap.to(track, {
-        x: -halfWidth,
-        duration: halfWidth / 55, // ~55px/s — calm, predictable speed
-        ease: "none",
-        repeat: -1,
-      });
-    };
 
-    raf = requestAnimationFrame(start);
-
-    const onResize = () => start();
-    window.addEventListener("resize", onResize, { passive: true });
-
-    return () => {
+    const killMarquee = () => {
       cancelAnimationFrame(raf);
+      raf = 0;
       tweenRef.current?.kill();
       tweenRef.current = null;
-      window.removeEventListener("resize", onResize);
+      gsap.set(track, { clearProps: "transform" });
+    };
+
+    const startDesktopMarquee = () => {
+      killMarquee();
+
+      const boot = () => {
+        const halfWidth = track.scrollWidth / 2;
+        if (halfWidth <= 0) {
+          raf = requestAnimationFrame(boot);
+          return;
+        }
+        gsap.set(track, { x: 0 });
+        tweenRef.current = gsap.to(track, {
+          x: -halfWidth,
+          duration: halfWidth / 55,
+          ease: "none",
+          repeat: -1,
+        });
+      };
+
+      raf = requestAnimationFrame(boot);
+    };
+
+    const syncMode = () => {
+      killMarquee();
+      if (isMobileMarquee()) return;
+      startDesktopMarquee();
+    };
+
+    syncMode();
+    mq.addEventListener("change", syncMode);
+    window.addEventListener("resize", syncMode, { passive: true });
+
+    return () => {
+      mq.removeEventListener("change", syncMode);
+      window.removeEventListener("resize", syncMode);
+      killMarquee();
     };
   }, [reduceMotion]);
 
@@ -338,9 +360,11 @@ export default function YoutubeVideosMarquee() {
             mask-image: none;
             -webkit-mask-image: none;
             -webkit-overflow-scrolling: touch;
-            scroll-snap-type: x mandatory;
+            scroll-snap-type: x proximity;
             scroll-behavior: smooth;
             padding-bottom: 6px;
+            touch-action: pan-x pinch-zoom;
+            overscroll-behavior-x: contain;
           }
           .yt-marquee-viewport::-webkit-scrollbar { display: none; }
           .yt-track {

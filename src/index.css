@@ -12,8 +12,7 @@ body {
   text-rendering: optimizeSpeed;
 }
 
-/* Default to native momentum scrolling on touch devices, which Lenis is now
-   skipped for. This keeps iOS/Safari rubber-band feel intact. */
+/* iOS momentum + Lenis: horizontal carousels use data-lenis-prevent-touch (see components). */
 html {
   -webkit-overflow-scrolling: touch;
 }

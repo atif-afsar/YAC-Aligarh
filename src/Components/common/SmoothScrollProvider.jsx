@@ -13,45 +13,50 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function shouldEnableLenis() {
+  if (typeof window === "undefined") return false;
+  if (prefersReducedMotion()) return false;
+  return true;
+}
+
 /**
- * Lenis tuning: smoother lerp feels nicer but runs more virtual-scroll
- * interpolation frames. On touch / low-memory devices we use higher lerp so
- * the scroll target catches up faster → fewer active frames → better battery
- * and scroll-linked animation cost.
+ * Lenis everywhere except reduced-motion (accessibility).
+ * - Desktop (fine pointer): wheel smoothing, native-friendly touch off for nested scrollers.
+ * - Mobile / coarse pointer: syncTouch for vertical smooth scroll; allowNestedScroll +
+ *   data-lenis-prevent-* on horizontal strips stops Lenis from stealing sideways swipes.
  */
 function buildLenisOptions() {
-  const coarse =
-    window.matchMedia("(pointer: coarse)").matches ||
-    window.matchMedia("(hover: none)").matches;
-
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
   const narrow = window.matchMedia("(max-width: 768px)").matches;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mem = navigator.deviceMemory;
-  const lowMem = typeof mem === "number" && mem > 0 && mem <= 4;
-
-  const lite = coarse || narrow || lowMem;
+  const touchPrimary = coarse || narrow;
 
   return {
-    // Desktop: smooth; mobile/low-end: snappier (less main-thread smoothing).
-    lerp: lowMem ? 0.22 : lite ? 0.17 : 0.12,
+    // Keep desktop responsive while letting mobile feel fluid.
+    lerp: touchPrimary ? 0.1 : 0.085,
     smoothWheel: true,
-    // Smooth touch on phones/tablets; syncTouchLerp tuned higher on lite
-    // devices so virtual scroll catches up faster (fewer expensive frames).
-    syncTouch: true,
-    syncTouchLerp: lite ? 0.12 : 0.075,
+    syncTouch: touchPrimary,
+    ...(touchPrimary
+      ? {
+          syncTouchLerp: 0.16,
+          touchMultiplier: 1,
+          touchInertiaExponent: 1.7,
+        }
+      : {}),
     wheelMultiplier: 1,
-    touchMultiplier: lite ? 0.92 : 1,
+    gestureOrientation: "vertical",
+    autoResize: true,
     infinite: false,
     stopInertiaOnNavigate: true,
-    // Driven by gsap.ticker below — avoids Lenis running a second RAF loop.
-    autoRaf: false,
+    overscroll: true,
+    anchors: true,
+    autoRaf: true,
+    allowNestedScroll: true,
   };
 }
 
 /**
  * Coalesce ScrollTrigger updates to at most once per animation frame.
- * Lenis can emit several scroll callbacks per frame when syncTouch is on;
+ * Lenis can emit several scroll callbacks per frame during wheel smoothing;
  * batching keeps GSAP work predictable without changing visual behavior.
  */
 function createScrollTriggerBatcher(ScrollTrigger) {
@@ -66,15 +71,13 @@ function createScrollTriggerBatcher(ScrollTrigger) {
 }
 
 /**
- * Lenis + GSAP ScrollTrigger. Enabled on all devices except reduced-motion
- * (accessibility). Dynamic import keeps initial JS smaller; init is deferred
- * to after first paint so LCP is not blocked.
+ * Lenis + GSAP ScrollTrigger. Reduced-motion users get no Lenis (accessibility).
  */
 export function SmoothScrollProvider({ children }) {
   const [lenis, setLenis] = useState(null);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return undefined;
+    if (!shouldEnableLenis()) return undefined;
 
     let cancelled = false;
     let cleanup = null;
@@ -102,12 +105,6 @@ export function SmoothScrollProvider({ children }) {
         const batchUpdate = createScrollTriggerBatcher(ScrollTrigger);
         const unsubScroll = instance.on("scroll", batchUpdate);
 
-        const onTick = (time) => {
-          instance.raf(time * 1000);
-        };
-        gsap.ticker.add(onTick);
-        gsap.ticker.lagSmoothing(0);
-
         const onResize = () => {
           batchUpdate();
           ScrollTrigger.refresh();
@@ -121,7 +118,6 @@ export function SmoothScrollProvider({ children }) {
 
         cleanup = () => {
           window.removeEventListener("resize", onResize);
-          gsap.ticker.remove(onTick);
           unsubScroll();
           instance.destroy();
           setLenis(null);

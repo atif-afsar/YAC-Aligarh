@@ -122,19 +122,29 @@ export default function BestResultsPreview() {
 
   useEffect(() => {
     if (!isMobile) return;
+    const slider = sliderRef.current;
+    if (!slider) return;
+
     const compute = () => {
-      const slider = sliderRef.current;
-      if (!slider) return;
       const firstCard = slider.firstElementChild;
       if (!firstCard) return;
-      const gap = Number.parseFloat(
-        window.getComputedStyle(slider).columnGap || "16"
-      );
-      itemSpanRef.current = firstCard.clientWidth + gap;
+      const cs = window.getComputedStyle(slider);
+      const gapRaw = cs.columnGap || cs.gap || "16px";
+      const gap = Number.parseFloat(gapRaw) || 16;
+      itemSpanRef.current = firstCard.getBoundingClientRect().width + gap;
     };
+
     compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
+
+    const ro = new ResizeObserver(() => compute());
+    ro.observe(slider);
+    Array.from(slider.children).forEach((child) => ro.observe(child));
+
+    window.addEventListener("resize", compute, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", compute);
+    };
   }, [isMobile]);
 
   const onSliderScroll = () => {
@@ -172,7 +182,6 @@ export default function BestResultsPreview() {
   return (
     <section
       className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/40 to-white py-16 sm:py-20 lg:py-24"
-      style={{ contain: "layout paint" }}
     >
       {/* Decorative blurs — kept as static halos with no `will-change` so we
           don't keep a separate GPU layer alive during scroll. The visuals are
@@ -215,15 +224,18 @@ export default function BestResultsPreview() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
-              className="relative -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-              style={{ WebkitOverflowScrolling: "touch" }}
+              className="relative -mx-4 flex snap-x snap-proximity gap-4 overflow-x-auto px-4 pb-2 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                touchAction: "pan-x pinch-zoom",
+                overscrollBehaviorX: "contain",
+              }}
             >
               {PREVIEW_RESULTS.map((result) => (
                 <Motion.article
                   key={`${result.name}-${result.image}`}
                   variants={v.card}
                   className="group relative w-[82vw] max-w-[320px] shrink-0 snap-center overflow-hidden rounded-[1.35rem] border border-red-100/80 bg-white shadow-[0_16px_42px_-24px_rgba(17,24,39,0.55)] transition-transform duration-200 active:scale-[0.985]"
-                  style={{ contain: "layout paint" }}
                 >
                   <div className="relative">
                     <img

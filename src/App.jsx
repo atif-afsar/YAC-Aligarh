@@ -39,9 +39,8 @@ function ScrollToTop() {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     }
     // ScrollTrigger.refresh is expensive; defer it so it never blocks paint.
-    // GSAP is only ever needed when Lenis is active (i.e. desktop), so we
-    // avoid a static import and let the gsap chunk stay desktop-only.
-    if (!lenis) return undefined
+    // Run after native scroll resets too (Lenis off on touch/narrow) so pinned
+    // sections stay correct on route changes.
     let cancelled = false
     const id = window.requestAnimationFrame(async () => {
       try {
