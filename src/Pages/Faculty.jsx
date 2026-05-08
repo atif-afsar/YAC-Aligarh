@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import FacultyPostersCarousel from "../Components/Faculty/FacultyPostersCarousel";
 import FacultyHero from "../Components/Faculty/FacultyHero";
 import FacultyPanel from "../Components/Faculty/FacultyPanel";
 import FacultyWhy from "../Components/Faculty/FacultyWhy";
@@ -25,6 +26,7 @@ const Faculty = () => {
         path={seoConfig.faculty.path}
         jsonLd={jsonLd}
       />
+      <FacultyPostersCarousel />
       <FacultyHero />
       <FacultyPanel />
       <FacultyWhy />
