@@ -20,7 +20,7 @@ export const SITE = {
   twitter: "@yasiraliclasses",
   phone: "+91-9045417079",
   phoneDisplay: "+91 90454 17079",
-  email: "info@yasiraliclasses.in",
+  email: "yasirali83637@gmail.com",
   address: {
     street: "Senco Jewellers, IT Plaza, Amir Nishan Road",
     locality: "Aligarh",

@@ -23,7 +23,7 @@ export const instituteKnowledge = {
   contact: {
     phone: "+91 90454 17079",
     phoneTel: "+919045417079",
-    email: "info@yasiraliclasses.in",
+    email: "yasirali83637@gmail.com",
   },
 
   /** Public links (same as site footer / social) */

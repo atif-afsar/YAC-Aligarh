@@ -172,11 +172,11 @@ export default function Footer() {
               +91 90454 17079
             </a>
             <a
-              href="mailto:info@yasiraliclasses.in"
+              href="mailto:yasirali83637@gmail.com"
               className="flex items-center gap-3 transition hover:text-red-300"
             >
               <FaEnvelope className="shrink-0 text-red-400" />
-              info@yasiraliclasses.in
+              yasirali83637@gmail.com
             </a>
           </div>
 

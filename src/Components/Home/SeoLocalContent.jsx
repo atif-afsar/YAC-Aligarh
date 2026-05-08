@@ -365,14 +365,14 @@ export default function SeoLocalContent() {
                     +91 90454 17079
                   </a>
                   <a
-                    href="mailto:info@yasiraliclasses.in"
+                    href="mailto:yasirali83637@gmail.com"
                     className="inline-flex items-center gap-2 font-semibold text-[#DC3545] hover:underline"
                   >
                     <FaEnvelope
                       className="text-[0.7rem] text-[#DC3545]/80"
                       aria-hidden
                     />
-                    info@yasiraliclasses.in
+                    yasirali83637@gmail.com
                   </a>
                 </span>
               }
