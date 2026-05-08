@@ -26,7 +26,13 @@ export const CATEGORY_FILTER_OPTIONS = [
  * @property {ClassLevel[]} classLevels
  * @property {Stream[]} streams  — empty = not stream-specific (e.g. 5–10, or any stream)
  * @property {CourseType} courseType
+ * @property {string} [image]      — public-folder image path for the batch poster
+ * @property {string} [imageAlt]   — accessible alt text for the poster
  */
+
+/* Helper: paths in /public/batch contain spaces & parentheses; centralise so
+ * data is easy to scan and the renderer doesn't need to worry about encoding. */
+const BATCH_IMG = (file) => `/batch/${file}`;
 
 /**
  * YAC course catalogue (aligned to institute data: school prep, entrances, professional, graduation).
@@ -50,6 +56,8 @@ export const COURSES = [
       "Doubt sessions and test feedback",
       "Habit-building in small, structured batches",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.26 PM (1).jpeg"),
+    imageAlt: "ZENITH Batch poster — Class 10 Regular at Yasir Ali Classes",
   },
   {
     id: "senior-11-12-commerce",
@@ -67,6 +75,8 @@ export const COURSES = [
       "CA / professional orientation without rushing concepts",
       "Small batches with parent progress updates",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.26 PM.jpeg"),
+    imageAlt: "CHAMPIONS Batch poster — Class 11 Commerce & Humanities Regular",
   },
   {
     id: "senior-11-12-humanities",
@@ -84,6 +94,8 @@ export const COURSES = [
       "Map & optional subject support as per batch",
       "Regular tests with targeted feedback",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.25 PM (1).jpeg"),
+    imageAlt: "ACHIEVER'S Batch poster — Class 12 Commerce & Humanities Regular",
   },
   {
     id: "senior-11-12-science",
@@ -101,6 +113,8 @@ export const COURSES = [
       "Mock tests and error tracking",
       "Doubt support in smaller batches",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM (1).jpeg"),
+    imageAlt: "DREAMERS Batch poster — Class 11 Science / Diploma in Engineering",
   },
   {
     id: "bcom-regular",
@@ -118,6 +132,8 @@ export const COURSES = [
       "Internship and skill add-ons (where applicable)",
       "Soft skills and campus-placement readiness basics",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM.jpeg"),
+    imageAlt: "JEET Batch poster — B.Com & BBA programmes at Yasir Ali Classes",
   },
 
   /* —— School-level entrance —— */
@@ -137,6 +153,8 @@ export const COURSES = [
       "Full-length mock tests",
       "Basic interview / interaction readiness",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.25 PM.jpeg"),
+    imageAlt: "UDAAN Batch poster — Class 6 Entrance preparation",
   },
   {
     id: "entrance-9th",
@@ -154,6 +172,8 @@ export const COURSES = [
       "Time & accuracy coaching",
       "One-on-one weak-topic support (as per batch)",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM (2).jpeg"),
+    imageAlt: "JASHN Batch poster — Class 9 Entrance preparation",
   },
   {
     id: "entrance-11th",
@@ -171,6 +191,8 @@ export const COURSES = [
       "Subject-choice orientation (overview)",
       "Timed tests with performance review",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM (1).jpeg"),
+    imageAlt: "DREAMERS Batch poster — Class 11 Entrance for Sci/Comm/Humanities",
   },
 
   /* —— UG & PG entrance (after school) —— */
@@ -190,6 +212,8 @@ export const COURSES = [
       "Time-bound paper strategy",
       "Counselling: form filling & college shortlists (overview)",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.23 PM (2).jpeg"),
+    imageAlt: "PRAGATI Batch poster — BA & BAFL Entrance for AMU & JMI",
   },
   {
     id: "entrance-bcom-ug",
@@ -207,6 +231,8 @@ export const COURSES = [
       "Mock marathons and rank improvement loops",
       "Doubt labs before exam window",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM.jpeg"),
+    imageAlt: "JEET Batch poster — B.Com & BBA Entrance for AMU & JMI",
   },
   {
     id: "entrance-bafl",
@@ -224,6 +250,8 @@ export const COURSES = [
       "Mock tests in timed mode",
       "Form & eligibility checklist (general guidance)",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.23 PM (2).jpeg"),
+    imageAlt: "PRAGATI Batch poster — BA & BAFL Entrance for AMU & JMI",
   },
   {
     id: "entrance-bba",
@@ -241,6 +269,8 @@ export const COURSES = [
       "GD & interview primer (as per batch design)",
       "Test strategy workshops",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM.jpeg"),
+    imageAlt: "JEET Batch poster — B.Com & BBA Entrance for AMU & JMI",
   },
   {
     id: "entrance-ballb",
@@ -258,6 +288,8 @@ export const COURSES = [
       "Comprehension and argument analysis",
       "All-India level mock test series",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.23 PM (1).jpeg"),
+    imageAlt: "NYAY Batch poster — BA LLB Entrance preparation for AMU",
   },
   {
     id: "entrance-mba",
@@ -275,6 +307,8 @@ export const COURSES = [
       "PI / WAT overview (as per program)",
       "Score vs percentile tracking",
     ],
+    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.23 PM.jpeg"),
+    imageAlt: "LEADER Batch poster — MBA Entrance preparation for AMU",
   },
 
   /* —— Professional —— */

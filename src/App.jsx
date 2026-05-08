@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './Components/common/Navbar'
 import Footer from './Components/Home/Footer'
 import FloatingQuickActions from './Components/common/FloatingQuickActions'
+import LeadCapturePopup from './Components/common/LeadCapturePopup'
 import Loader from './Components/common/Loader'
 import { SmoothScrollProvider, useSmoothScroll } from './Components/common/SmoothScrollProvider'
 import Home from './Pages/Home'
@@ -89,6 +90,7 @@ const App = () => {
             <Route path="/youtube" element={<Youtube />} />
           </Routes>
           <FloatingQuickActions />
+          <LeadCapturePopup />
           <Footer />
         </>
       </Suspense>
