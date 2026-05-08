@@ -1,13 +1,14 @@
-import React, { Suspense, lazy, useEffect, useLayoutEffect, useState } from 'react'
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from './Components/common/Navbar'
 import Footer from './Components/Home/Footer'
-import FloatingQuickActions from './Components/common/FloatingQuickActions'
-import LeadCapturePopup from './Components/common/LeadCapturePopup'
 import Loader from './Components/common/Loader'
 import { SmoothScrollProvider, useSmoothScroll } from './Components/common/SmoothScrollProvider'
 import Home from './Pages/Home'
+
+// Below-the-fold UI is loaded lazily so it never blocks the Home LCP.
+const FloatingQuickActions = lazy(() => import('./Components/common/FloatingQuickActions'))
+const LeadCapturePopup = lazy(() => import('./Components/common/LeadCapturePopup'))
 
 const Blog = lazy(() => import('./Pages/Blog'))
 const BlogPost = lazy(() => import('./Pages/BlogPost'))
@@ -37,7 +38,21 @@ function ScrollToTop() {
     } else {
       window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     }
-    requestAnimationFrame(() => ScrollTrigger.refresh())
+    // ScrollTrigger.refresh is expensive; defer it so it never blocks paint.
+    // GSAP is only ever needed when Lenis is active (i.e. desktop), so we
+    // avoid a static import and let the gsap chunk stay desktop-only.
+    if (!lenis) return undefined
+    let cancelled = false
+    const id = window.requestAnimationFrame(async () => {
+      try {
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+        if (!cancelled) ScrollTrigger.refresh()
+      } catch { /* noop */ }
+    })
+    return () => {
+      cancelled = true
+      window.cancelAnimationFrame(id)
+    }
   }, [pathname, lenis])
 
   return null
@@ -49,51 +64,55 @@ function RouteFallback() {
 
 const App = () => {
   const { pathname } = useLocation()
-  const [isLoading, setIsLoading] = useState(true)
+  // One intro per full page load (App does not remount on client navigation).
+  // Previously home never set showLoader=true (LCP experiment) and Loader was
+  // lazy — so the chunk often arrived after the timeout and nothing appeared.
+  const [showLoader, setShowLoader] = useState(true)
+  const initialPathRef = useRef(pathname)
 
   useEffect(() => {
-    const loaderDuration = pathname === '/' ? 250 : 700
+    const isHome = initialPathRef.current === '/'
+    const duration = isHome ? 600 : 800
     const timer = window.setTimeout(() => {
-      setIsLoading(false)
-    }, loaderDuration)
+      setShowLoader(false)
+    }, duration)
     return () => window.clearTimeout(timer)
-  }, [pathname])
-
-  if (isLoading) {
-    return <Loader isLoaded={false} />
-  }
+  }, [])
 
   return (
     <SmoothScrollProvider>
       <ScrollToTop />
       <Navbar />
       <Suspense fallback={<RouteFallback />}>
-        <>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/best-coaching-in-aligarh" element={<BestCoachingInAligarh />} />
-            <Route path="/commerce-coaching" element={<CommerceCoaching />} />
-            <Route path="/best-science-coaching-in-aligarh" element={<BestScienceCoaching />} />
-            <Route path="/best-junior-coaching-in-aligarh" element={<BestJuniorCoaching />} />
-            <Route path="/best-ca-coaching-in-aligarh" element={<BestCACoaching />} />
-            <Route path="/best-cma-coaching-in-aligarh" element={<BestCMACoaching />} />
-            <Route path="/best-entrance-coaching-in-aligarh" element={<BestEntranceCoaching />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/faculty" element={<Faculty />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/admissions" element={<Admissions />} />
-            <Route path="/mobile-app" element={<MobileApp />} />
-            <Route path="/online-courses" element={<OnlineCourses />} />
-            <Route path="/youtube" element={<Youtube />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/best-coaching-in-aligarh" element={<BestCoachingInAligarh />} />
+          <Route path="/commerce-coaching" element={<CommerceCoaching />} />
+          <Route path="/best-science-coaching-in-aligarh" element={<BestScienceCoaching />} />
+          <Route path="/best-junior-coaching-in-aligarh" element={<BestJuniorCoaching />} />
+          <Route path="/best-ca-coaching-in-aligarh" element={<BestCACoaching />} />
+          <Route path="/best-cma-coaching-in-aligarh" element={<BestCMACoaching />} />
+          <Route path="/best-entrance-coaching-in-aligarh" element={<BestEntranceCoaching />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/faculty" element={<Faculty />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/results" element={<Results />} />
+          <Route path="/admissions" element={<Admissions />} />
+          <Route path="/mobile-app" element={<MobileApp />} />
+          <Route path="/online-courses" element={<OnlineCourses />} />
+          <Route path="/youtube" element={<Youtube />} />
+        </Routes>
+        <Suspense fallback={null}>
           <FloatingQuickActions />
           <LeadCapturePopup />
-          <Footer />
-        </>
+        </Suspense>
+        <Footer />
       </Suspense>
+
+      {/* One intro per full page load; same instance so Framer exit animation runs. */}
+      <Loader isLoaded={!showLoader} />
     </SmoothScrollProvider>
   )
 }

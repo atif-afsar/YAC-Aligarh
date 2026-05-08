@@ -28,36 +28,30 @@ export default function UltraPremiumLoader({ isLoaded }) {
       {!isLoaded && (
         <Motion.div
           initial={{ opacity: 1 }}
-          exit={{ 
-            opacity: 0, 
-            transition: { duration: 1, ease: LUXE_EASE, delay: 0.2 } 
+          exit={{
+            opacity: 0,
+            transition: { duration: 1, ease: LUXE_EASE, delay: 0.2 },
           }}
           className="fixed inset-0 z-[300] flex items-center justify-center bg-white overflow-hidden"
         >
-          {/* 1. Ambient Mesh Background - Very Subtle */}
-          <div className="absolute inset-0 z-0">
-            <Motion.div 
-              animate={{ 
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, 0],
-                x: [0, 20, 0] 
-              }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-red-50/40 rounded-full blur-[120px]" 
+          {/* 1. Ambient mesh background — static halos.
+              The previous version animated 50% / 60% wide blobs with
+              blur(120px) / blur(150px) infinitely; that single effect was
+              the most expensive thing on the loader frame. We keep the
+              exact same visual but no longer animate the blur layer. */}
+          <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
+            <div
+              className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-red-50/40"
+              style={{ filter: "blur(120px)" }}
             />
-            <Motion.div 
-              animate={{ 
-                scale: [1, 1.2, 1],
-                rotate: [0, -5, 0],
-                x: [0, -30, 0] 
-              }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] bg-red-50/30 rounded-full blur-[150px]" 
+            <div
+              className="absolute -bottom-[10%] -right-[10%] w-[60%] h-[60%] rounded-full bg-red-50/30"
+              style={{ filter: "blur(150px)" }}
             />
           </div>
 
           <div className="relative z-10 flex flex-col items-center">
-            {/* 2. Large Hero Initials */}
+            {/* 2. Large hero initials */}
             <div className="flex items-center justify-center gap-1 md:gap-4 overflow-hidden">
               {LETTERS.map((letter, i) => (
                 <Motion.span
@@ -73,9 +67,15 @@ export default function UltraPremiumLoader({ isLoaded }) {
               ))}
             </div>
 
-            {/* 3. The Animated Underline (Variable Width Feel) */}
+            {/* 3. Animated underline */}
             <div className="relative w-[300px] md:w-[400px] h-4 mt-2">
-              <svg width="100%" height="100%" viewBox="0 0 400 20" fill="none" preserveAspectRatio="none">
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 400 20"
+                fill="none"
+                preserveAspectRatio="none"
+              >
                 <Motion.path
                   d="M10 10C60 10 340 10 390 10"
                   stroke={RED}
@@ -88,7 +88,7 @@ export default function UltraPremiumLoader({ isLoaded }) {
               </svg>
             </div>
 
-            {/* 4. Luxury Branding Reveal */}
+            {/* 4. Branding reveal */}
             <div className="flex flex-col items-center mt-8 text-center px-6">
               <Motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -99,7 +99,6 @@ export default function UltraPremiumLoader({ isLoaded }) {
                 Yasir Ali Classes
               </Motion.h2>
 
-              {/* 5. Masked Tagline with highlighting */}
               <div className="relative mt-4 overflow-hidden">
                 <Motion.p
                   initial={{ y: "100%" }}
@@ -107,14 +106,16 @@ export default function UltraPremiumLoader({ isLoaded }) {
                   transition={{ delay: 1.5, duration: 1, ease: LUXE_EASE }}
                   className="text-xs md:text-sm font-medium text-gray-400 tracking-[0.1em] uppercase"
                 >
-                  We <span className="text-red-500 font-bold">Debit</span> Efforts, 
-                  to <span className="text-red-500 font-bold">Credit</span> Your Success
+                  We <span className="text-red-500 font-bold">Debit</span>{" "}
+                  Efforts, to{" "}
+                  <span className="text-red-500 font-bold">Credit</span> Your
+                  Success
                 </Motion.p>
               </div>
             </div>
 
-            {/* 6. Subtle Interactive Progress Element */}
-            <Motion.div 
+            {/* 5. Subtle progress strip */}
+            <Motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 2.2 }}
@@ -126,12 +127,12 @@ export default function UltraPremiumLoader({ isLoaded }) {
             </Motion.div>
           </div>
 
-          {/* 7. Screen Wipe (The Exit Detail) */}
-          <Motion.div 
+          {/* 6. Screen wipe on exit */}
+          <Motion.div
             initial={{ scaleY: 0 }}
-            exit={{ 
-              scaleY: 1, 
-              transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } 
+            exit={{
+              scaleY: 1,
+              transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
             }}
             className="absolute inset-0 bg-red-600 origin-bottom z-[310] pointer-events-none"
           />

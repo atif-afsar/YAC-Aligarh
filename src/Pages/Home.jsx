@@ -58,58 +58,88 @@ const Home = memo(function Home() {
       />
       <Hero />
 
-      <Suspense fallback={<StatsCoursesFallback />}>
-        <Stats />
-        <CoursesSection />
-      </Suspense>
+      {/* Each below-the-fold block is wrapped in a `cv-auto` div so the
+          browser can skip layout/paint for whatever isn't on screen yet.
+          intrinsic-size: prevents layout shift while sections are skipped. */}
 
-      <Suspense fallback={<SectionFallback className="min-h-[22rem] bg-white" />}>
-        <YoutubeVideosMarquee />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<StatsCoursesFallback />}>
+          <Stats />
+          <CoursesSection />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[260px]" />}>
-        <BestResultsPreview />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 600px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[22rem] bg-white" />}>
+          <YoutubeVideosMarquee />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[28rem]" />}>
-        <WhyChooseUs />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[260px]" />}>
+          <BestResultsPreview />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[260px]" />}>
-        <InstaReelsMarquee />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 480px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[28rem]" />}>
+          <WhyChooseUs />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[280px]" />}>
-        <YoutubeMobileCTA />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[260px]" />}>
+          <InstaReelsMarquee />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback />}>
-        <Methodology />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[280px]" />}>
+          <YoutubeMobileCTA />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[340px]" />}>
-        <Testimonials />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<SectionFallback />}>
+          <Methodology />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[560px]" />}>
-        <LearningLabs />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 360px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[340px]" />}>
+          <Testimonials />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[340px]" />}>
-        <VideoEnrollSection />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 600px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[560px]" />}>
+          <LearningLabs />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[28rem]" />}>
-        <FaqsSection />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 540px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[340px]" />}>
+          <VideoEnrollSection />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[24rem]" />}>
-        <SeoLocalContent />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 480px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[28rem]" />}>
+          <FaqsSection />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<SectionFallback className="min-h-[280px]" />}>
-        <AdmissionsCTA />
-      </Suspense>
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 420px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[24rem]" />}>
+          <SeoLocalContent />
+        </Suspense>
+      </div>
+
+      <div className="cv-auto" style={{ containIntrinsicSize: "1px 320px" }}>
+        <Suspense fallback={<SectionFallback className="min-h-[280px]" />}>
+          <AdmissionsCTA />
+        </Suspense>
+      </div>
     </main>
   );
 });

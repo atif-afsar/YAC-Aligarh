@@ -65,12 +65,18 @@ export default function Footer() {
         >
           <div className="flex items-center gap-3">
             <span className="inline-flex rounded-lg bg-white p-1.5 shadow-sm ring-1 ring-black/5">
-              <img
-                src="/images/Logo.png"
-                alt="Yasir Ali Classes logo"
-                className="h-9 w-auto object-contain sm:h-10"
-                loading="lazy"
-              />
+              <picture>
+                <source type="image/webp" srcSet="/images/Logo.webp" />
+                <img
+                  src="/images/Logo.png"
+                  alt="Yasir Ali Classes logo"
+                  className="h-9 w-auto object-contain sm:h-10"
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </span>
             <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">
               Yasir Ali Classes

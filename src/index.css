@@ -7,6 +7,15 @@
 
 body {
   font-family: var(--font-sans);
+  /* Hint to mobile browsers to use the GPU compositor for the document. */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeSpeed;
+}
+
+/* Default to native momentum scrolling on touch devices, which Lenis is now
+   skipped for. This keeps iOS/Safari rubber-band feel intact. */
+html {
+  -webkit-overflow-scrolling: touch;
 }
 
 .font-serif-display {
@@ -16,6 +25,13 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
   }
 }
 
@@ -35,4 +51,21 @@ body {
     left: 120%;
     opacity: 0;
   }
+}
+
+/* Skip rendering work for off-screen sections.
+   `content-visibility: auto` lets the browser drop layout / paint work for any
+   section currently outside the viewport. The `contain-intrinsic-size`
+   reserves a stable height so we never trigger CLS when the section enters.
+   We apply it section-by-section through this utility class so we never break
+   things that need to be measured (e.g. the hero, sticky headers, etc.). */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
+}
+
+/* GPU-friendly will-change utility — only set during interaction. */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

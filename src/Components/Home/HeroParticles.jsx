@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const RED = "rgba(220, 53, 69,";
-const DPR_CAP = 2;
+const DPR_CAP = 1.5;
 
 function makeParticles(w, h, count) {
   const out = [];
@@ -18,14 +18,22 @@ function makeParticles(w, h, count) {
   return out;
 }
 
+function detectIsMobile() {
+  if (typeof window === "undefined") return true;
+  return (
+    window.matchMedia("(max-width: 768px)").matches ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
+
 /**
  * Subtle red dots: Brownian drift + soft repel from pointer (expects hero-local coords in pointerRef).
  *
  * Perf rules:
+ *  - Disabled entirely on mobile / coarse-pointer devices (zero CPU cost).
  *  - RAF is only started when the canvas is in the viewport (IntersectionObserver).
- *  - Particle count is capped lower than before to keep mid-range devices smooth.
- *  - The hero is the first thing on the page so once you scroll past it,
- *    the canvas stops drawing entirely.
+ *  - Particle count is capped so mid-range laptops stay smooth.
+ *  - Once the hero scrolls out of view the canvas stops drawing entirely.
  */
 export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
   const canvasRef = useRef(null);
@@ -33,13 +41,22 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
   const rafRef = useRef(0);
   const visibleRef = useRef(true);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
+  const [isMobile, setIsMobile] = useState(() => detectIsMobile());
 
   useEffect(() => {
-    if (reduced) return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const apply = () => setIsMobile(detectIsMobile());
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    if (reduced || isMobile) return;
     const canvas = canvasRef.current;
     const section = sectionRef?.current;
     if (!canvas || !section) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const resize = () => {
@@ -53,8 +70,8 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Lighter particle count → smoother on mid-range phones / older laptops.
-      const n = Math.min(70, Math.max(28, Math.floor((w * h) / 22000)));
+      // Lighter particle count → smoother on mid-range hardware.
+      const n = Math.min(50, Math.max(22, Math.floor((w * h) / 28000)));
       particlesRef.current = makeParticles(w, h, n);
     };
 
@@ -143,8 +160,6 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
     const onVis = () => {
       if (document.hidden) {
         visibleRef.current = false;
-      } else {
-        // Recheck via the next IO tick; in the meantime, don't restart yet.
       }
     };
     document.addEventListener("visibilitychange", onVis);
@@ -158,9 +173,10 @@ export default function HeroParticles({ sectionRef, pointerRef, reduced }) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = 0;
     };
-  }, [sectionRef, pointerRef, reduced]);
+  }, [sectionRef, pointerRef, reduced, isMobile]);
 
-  if (reduced) return null;
+  // No canvas at all on mobile / reduced-motion → zero per-frame cost.
+  if (reduced || isMobile) return null;
 
   return (
     <canvas

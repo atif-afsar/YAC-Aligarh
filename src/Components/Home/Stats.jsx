@@ -1,8 +1,4 @@
 import { memo, useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
   { end: 80000, suffix: "+", label: "Students Mentored" },
@@ -17,32 +13,58 @@ const StatItem = memo(function StatItem({ end, suffix, label, index }) {
   useLayoutEffect(() => {
     const el = numRef.current;
     const wrap = wrapRef.current;
-    if (!el || !wrap) return;
+    if (!el || !wrap) return undefined;
 
-    const obj = { val: 0 };
-    const tween = gsap.fromTo(
-      obj,
-      { val: 0 },
-      {
-        val: end,
-        duration: 1.85,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: wrap,
-          start: "top 88%",
-          once: true,
-        },
-        onUpdate: () => {
-          const v = Math.round(obj.val);
-          el.textContent =
-            end >= 1000 ? v.toLocaleString("en-IN") : String(v);
-        },
-      }
+    // Counter animation is purely cosmetic. Use IntersectionObserver instead
+    // of a ScrollTrigger so we don't add another GSAP scroll subscriber on
+    // every Stats render. Skips entirely under prefers-reduced-motion.
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const final =
+      end >= 1000 ? end.toLocaleString("en-IN") : String(end);
+
+    if (reduced) {
+      el.textContent = final;
+      return undefined;
+    }
+
+    let rafId = 0;
+    let started = false;
+    const run = () => {
+      if (started) return;
+      started = true;
+      const start = performance.now();
+      const duration = 1850;
+      const ease = (t) => 1 - Math.pow(1 - t, 2); // power2.out
+      const step = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        const v = Math.round(end * ease(t));
+        el.textContent =
+          end >= 1000 ? v.toLocaleString("en-IN") : String(v);
+        if (t < 1) rafId = requestAnimationFrame(step);
+      };
+      rafId = requestAnimationFrame(step);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            run();
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.4 }
     );
+    io.observe(wrap);
 
     return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
+      io.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [end]);
 

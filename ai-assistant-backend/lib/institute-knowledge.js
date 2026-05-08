@@ -151,6 +151,19 @@ export const instituteKnowledge = {
         experience: "8+ years",
       },
       {
+        name: "Mohammad Atif Khan",
+        role: "Economics Educator",
+        subjects: ["Economics"],
+        qualifications: [
+          "MBA",
+          "B.Ed.",
+          "P.G Diploma in Journalism and Mass Communication",
+        ],
+        experience: "10+ years of teaching",
+        focus:
+          "Concept clarity and strong foundation in Economics for Commerce / boards; aligned with YAC’s Commerce focus (official faculty poster).",
+      },
+      {
         name: "Nida Ara (Miss Nida)",
         role: "English Educator",
         subjects: ["English"],

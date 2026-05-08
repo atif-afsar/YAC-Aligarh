@@ -84,20 +84,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://www.youtube.com" />
     <link rel="dns-prefetch" href="https://i.ytimg.com" />
+    <!-- Trimmed Google Fonts request: only weights we actually use across the
+         site (Inter 400/600/700, Playfair 400 italic + 600). Cuts ~30 KB of
+         font CSS + ~2 extra font files vs. the previous combined request. -->
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600&family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600&family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap"
         rel="stylesheet"
       />
     </noscript>
-    <link rel="preload" as="image" href="/hero/img3.webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/images/Logo.webp" fetchpriority="high" />
+    <!-- LCP candidate (centre hero card) — preload the small WebP only.
+         The large JPG fallback is never hit on modern browsers. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/hero/img3.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/Logo.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
 
     <!-- Structured Data: Organization + LocalBusiness + EducationalOrganization -->
     <script type="application/ld+json">

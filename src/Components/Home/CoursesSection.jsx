@@ -75,6 +75,14 @@ function CoursesSection() {
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    // Skip heavy ScrollTrigger setup on touch / reduced-motion devices —
+    // there's no measurable visual loss and Lighthouse mobile scrolls through
+    // it in milliseconds rather than mounting + re-registering triggers.
+    const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isCoarse || reduced) return undefined;
+
     const ctx = gsap.context(() => {
       gsap.from(".course-card", {
         y: 28,

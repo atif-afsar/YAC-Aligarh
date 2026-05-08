@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion as Motion, useReducedMotion } from "framer-motion";
 import { FaPhoneAlt, FaRobot, FaTimes, FaWhatsapp } from "react-icons/fa";
-import AiAssistantPanel from "./AiAssistantPanel";
+
+// Heavy chat panel only loads when the user actually opens it.
+const AiAssistantPanel = lazy(() => import("./AiAssistantPanel"));
 
 const RED = "#DC3545";
+
+function detectCoarsePointer() {
+  if (typeof window === "undefined") return true;
+  return (
+    window.matchMedia("(pointer: coarse)").matches ||
+    window.matchMedia("(max-width: 768px)").matches
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Sub-action: a circular button + a label pill that slides in        */
@@ -104,7 +114,30 @@ function LeftAction({ icon: SvgIcon, label, tone = "red", href, index = 0 }) {
 export default function FloatingQuickActions() {
   const [openLeft, setOpenLeft] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [aiMounted, setAiMounted] = useState(false);
   const reduced = useReducedMotion();
+  const [isCoarse, setIsCoarse] = useState(() => detectCoarsePointer());
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse), (max-width: 768px)");
+    const apply = () => setIsCoarse(detectCoarsePointer());
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  // Only enable the infinite pulse rings on desktop with motion enabled —
+  // they run forever and are otherwise pure compositor work on phones.
+  const allowPulse = !reduced && !isCoarse;
+
+  // Lazy-mount the AI assistant module the first time the user opens it.
+  const handleToggleAi = () => {
+    setAiOpen((v) => {
+      const next = !v;
+      if (next) setAiMounted(true);
+      return next;
+    });
+  };
 
   return (
     <>
@@ -150,8 +183,8 @@ export default function FloatingQuickActions() {
           transition={{ type: "spring", stiffness: 420, damping: 22 }}
           className="group relative inline-flex h-14 w-14 items-center justify-center rounded-full border border-red-300/50 bg-white text-gray-900 shadow-[0_18px_36px_-14px_rgba(220,53,69,0.55)] sm:h-16 sm:w-16"
         >
-          {/* Idle pulse ring — only when collapsed and motion is allowed */}
-          {!openLeft && !reduced && (
+          {/* Idle pulse ring — desktop + motion enabled only. */}
+          {!openLeft && allowPulse && (
             <>
               <Motion.span
                 aria-hidden
@@ -196,7 +229,7 @@ export default function FloatingQuickActions() {
       {/* RIGHT: AI Assistant FAB */}
       <Motion.button
         type="button"
-        onClick={() => setAiOpen((v) => !v)}
+        onClick={handleToggleAi}
         initial={{ opacity: 0, x: 24, scale: 0.94 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
@@ -212,8 +245,8 @@ export default function FloatingQuickActions() {
             : "z-[100] opacity-100",
         ].join(" ")}
       >
-        {/* Idle pulse on the AI button (only when collapsed + motion allowed) */}
-        {!aiOpen && !reduced && (
+        {/* Idle pulse on the AI button — desktop + motion enabled only. */}
+        {!aiOpen && allowPulse && (
           <Motion.span
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full sm:rounded-full"
@@ -247,7 +280,11 @@ export default function FloatingQuickActions() {
         </span>
       </Motion.button>
 
-      <AiAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />
+      {aiMounted ? (
+        <Suspense fallback={null}>
+          <AiAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />
+        </Suspense>
+      ) : null}
     </>
   );
 }

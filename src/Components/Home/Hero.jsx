@@ -1,10 +1,11 @@
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { lazy, memo, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaArrowRight, FaPlay, FaStar } from "react-icons/fa";
-import HeroParticles from "./HeroParticles";
+
+// HeroParticles + GSAP are desktop-only. They're loaded asynchronously so they
+// never block the mobile critical path / LCP frame.
+const HeroParticles = lazy(() => import("./HeroParticles"));
 
 const RED = "#DC3545";
 
@@ -18,18 +19,26 @@ const COURSES = [
   "Entrance Exams",
 ];
 
-gsap.registerPlugin(ScrollTrigger);
-
 function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
     const onChange = () => setReduced(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
   return reduced;
+}
+
+function detectMobile() {
+  if (typeof window === "undefined") return false;
+  return (
+    window.matchMedia("(max-width: 768px)").matches ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
 }
 
 /** Showcase cards inspired by stacked gaming-card layout */
@@ -234,151 +243,169 @@ function Hero() {
   const imageRowParallaxRef = useRef(null);
   const pointerRef = useRef({ x: 0, y: 0, active: false });
   const reduced = usePrefersReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
-  const textVariants = useMemo(() => buildTextVariants(reduced), [reduced]);
+  // Initialise from the actual viewport so the first render matches the device,
+  // avoiding a re-render + layout shift on mount.
+  const [isMobile, setIsMobile] = useState(() => detectMobile());
+  const [isNarrow, setIsNarrow] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 639px)").matches;
+  });
+  // On mobile we run a much simpler animation chain (or none at all) so the
+  // hero composites in a single frame.
+  const animReduced = reduced || isMobile;
+  const textVariants = useMemo(
+    () => buildTextVariants(animReduced),
+    [animReduced]
+  );
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    const apply = () => setIsMobile(mq.matches);
+    const mqMobile = window.matchMedia("(max-width: 768px)");
+    const mqNarrow = window.matchMedia("(max-width: 639px)");
+    const apply = () => {
+      setIsMobile(detectMobile());
+      setIsNarrow(mqNarrow.matches);
+    };
     apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+    mqMobile.addEventListener("change", apply);
+    mqNarrow.addEventListener("change", apply);
+    return () => {
+      mqMobile.removeEventListener("change", apply);
+      mqNarrow.removeEventListener("change", apply);
+    };
   }, []);
 
   const visibleFanImages = useMemo(
     () =>
       FAN_IMAGES.filter((_, i) => {
-        if (!isMobile) return true;
+        if (!isNarrow) return true;
         return i !== 0 && i !== 4;
       }),
-    [isMobile]
+    [isNarrow]
   );
 
   useLayoutEffect(() => {
-    if (reduced || isMobile || !sectionRef.current) return;
+    if (reduced || isMobile || !sectionRef.current) return undefined;
 
-    const ctx = gsap.context(() => {
-      const layer = squiggleLayerRef.current;
-      if (!layer) return;
+    let cancelled = false;
+    let revert = null;
+    (async () => {
+      const { default: gsap } = await import("gsap");
+      if (cancelled) return;
+      const ctx = gsap.context(() => {
+        const layer = squiggleLayerRef.current;
+        if (!layer) return;
 
-      const svgs = layer.querySelectorAll("svg");
-      if (svgs[0]) {
-        gsap.to(svgs[0], {
-          y: 14,
-          rotation: 1.2,
-          transformOrigin: "50% 50%",
-          duration: 6.5,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-      }
-      if (svgs[1]) {
-        gsap.to(svgs[1], {
-          y: -12,
-          rotation: -1.4,
-          transformOrigin: "50% 50%",
-          duration: 7.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 0.4,
-        });
-      }
+        const svgs = layer.querySelectorAll("svg");
+        if (svgs[0]) {
+          gsap.to(svgs[0], {
+            y: 14,
+            rotation: 1.2,
+            transformOrigin: "50% 50%",
+            duration: 6.5,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+          });
+        }
+        if (svgs[1]) {
+          gsap.to(svgs[1], {
+            y: -12,
+            rotation: -1.4,
+            transformOrigin: "50% 50%",
+            duration: 7.2,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: 0.4,
+          });
+        }
+        // NOTE: the previous scrubbed parallax on the image row was removed
+        // because scrub:true + Lenis interpolation runs ScrollTrigger every
+        // single smooth-scroll frame and was the main cause of scroll jank.
+      }, sectionRef);
+      revert = () => ctx.revert();
+    })();
 
-      // NOTE: the previous scrubbed parallax on the image row was removed
-      // because scrub:true + Lenis interpolation runs ScrollTrigger every
-      // single smooth-scroll frame and was the main cause of scroll jank.
-    }, sectionRef);
-
-    return () => ctx.revert();
+    return () => {
+      cancelled = true;
+      if (revert) revert();
+    };
   }, [reduced, isMobile]);
 
   useEffect(() => {
-    if (reduced || isMobile || !sectionRef.current) return;
+    if (reduced || isMobile || !sectionRef.current) return undefined;
 
     const section = sectionRef.current;
     const layer = squiggleLayerRef.current;
     const rowParallax = imageRowParallaxRef.current;
-    if (!layer) return;
+    if (!layer) return undefined;
 
-    const xTo = gsap.quickTo(layer, "x", { duration: 0.9, ease: "power3.out" });
-    const yTo = gsap.quickTo(layer, "y", { duration: 0.9, ease: "power3.out" });
-    const xRow = rowParallax
-      ? gsap.quickTo(rowParallax, "x", { duration: 1, ease: "power3.out" })
-      : null;
-    const yRow = rowParallax
-      ? gsap.quickTo(rowParallax, "y", { duration: 1, ease: "power3.out" })
-      : null;
+    let cancelled = false;
+    let teardown = null;
 
-    let frameId = 0;
-    let latestMoveEvent = null;
-    const updateFromPointer = (clientX, clientY) => {
-      const { left, top, width, height } = section.getBoundingClientRect();
-      pointerRef.current = {
-        x: clientX - left,
-        y: clientY - top,
-        active: true,
+    (async () => {
+      const { default: gsap } = await import("gsap");
+      if (cancelled) return;
+
+      const xTo = gsap.quickTo(layer, "x", { duration: 0.9, ease: "power3.out" });
+      const yTo = gsap.quickTo(layer, "y", { duration: 0.9, ease: "power3.out" });
+      const xRow = rowParallax
+        ? gsap.quickTo(rowParallax, "x", { duration: 1, ease: "power3.out" })
+        : null;
+      const yRow = rowParallax
+        ? gsap.quickTo(rowParallax, "y", { duration: 1, ease: "power3.out" })
+        : null;
+
+      let frameId = 0;
+      let latestMoveEvent = null;
+      const updateFromPointer = (clientX, clientY) => {
+        const { left, top, width, height } = section.getBoundingClientRect();
+        pointerRef.current = {
+          x: clientX - left,
+          y: clientY - top,
+          active: true,
+        };
+        const x = (clientX - left) / width - 0.5;
+        const y = (clientY - top) / height - 0.5;
+        xTo(x * 32);
+        yTo(y * 24);
+        if (xRow && yRow) {
+          xRow(x * 10);
+          yRow(y * 8);
+        }
       };
-      const x = (clientX - left) / width - 0.5;
-      const y = (clientY - top) / height - 0.5;
-      xTo(x * 32);
-      yTo(y * 24);
-      if (xRow && yRow) {
-        xRow(x * 10);
-        yRow(y * 8);
-      }
-    };
-    const onMove = (e) => {
-      latestMoveEvent = e;
-      if (frameId) return;
-      frameId = window.requestAnimationFrame(() => {
-        frameId = 0;
-        if (!latestMoveEvent) return;
-        updateFromPointer(latestMoveEvent.clientX, latestMoveEvent.clientY);
-      });
-    };
-
-    const onLeave = () => {
-      pointerRef.current = { x: 0, y: 0, active: false };
-      xTo(0);
-      yTo(0);
-      if (xRow && yRow) {
-        xRow(0);
-        yRow(0);
-      }
-    };
-
-    const onTouch = (e) => {
-      if (e.touches.length === 0) return;
-      const t = e.touches[0];
-      const r = section.getBoundingClientRect();
-      pointerRef.current = {
-        x: t.clientX - r.left,
-        y: t.clientY - r.top,
-        active: true,
+      const onMove = (e) => {
+        latestMoveEvent = e;
+        if (frameId) return;
+        frameId = window.requestAnimationFrame(() => {
+          frameId = 0;
+          if (!latestMoveEvent) return;
+          updateFromPointer(latestMoveEvent.clientX, latestMoveEvent.clientY);
+        });
       };
-    };
-    const onTouchEnd = () => {
-      pointerRef.current = { x: 0, y: 0, active: false };
-    };
+      const onLeave = () => {
+        pointerRef.current = { x: 0, y: 0, active: false };
+        xTo(0);
+        yTo(0);
+        if (xRow && yRow) {
+          xRow(0);
+          yRow(0);
+        }
+      };
 
-    section.addEventListener("mousemove", onMove);
-    section.addEventListener("mouseleave", onLeave);
-    section.addEventListener("touchmove", onTouch, { passive: true });
-    section.addEventListener("touchstart", onTouch, { passive: true });
-    section.addEventListener("touchend", onTouchEnd);
-    section.addEventListener("touchcancel", onTouchEnd);
+      section.addEventListener("mousemove", onMove, { passive: true });
+      section.addEventListener("mouseleave", onLeave, { passive: true });
+
+      teardown = () => {
+        if (frameId) window.cancelAnimationFrame(frameId);
+        section.removeEventListener("mousemove", onMove);
+        section.removeEventListener("mouseleave", onLeave);
+      };
+    })();
+
     return () => {
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-      }
-      section.removeEventListener("mousemove", onMove);
-      section.removeEventListener("mouseleave", onLeave);
-      section.removeEventListener("touchmove", onTouch);
-      section.removeEventListener("touchstart", onTouch);
-      section.removeEventListener("touchend", onTouchEnd);
-      section.removeEventListener("touchcancel", onTouchEnd);
+      cancelled = true;
+      if (teardown) teardown();
     };
   }, [reduced, isMobile]);
 
@@ -387,19 +414,28 @@ function Hero() {
       ref={sectionRef}
       className="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-36 md:pt-40 md:pb-24"
     >
-      <div
-        ref={squiggleLayerRef}
-        className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
-        aria-hidden
-      >
-        <HeroSquiggles />
-      </div>
+      {/* Decorative squiggles + particles — desktop only.
+          On mobile they only contribute paint cost (Lighthouse mobile is the
+          target profile here) and they're already mostly off-screen. */}
+      {!isMobile && (
+        <div
+          ref={squiggleLayerRef}
+          className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
+          aria-hidden
+        >
+          <HeroSquiggles />
+        </div>
+      )}
 
-      <HeroParticles
-        sectionRef={sectionRef}
-        pointerRef={pointerRef}
-        reduced={reduced}
-      />
+      {!isMobile && (
+        <Suspense fallback={null}>
+          <HeroParticles
+            sectionRef={sectionRef}
+            pointerRef={pointerRef}
+            reduced={reduced}
+          />
+        </Suspense>
+      )}
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Motion.div
@@ -418,14 +454,14 @@ function Hero() {
             <Motion.span
               aria-hidden
               className="hidden h-px w-10 origin-right bg-gradient-to-r from-transparent via-red-200 to-red-400 sm:block md:w-16"
-              initial={reduced ? false : { scaleX: 0 }}
+              initial={animReduced ? false : { scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.8, ease: contentEase, delay: 0.1 }}
             />
             <Motion.span
               aria-hidden
               className="hidden h-1.5 w-1.5 rounded-full bg-[#DC3545] sm:block"
-              initial={reduced ? false : { scale: 0 }}
+              initial={animReduced ? false : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, ease: contentEase, delay: 0.35 }}
             />
@@ -435,7 +471,7 @@ function Hero() {
               <Motion.span
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-3 -inset-y-1.5 -z-10 rounded-full bg-gradient-to-r from-rose-100/0 via-rose-100/70 to-rose-100/0 blur-sm motion-reduce:hidden"
-                initial={reduced ? false : { opacity: 0, scaleX: 0.4 }}
+                initial={animReduced ? false : { opacity: 0, scaleX: 0.4 }}
                 animate={{ opacity: 1, scaleX: 1 }}
                 transition={{ duration: 0.9, ease: contentEase, delay: 0.2 }}
               />
@@ -451,7 +487,7 @@ function Hero() {
                   background:
                     "linear-gradient(135deg, #DC3545 0%, #B91C1C 100%)",
                 }}
-                initial={reduced ? false : { opacity: 0, scale: 0.6, rotate: -6 }}
+                initial={animReduced ? false : { opacity: 0, scale: 0.6, rotate: -6 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={{ duration: 0.5, ease: contentEase, delay: 0.4 }}
               >
@@ -463,14 +499,14 @@ function Hero() {
             <Motion.span
               aria-hidden
               className="hidden h-1.5 w-1.5 rounded-full bg-[#DC3545] sm:block"
-              initial={reduced ? false : { scale: 0 }}
+              initial={animReduced ? false : { scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, ease: contentEase, delay: 0.35 }}
             />
             <Motion.span
               aria-hidden
               className="hidden h-px w-10 origin-left bg-gradient-to-l from-transparent via-red-200 to-red-400 sm:block md:w-16"
-              initial={reduced ? false : { scaleX: 0 }}
+              initial={animReduced ? false : { scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.8, ease: contentEase, delay: 0.1 }}
             />
@@ -557,8 +593,8 @@ function Hero() {
             variants={textVariants.item}
           >
             <Motion.div
-              whileHover={reduced ? undefined : { scale: 1.035 }}
-              whileTap={reduced ? undefined : { scale: 0.97 }}
+              whileHover={animReduced ? undefined : { scale: 1.035 }}
+              whileTap={animReduced ? undefined : { scale: 0.97 }}
               transition={btnSpring}
             >
               <Link
@@ -576,8 +612,8 @@ function Hero() {
               </Link>
             </Motion.div>
             <Motion.div
-              whileHover={reduced ? undefined : { scale: 1.03 }}
-              whileTap={reduced ? undefined : { scale: 0.98 }}
+              whileHover={animReduced ? undefined : { scale: 1.03 }}
+              whileTap={animReduced ? undefined : { scale: 0.98 }}
               transition={btnSpring}
             >
               <Link
@@ -621,12 +657,19 @@ function Hero() {
             >
               <div className="relative z-[2] pt-14 sm:pt-14 md:pt-20">
                 <div className="flex justify-center items-end gap-0 sm:gap-1.5 md:gap-2 min-h-[185px] sm:min-h-[330px] md:min-h-[420px]">
-                  {visibleFanImages.map((item, i) => (
-                    <Motion.div
+                  {visibleFanImages.map((item, i) => {
+                    const Card = animReduced ? "div" : Motion.div;
+                    const cardProps = animReduced
+                      ? {}
+                      : {
+                          initial: "hidden",
+                          animate: "visible",
+                          variants: fanStagger(i),
+                        };
+                    return (
+                    <Card
                       key={`${item.src}-${i}`}
-                      initial="hidden"
-                      animate="visible"
-                      variants={fanStagger(i)}
+                      {...cardProps}
                       className={`relative -mx-1.5 sm:-mx-3.5 md:-mx-5 w-[38%] min-w-[122px] sm:min-w-[210px] md:min-w-[270px] max-w-[160px] sm:max-w-[320px] ${
                         i === Math.floor(visibleFanImages.length / 2)
                           ? "scale-[1.03] md:scale-[1.08]"
@@ -636,7 +679,7 @@ function Hero() {
                       <Motion.div
                         className="rounded-[1.35rem] overflow-hidden border border-white/40 bg-white shadow-[0_24px_44px_-24px_rgba(17,24,39,0.5)] ring-1 ring-slate-900/5"
                         whileHover={
-                          reduced
+                          animReduced
                             ? undefined
                             : {
                                 y: -8,
@@ -655,9 +698,10 @@ function Hero() {
                           />
                           <img
                             src={item.src}
-                            srcSet={`${item.src} 1x`}
                             sizes="(max-width: 640px) 38vw, (max-width: 1024px) 30vw, 270px"
                             alt={item.alt}
+                            width={320}
+                            height={420}
                             className="w-full h-[148px] sm:h-[270px] md:h-[350px] object-cover block"
                             decoding="async"
                             loading={
@@ -674,8 +718,9 @@ function Hero() {
                         </picture>
                         {/* Footer metadata removed: image-only cards */}
                       </Motion.div>
-                    </Motion.div>
-                  ))}
+                    </Card>
+                  );
+                  })}
                 </div>
               </div>
             </div>

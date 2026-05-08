@@ -1,12 +1,41 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 
+const VIDEO_SRC =
+  "/video/vidssave.com 🎯Admissions open Join Yasir Ali Classes – where serious students get serious result 480P.mp4";
+
 export default function VideoEnrollSection() {
+  const sectionRef = useRef(null);
   const videoRef = useRef(null);
+  // Don't even mount the <video> element until the section nears the viewport.
+  // Avoids loading several MB of video bytes / decoder state during the LCP frame.
+  const [shouldMount, setShouldMount] = useState(false);
 
   useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return undefined;
+    if (typeof IntersectionObserver === "undefined") {
+      setShouldMount(true);
+      return undefined;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          setShouldMount(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "400px 0px" }
+    );
+    io.observe(sectionEl);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!shouldMount) return undefined;
     const videoEl = videoRef.current;
     if (!videoEl) return undefined;
 
@@ -17,8 +46,6 @@ export default function VideoEnrollSection() {
         playPromise.catch(() => {});
       }
     };
-
-    tryPlay();
 
     if ("IntersectionObserver" in window) {
       observer = new IntersectionObserver(
@@ -33,16 +60,21 @@ export default function VideoEnrollSection() {
         { threshold: 0.25 }
       );
       observer.observe(videoEl);
+    } else {
+      tryPlay();
     }
 
     return () => {
       if (observer) observer.disconnect();
       videoEl.pause();
     };
-  }, []);
+  }, [shouldMount]);
 
   return (
-    <section className="px-3 sm:px-6 py-12 sm:py-14 md:py-20">
+    <section
+      ref={sectionRef}
+      className="px-3 sm:px-6 py-12 sm:py-14 md:py-20"
+    >
       <Motion.div
         initial={{ opacity: 0, y: 26 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -50,17 +82,26 @@ export default function VideoEnrollSection() {
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="relative max-w-6xl mx-auto overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.4rem] shadow-[0_25px_70px_-20px_rgba(17,24,39,0.5)]"
       >
-        <video
-          ref={videoRef}
-          src="/video/vidssave.com 🎯Admissions open Join Yasir Ali Classes – where serious students get serious result 480P.mp4"
-          className="h-[420px] sm:h-[460px] md:h-[540px] w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-label="YAC premium learning experience preview"
-        />
+        {/* Reserve the same height as the <video> while it's not yet mounted
+            so this section never causes layout shift. */}
+        <div
+          aria-hidden={!shouldMount}
+          className="h-[420px] sm:h-[460px] md:h-[540px] w-full bg-[#181a1d]"
+        >
+          {shouldMount ? (
+            <video
+              ref={videoRef}
+              src={VIDEO_SRC}
+              className="h-full w-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              aria-label="YAC premium learning experience preview"
+            />
+          ) : null}
+        </div>
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-tr from-black/85 via-black/45 to-black/10" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(220,53,69,0.25),transparent_46%)]" />

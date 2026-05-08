@@ -172,16 +172,17 @@ export default function BestResultsPreview() {
   return (
     <section
       className="relative overflow-hidden bg-gradient-to-b from-white via-rose-50/40 to-white py-16 sm:py-20 lg:py-24"
-      style={{ contain: "layout paint style", transform: "translateZ(0)" }}
+      style={{ contain: "layout paint" }}
     >
+      {/* Decorative blurs — kept as static halos with no `will-change` so we
+          don't keep a separate GPU layer alive during scroll. The visuals are
+          identical to the previous version. */}
       <div
         className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-red-200/25 blur-3xl"
-        style={{ transform: "translateZ(0)", willChange: "transform" }}
         aria-hidden
       />
       <div
         className="pointer-events-none absolute -right-20 bottom-8 h-72 w-72 rounded-full bg-rose-200/20 blur-3xl"
-        style={{ transform: "translateZ(0)", willChange: "transform" }}
         aria-hidden
       />
 

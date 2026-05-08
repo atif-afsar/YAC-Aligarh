@@ -30,7 +30,19 @@ export default function Methodology() {
   const rootRef = useRef(null);
 
   useLayoutEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+
     const ctx = gsap.context(() => {
+      // Mobile / reduced-motion: snap the lines to their final state.
+      // No ScrollTrigger churn during scroll on the home page.
+      if (reduced || isCoarse) {
+        if (lineRef.current) gsap.set(lineRef.current, { scaleX: 1 });
+        if (mobileLineRef.current) gsap.set(mobileLineRef.current, { scaleY: 1 });
+        return;
+      }
+
       if (lineRef.current) {
         gsap.fromTo(
           lineRef.current,

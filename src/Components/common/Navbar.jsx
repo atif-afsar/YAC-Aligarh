@@ -299,24 +299,20 @@ export default function Navbar() {
             </Motion.div>
           </Link>
 
-          {/* Center: Nav Links */}
+          {/* Center: Nav Links — only desktop renders these so we keep the
+              entry animation but drop the per-item Motion wrapper that adds
+              measurable mount cost on every route change. */}
           <nav className="hidden md:flex items-center gap-7 lg:gap-9">
-            {navLinks.map(({ label, to }, i) => (
-              <Motion.div
+            {navLinks.map(({ label, to }) => (
+              <NavLink
                 key={label}
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * i, duration: 0.35 }}
+                to={to}
+                end={to === "/"}
+                onClick={closeMenu}
+                className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
               >
-                <NavLink
-                  to={to}
-                  end={to === "/"}
-                  onClick={closeMenu}
-                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
-                >
-                  {label}
-                </NavLink>
-              </Motion.div>
+                {label}
+              </NavLink>
             ))}
           </nav>
 
