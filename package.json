@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "images:webp": "node scripts/build-web-images.mjs"
+    "images:webp": "node scripts/build-web-images.mjs",
+    "restore:navbar-admissions-jsx": "git restore src/Components/common/Navbar.jsx src/Components/Admissions/AdmissionsFormSection.jsx"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
