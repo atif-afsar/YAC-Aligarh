@@ -391,3 +391,32 @@ export const BADGE_CLASSES = {
   blue: "bg-sky-100 text-sky-700 border border-sky-200/80",
   orange: "bg-orange-100 text-orange-800 border border-orange-200/80",
 };
+
+/**
+ * Parses `imageAlt` lines like "ZENITH Batch poster — Class 10 Regular at Yasir Ali Classes"
+ * into a short heading that matches the poster wording.
+ * @param {string|undefined} imageAlt
+ * @returns {string|null}
+ */
+function parsePosterHeadingFromAlt(imageAlt) {
+  if (!imageAlt || typeof imageAlt !== "string") return null;
+  const trimmed = imageAlt
+    .replace(/\s+at\s+Yasir\s+Ali\s+Classes\.?$/i, "")
+    .trim();
+  const m = trimmed.match(/^(.+?)\s+Batch\s+poster\s*[—–\-]\s*(.+)$/iu);
+  if (!m) return null;
+  const batchName = m[1].trim();
+  const subtitle = m[2].trim();
+  if (!batchName || !subtitle) return null;
+  return `${batchName} — ${subtitle}`;
+}
+
+/**
+ * Card headline: poster text from `imageAlt` when it follows the batch pattern, else `title`.
+ * @param {CourseCard} course
+ */
+export function getCardDisplayHeading(course) {
+  const fromAlt = parsePosterHeadingFromAlt(course.imageAlt);
+  if (fromAlt) return fromAlt;
+  return course.title;
+}

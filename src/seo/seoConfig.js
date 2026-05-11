@@ -175,6 +175,15 @@ export const seoConfig = {
       baseKeywords,
     path: "/online-courses",
   },
+  ourCenters: {
+    title: "Our Centers — Aligarh Campus & Online Across India | YAC",
+    description:
+      "Yasir Ali Classes: flagship campus at IT Plaza, Aligarh (offline + online). Same faculty-led live programmes for Delhi NCR, Lucknow, Moradabad, Agra, Meerut, Saharanpur, Mathura, Bareilly & all India.",
+    keywords:
+      "Yasir Ali Classes centres, YAC Aligarh campus IT Plaza, online coaching India, coaching Delhi NCR Lucknow Moradabad Agra, Meerut Saharanpur online classes, Mathura Bareilly Etawah coaching online, best coaching Aligarh offline online, " +
+      baseKeywords,
+    path: "/our-centers",
+  },
   admissions: {
     title: "Admissions Open - Best Coaching in Aligarh | YAC",
     description:
@@ -482,6 +491,86 @@ export function buildBreadcrumbJsonLd(crumbs) {
       item: `${SITE.url}${c.path === "/" ? "" : c.path}`,
     })),
   };
+}
+
+/** FAQs for /our-centers (FAQPage JSON-LD). */
+const OUR_CENTERS_FAQ = [
+  {
+    q: "Where is the main Yasir Ali Classes campus?",
+    a: "The flagship centre is at Senco Jewellers, IT Plaza, Amir Nishan Road, Aligarh, Uttar Pradesh 202001—visit for offline batches, doubt labs, and tests, or join the same programmes online from anywhere in India.",
+  },
+  {
+    q: "Does YAC offer online coaching outside Aligarh?",
+    a: "Yes. Students from Delhi NCR, Lucknow, Moradabad, Agra, Meerut, Saharanpur, Mathura, Bareilly, Etawah and other cities join the same live timetable, faculty, and study system as our Aligarh batches.",
+  },
+  {
+    q: "Is the Aligarh centre online and offline?",
+    a: "Yes. Aligarh is our head campus with in-person classes at IT Plaza, and the same programmes are available as live online batches for students who cannot travel to Aligarh.",
+  },
+  {
+    q: "How do I enrol from Delhi, Lucknow or another city?",
+    a: "Use the Admissions page or call the institute number on this site. Our team will suggest the right batch—online or offline—based on your class, stream, and target exam.",
+  },
+];
+
+/**
+ * JSON-LD for the Our Centers page: breadcrumbs, WebPage, organisation (expanded service areas), FAQ.
+ * @returns {object[]}
+ */
+export function buildOurCentersPageJsonLd() {
+  const pagePath = seoConfig.ourCenters.path;
+  const pageUrl = `${SITE.url}${pagePath}`;
+  const baseOrg = buildOrganizationJsonLd();
+  const org = {
+    ...baseOrg,
+    areaServed: [
+      { "@type": "Country", name: "India" },
+      { "@type": "City", name: "Aligarh" },
+      { "@type": "AdministrativeArea", name: "Delhi NCR" },
+      { "@type": "City", name: "Lucknow" },
+      { "@type": "City", name: "Moradabad" },
+      { "@type": "City", name: "Agra" },
+      { "@type": "City", name: "Meerut" },
+      { "@type": "City", name: "Saharanpur" },
+      { "@type": "City", name: "Mathura" },
+      { "@type": "City", name: "Bareilly" },
+      { "@type": "City", name: "Etawah" },
+      { "@type": "State", name: "Uttar Pradesh" },
+    ],
+  };
+
+  const webPage = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: seoConfig.ourCenters.title,
+    description: seoConfig.ourCenters.description,
+    inLanguage: SITE.locale || "en-IN",
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    about: { "@id": `${SITE.url}/#organization` },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: `${SITE.url}/images/our-centers-hero.png`,
+      width: 1600,
+      height: 900,
+      caption: "Yasir Ali Classes — Aligarh and nationwide online coaching",
+    },
+  };
+
+  return [
+    buildBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Our Centers", path: pagePath },
+    ]),
+    webPage,
+    org,
+    buildFaqJsonLd(OUR_CENTERS_FAQ),
+  ];
 }
 
 /**

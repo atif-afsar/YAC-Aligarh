@@ -19,6 +19,7 @@ const Results = lazy(() => import('./Pages/Results'))
 const Admissions = lazy(() => import('./Pages/Admissions'))
 const MobileApp = lazy(() => import('./Pages/MobileApp'))
 const OnlineCourses = lazy(() => import('./Pages/OnlineCourses'))
+const OurCenters = lazy(() => import('./Pages/OurCenters'))
 const Youtube = lazy(() => import('./Pages/Youtube'))
 const BestCoachingInAligarh = lazy(() => import('./Pages/BestCoachingInAligarh'))
 const CommerceCoaching = lazy(() => import('./Pages/CommerceCoaching'))
@@ -105,6 +106,7 @@ const App = () => {
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/mobile-app" element={<MobileApp />} />
           <Route path="/online-courses" element={<OnlineCourses />} />
+          <Route path="/our-centers" element={<OurCenters />} />
           <Route path="/youtube" element={<Youtube />} />
         </Routes>
         <Suspense fallback={null}>

@@ -8,6 +8,7 @@ const navLinks = [
   { label: "Home", to: "/" },
   { label: "Courses", to: "/courses" },
   { label: "Online Courses", to: "/online-courses" },
+  { label: "Our Centers", to: "/our-centers" },
   { label: "Faculty", to: "/faculty" },
   { label: "Results", to: "/results" },
   { label: "Admissions", to: "/admissions" },

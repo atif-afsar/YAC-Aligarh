@@ -61,6 +61,8 @@ export default function Seo({
   keywords,
   path = "/",
   image,
+  imageWidth,
+  imageHeight,
   type = "website",
   noindex = false,
   jsonLd = null,
@@ -94,6 +96,8 @@ export default function Seo({
     upsertMeta("og:description", description, "property");
     upsertMeta("og:image", ogImage, "property");
     upsertMeta("og:image:alt", title, "property");
+    if (imageWidth) upsertMeta("og:image:width", String(imageWidth), "property");
+    if (imageHeight) upsertMeta("og:image:height", String(imageHeight), "property");
 
     upsertMeta("twitter:card", "summary_large_image");
     upsertMeta("twitter:site", SITE.twitter);
@@ -114,7 +118,7 @@ export default function Seo({
     return () => {
       scripts.forEach((s) => s.remove());
     };
-  }, [title, description, keywords, path, image, type, noindex, jsonLd]);
+  }, [title, description, keywords, path, image, imageWidth, imageHeight, type, noindex, jsonLd]);
 
   return null;
 }

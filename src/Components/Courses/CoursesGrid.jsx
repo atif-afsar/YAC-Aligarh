@@ -1,7 +1,7 @@
 import { AnimatePresence, motion as Motion } from "framer-motion";
 import { FaCheck, FaGraduationCap } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { BADGE_CLASSES } from "./courseData";
+import { BADGE_CLASSES, getCardDisplayHeading } from "./courseData";
 
 const TYPE_LABEL = {
   "school-prep": "School Prep",
@@ -149,7 +149,7 @@ export default function CoursesGrid({ courses }) {
                         ))}
                       </div>
                       <h3 className="mt-4 text-xl font-bold text-gray-900 tracking-tight">
-                        {course.title}
+                        {getCardDisplayHeading(course)}
                       </h3>
                       <p className="mt-2.5 text-sm text-gray-500 leading-relaxed">
                         {course.description}
