@@ -28,6 +28,7 @@ const BestJuniorCoaching = lazy(() => import('./Pages/BestJuniorCoaching'))
 const BestCACoaching = lazy(() => import('./Pages/BestCACoaching'))
 const BestCMACoaching = lazy(() => import('./Pages/BestCMACoaching'))
 const BestEntranceCoaching = lazy(() => import('./Pages/BestEntranceCoaching'))
+const StudentPortals = lazy(() => import('./Pages/StudentPortals'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -108,6 +109,7 @@ const App = () => {
           <Route path="/online-courses" element={<OnlineCourses />} />
           <Route path="/our-centers" element={<OurCenters />} />
           <Route path="/youtube" element={<Youtube />} />
+          <Route path="/student-portals" element={<StudentPortals />} />
         </Routes>
         <Suspense fallback={null}>
           <FloatingQuickActions />

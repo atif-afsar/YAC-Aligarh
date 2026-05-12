@@ -1,7 +1,7 @@
 import { lazy, memo, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import { FaArrowRight, FaPlay, FaStar } from "react-icons/fa";
+import { FaArrowRight, FaExternalLinkAlt, FaPlay, FaStar } from "react-icons/fa";
 
 // HeroParticles + GSAP are desktop-only. They're loaded asynchronously so they
 // never block the mobile critical path / LCP frame.
@@ -645,6 +645,35 @@ function Hero() {
             <span>
               <span className="text-gray-700">80,000+</span> Students Mentored
             </span>
+          </Motion.div>
+          {/* Quick portals — third CTA matching the row above */}
+          <Motion.div
+            variants={textVariants.item}
+            className="mt-4 flex justify-center sm:mt-5"
+          >
+            <Motion.div
+              whileHover={animReduced ? undefined : { scale: 1.035 }}
+              whileTap={animReduced ? undefined : { scale: 0.97 }}
+              transition={btnSpring}
+            >
+              <Link
+                to="/student-portals"
+                className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-9 py-3.5 text-base font-semibold text-white shadow-[0_14px_30px_-12px_rgba(220,53,69,0.6)] transition hover:shadow-[0_18px_36px_-12px_rgba(220,53,69,0.8)] sm:w-auto"
+                style={{ backgroundColor: RED }}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-all duration-700 ease-out group-hover:left-[120%] group-hover:opacity-100 motion-reduce:hidden"
+                />
+                <FaExternalLinkAlt className="relative text-xs" aria-hidden />
+                <span className="relative">Student Portals</span>
+                <span className="relative text-sm text-white/70">—</span>
+                <span className="relative text-sm text-white/80">
+                  AMU · JMI · BHU · CUET · CA &amp; more
+                </span>
+                <FaArrowRight className="relative text-sm transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Link>
+            </Motion.div>
           </Motion.div>
         </Motion.div>
 
