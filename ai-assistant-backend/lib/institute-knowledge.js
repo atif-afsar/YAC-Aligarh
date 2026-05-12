@@ -23,6 +23,8 @@ export const instituteKnowledge = {
   contact: {
     phone: "+91 90454 17079",
     phoneTel: "+919045417079",
+    phone2: "+91 94126 17279",
+    phone2Tel: "+919412617279",
     email: "yasirali83637@gmail.com",
   },
 
@@ -337,6 +339,32 @@ export const instituteKnowledge = {
     },
   ],
 
+  centers: {
+    flagship: {
+      name: "Aligarh",
+      type: "In-person + Online",
+      headline: "Main campus",
+      address:
+        "Senco Jewellers, IT Plaza, Amir Nishan Rd, Amir Nishan, Aligarh, Uttar Pradesh 202001",
+      description:
+        "Full classroom programmes, doubt labs, and test series — the same faculty-led system streamed live for students across India.",
+      googleMapsEmbed:
+        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin",
+      googleMapsLink:
+        "https://maps.google.com/?q=Yasir+Ali+Classes+Aligarh",
+    },
+    onlineHubs: [
+      { name: "Delhi NCR", region: "National Capital Region" },
+      { name: "Lucknow", region: "Uttar Pradesh" },
+      { name: "Moradabad", region: "Western UP" },
+      { name: "Agra", region: "Braj region" },
+      { name: "Meerut & Saharanpur", region: "Nearby belt" },
+      { name: "Mathura, Bareilly, Etawah", region: "UP — more cities" },
+    ],
+    onlineNote:
+      "Same live timetable, faculty, and study system as Aligarh — optimised for students who want top-tier coaching without relocating.",
+  },
+
   storyMilestones: [
     {
       year: "2015",
@@ -441,6 +469,7 @@ export function getKnowledgeText() {
     programStreams,
     courses,
     faculty,
+    centers,
     storyMilestones,
     faqs,
     notInKnowledgeBase,
@@ -467,12 +496,20 @@ export function getKnowledgeText() {
 
 **Location:** ${location.display}
 **Address (for visits / directions):** ${location.fullAddress}
-**Phone:** ${contact.phone}
+**Phone (primary):** ${contact.phone}
+**Phone (alternate):** ${contact.phone2}
 **Email:** ${contact.email}
 **YouTube:** ${links.youtube}
 **Instagram:** ${links.instagram}
 
 **Program streams we offer:** ${programStreams.join(", ")}.
+
+**Our centres:**
+- **${centers.flagship.name} (Flagship — ${centers.flagship.type}):** ${centers.flagship.description}
+  Address: ${centers.flagship.address}
+  Google Maps: ${centers.flagship.googleMapsLink}
+- **Online hubs:** ${centers.onlineHubs.map((h) => `${h.name} (${h.region})`).join(", ")}
+  ${centers.onlineNote}
 
 **Our story (short):**
 ${storyBlock}
@@ -499,6 +536,6 @@ ${faqBlock}
 - Never invent faculty names, qualifications, or subjects beyond what is in the roster.
 
 **If users ask for details we do not have above:**
-These topics are NOT in the knowledge base—do not make them up. Say the team can confirm: ${notInKnowledgeBase.join("; ")}. Direct them to call ${contact.phone} or email ${contact.email} or use the website admissions page.
+These topics are NOT in the knowledge base—do not make them up. Say the team can confirm: ${notInKnowledgeBase.join("; ")}. Direct them to call ${contact.phone} or ${contact.phone2}, email ${contact.email}, or use the website admissions page.
 `;
 }

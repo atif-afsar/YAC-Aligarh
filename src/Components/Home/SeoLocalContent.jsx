@@ -365,6 +365,16 @@ export default function SeoLocalContent() {
                     +91 90454 17079
                   </a>
                   <a
+                    href="tel:+919412617279"
+                    className="inline-flex items-center gap-2 font-semibold text-[#DC3545] hover:underline"
+                  >
+                    <FaPhoneAlt
+                      className="text-[0.7rem] text-[#DC3545]/80"
+                      aria-hidden
+                    />
+                    +91 94126 17279
+                  </a>
+                  <a
                     href="mailto:yasirali83637@gmail.com"
                     className="inline-flex items-center gap-2 font-semibold text-[#DC3545] hover:underline"
                   >

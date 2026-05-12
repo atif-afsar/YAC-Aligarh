@@ -164,6 +164,13 @@ export default function CommerceCoaching() {
               <FaPhoneAlt className="text-xs" />
               +91 90454 17079
             </a>
+            <a
+              href="tel:+919412617279"
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-gray-900 bg-white px-7 py-3.5 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
+            >
+              <FaPhoneAlt className="text-xs" />
+              +91 94126 17279
+            </a>
           </div>
         </div>
       </section>

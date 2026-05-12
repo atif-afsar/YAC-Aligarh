@@ -360,6 +360,15 @@ export default function AiAssistantPanel({ open, onClose }) {
                   |
                 </span>
                 <a
+                  href="tel:+919412617279"
+                  className="shrink-0 font-semibold text-[#DC3545] hover:underline"
+                >
+                  Call 2
+                </a>
+                <span className="shrink-0 text-gray-300" aria-hidden>
+                  |
+                </span>
+                <a
                   href="https://wa.me/919045417079"
                   target="_blank"
                   rel="noopener noreferrer"

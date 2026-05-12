@@ -178,6 +178,13 @@ export default function Footer() {
               +91 90454 17079
             </a>
             <a
+              href="tel:+919412617279"
+              className="flex items-center gap-3 transition hover:text-red-300"
+            >
+              <FaPhoneAlt className="shrink-0 text-red-400" />
+              +91 94126 17279
+            </a>
+            <a
               href="mailto:yasirali83637@gmail.com"
               className="flex items-center gap-3 transition hover:text-red-300"
             >

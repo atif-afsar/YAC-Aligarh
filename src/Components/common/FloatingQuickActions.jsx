@@ -161,10 +161,18 @@ export default function FloatingQuickActions() {
                 href="tel:+919045417079"
               />
               <LeftAction
+                key="call2"
+                icon={FaPhoneAlt}
+                label="Call 2"
+                index={1}
+                tone="red"
+                href="tel:+919412617279"
+              />
+              <LeftAction
                 key="whatsapp"
                 icon={FaWhatsapp}
                 label="WhatsApp"
-                index={1}
+                index={2}
                 tone="whatsapp"
                 href="https://wa.me/919045417079"
               />

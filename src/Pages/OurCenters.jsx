@@ -298,6 +298,14 @@ export default function OurCenters() {
               >
                 Call {SITE.phoneDisplay}
               </Motion.a>
+              <Motion.a
+                href={`tel:+${SITE.phone2.replace(/\D/g, "")}`}
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#DC3545] shadow-md ring-1 ring-rose-200/80 transition hover:bg-rose-50"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Call {SITE.phoneDisplay2}
+              </Motion.a>
               <Motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Link
                   to="/admissions"
@@ -308,24 +316,52 @@ export default function OurCenters() {
               </Motion.div>
             </Motion.div>
 
+            {/* Google Maps embed — right side */}
             <Motion.div
-              aria-hidden
-              className="pointer-events-none absolute bottom-2 right-2 hidden md:block md:bottom-6 md:right-8"
-              initial={{ opacity: 0, scale: 0.85, rotate: -12 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              className="absolute inset-y-0 right-0 hidden w-[38%] md:block"
+              initial={{ opacity: 0, x: 30, scale: 0.96 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 120, damping: 14, delay: 0.2 }}
+              transition={{ type: "spring", stiffness: 160, damping: 20, delay: 0.25 }}
             >
-              {!reduceMotion ? (
-                <Motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <FaBroadcastTower className="text-[6.5rem] text-[#DC3545]/[0.12] sm:text-[7.5rem]" />
-                </Motion.div>
-              ) : (
-                <FaBroadcastTower className="text-[6.5rem] text-[#DC3545]/[0.12] sm:text-[7.5rem]" aria-hidden />
-              )}
+              <div className="relative h-full w-full overflow-hidden rounded-r-3xl">
+                <div
+                  className="pointer-events-none absolute inset-0 z-10 rounded-r-3xl ring-1 ring-inset ring-rose-200/50"
+                  aria-hidden
+                />
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin!4v1778565538238!5m2!1sen!2sin"
+                  className="h-full w-full border-0"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Yasir Ali Classes — Aligarh location on Google Maps"
+                />
+              </div>
+            </Motion.div>
+
+            {/* Map — mobile (below content) */}
+            <Motion.div
+              className="relative mt-6 overflow-hidden rounded-2xl md:hidden"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2, ease: easeOut }}
+            >
+              <div className="relative">
+                <div
+                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-inset ring-rose-200/50"
+                  aria-hidden
+                />
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin!4v1778565538238!5m2!1sen!2sin"
+                  className="h-52 w-full border-0 sm:h-64"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Yasir Ali Classes — Aligarh location on Google Maps"
+                />
+              </div>
             </Motion.div>
           </Motion.article>
         </div>

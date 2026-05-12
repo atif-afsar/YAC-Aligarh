@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
+import { FaCheckCircle, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import { BENEFITS } from "./admissionsData";
 
 const COURSE_OPTIONS = ["Science", "Commerce", "Regular Batch", "Entrance Batch"];
@@ -194,15 +194,31 @@ export default function AdmissionsFormSection() {
             </div>
           </div>
 
-          <a
-            href="https://wa.me/919045417079"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-5 py-2.5 text-sm font-semibold hover:brightness-95 transition"
-          >
-            <FaWhatsapp />
-            Chat on WhatsApp
-          </a>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href="tel:+919045417079"
+              className="inline-flex items-center gap-2 rounded-full bg-[#DC3545] text-white px-5 py-2.5 text-sm font-semibold hover:brightness-95 transition"
+            >
+              <FaPhoneAlt className="text-xs" />
+              +91 90454 17079
+            </a>
+            <a
+              href="tel:+919412617279"
+              className="inline-flex items-center gap-2 rounded-full bg-[#DC3545] text-white px-5 py-2.5 text-sm font-semibold hover:brightness-95 transition"
+            >
+              <FaPhoneAlt className="text-xs" />
+              +91 94126 17279
+            </a>
+            <a
+              href="https://wa.me/919045417079"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-[#25D366] text-white px-5 py-2.5 text-sm font-semibold hover:brightness-95 transition"
+            >
+              <FaWhatsapp />
+              Chat on WhatsApp
+            </a>
+          </div>
         </article>
       </div>
     </section>
