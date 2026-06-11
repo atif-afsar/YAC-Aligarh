@@ -16,6 +16,7 @@ const About = lazy(() => import('./Pages/About'))
 const Faculty = lazy(() => import('./Pages/Faculty'))
 const Courses = lazy(() => import('./Pages/Courses'))
 const Results = lazy(() => import('./Pages/Results'))
+const NewResults = lazy(() => import('./Pages/NewResults'))
 const Admissions = lazy(() => import('./Pages/Admissions'))
 const MobileApp = lazy(() => import('./Pages/MobileApp'))
 const OnlineCourses = lazy(() => import('./Pages/OnlineCourses'))
@@ -104,6 +105,7 @@ const App = () => {
           <Route path="/faculty" element={<Faculty />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/results/new" element={<NewResults />} />
           <Route path="/admissions" element={<Admissions />} />
           <Route path="/mobile-app" element={<MobileApp />} />
           <Route path="/online-courses" element={<OnlineCourses />} />

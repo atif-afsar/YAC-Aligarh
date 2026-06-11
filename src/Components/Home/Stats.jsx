@@ -3,7 +3,7 @@ import { memo, useLayoutEffect, useRef } from "react";
 const STATS = [
   { end: 80000, suffix: "+", label: "Students Mentored" },
   { end: 20000, suffix: "+", label: "Final Selections" },
-  { end: 15, suffix: "+", label: "Years Experience" },
+  { end: 10, suffix: "+", label: "Years Experience" },
 ];
 
 const StatItem = memo(function StatItem({ end, suffix, label, index }) {

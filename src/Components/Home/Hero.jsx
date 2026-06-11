@@ -2,6 +2,7 @@ import { lazy, memo, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useS
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { FaArrowRight, FaExternalLinkAlt, FaPlay, FaStar } from "react-icons/fa";
+import NewResultsAlert from "../Results/NewResultsAlert";
 
 // HeroParticles + GSAP are desktop-only. They're loaded asynchronously so they
 // never block the mobile critical path / LCP frame.
@@ -414,6 +415,7 @@ function Hero() {
       ref={sectionRef}
       className="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-36 md:pt-40 md:pb-24"
     >
+      <NewResultsAlert />
       {/* Decorative squiggles + particles — desktop only.
           On mobile they only contribute paint cost (Lighthouse mobile is the
           target profile here) and they're already mostly off-screen. */}
@@ -572,7 +574,7 @@ function Hero() {
           <span className="sr-only">
             Yasir Ali Classes (YAC) is the best coaching in Aligarh for Commerce,
             Science, Junior (Classes 5-10), CA Foundation, CMA, B.Com, Class
-            11-12 and Entrance exams (BBA, MBA, BA-LLB / CLAT). 16+ years of
+            11-12 and Entrance exams (BBA, MBA, BA-LLB / CLAT). 10+ years of
             mentorship, 80,000+ students mentored and a 4.9★ Google rating.
             Online and offline batches available.
           </span>
@@ -639,7 +641,7 @@ function Hero() {
             </span>
             <span aria-hidden className="h-3 w-px bg-gray-300" />
             <span>
-              <span className="text-gray-700">16+</span> Years in Aligarh
+              <span className="text-gray-700">10+</span> Years in Aligarh
             </span>
             <span aria-hidden className="h-3 w-px bg-gray-300" />
             <span>
@@ -667,8 +669,8 @@ function Hero() {
                 />
                 <FaExternalLinkAlt className="relative text-xs" aria-hidden />
                 <span className="relative">Student Portals</span>
-                <span className="relative text-sm text-white/70">—</span>
-                <span className="relative text-sm text-white/80">
+                <span className="relative hidden text-sm text-white/70 sm:inline">—</span>
+                <span className="relative hidden text-sm text-white/80 sm:inline">
                   AMU · JMI · BHU · CUET · CA &amp; more
                 </span>
                 <FaArrowRight className="relative text-sm transition-transform duration-300 group-hover:translate-x-0.5" />

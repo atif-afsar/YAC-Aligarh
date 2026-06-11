@@ -207,6 +207,15 @@ export const seoConfig = {
     keywords: "best results coaching Aligarh, top rankers Aligarh, " + baseKeywords,
     path: "/results",
   },
+  newResults: {
+    title: "AMU Entrance Results 2026 - New Selections | YAC Aligarh",
+    description:
+      "Fresh AMU entrance result sheets from Yasir Ali Classes Aligarh — B.Com, BBA, BA, BA FL and BA Honours selections for 2026. Browse our latest AMU entrance achievers.",
+    keywords:
+      "AMU entrance results 2026, AMU entrance coaching Aligarh, AMU B.Com entrance, AMU BBA entrance, YAC AMU results, " +
+      baseKeywords,
+    path: "/results/new",
+  },
   about: {
     title: "About YAC - Aligarh's Leading Coaching Institute",
     description:
