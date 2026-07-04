@@ -32,7 +32,7 @@ export const CATEGORY_FILTER_OPTIONS = [
 
 /* Helper: paths in /public/batch contain spaces & parentheses; centralise so
  * data is easy to scan and the renderer doesn't need to worry about encoding. */
-const BATCH_IMG = (file) => `/batch/${file}`;
+const BATCH_IMG = (file) => encodeURI(`/batch/${file}`);
 
 /**
  * YAC course catalogue (aligned to institute data: school prep, entrances, professional, graduation).
@@ -144,17 +144,20 @@ export const COURSES = [
     courseType: "entrance",
     badge: "ENTRANCE",
     badgeTone: "orange",
-    title: "Class 6 Entrance",
+    title: "ILM-E-AGHAAZ Online Course",
     description:
-      "Aptitude, language, and reasoning in age-suitable sets for 6th-standard entrance tests to reputed schools or institutes.",
+      "Your first step towards AMU & JMI success — online preparation for 6th standard AMU and JMI entrance 2027-28. Special launch offer at ₹6,999 (limited seats).",
     features: [
-      "Topic-wise aptitude practice",
-      "Reading & comprehension",
-      "Full-length mock tests",
-      "Basic interview / interaction readiness",
+      "Comprehensive study material",
+      "Live & recorded classes",
+      "Regular tests & assignments",
+      "Previous year questions practice",
+      "Performance analysis & mentorship",
+      "Exam-oriented strategy sessions",
     ],
-    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.25 PM.jpeg"),
-    imageAlt: "UDAAN Batch poster — Class 6 Entrance preparation",
+    image: BATCH_IMG("faa84af1-8b4a-418c-9e61-51e55ae87362.png"),
+    imageAlt:
+      "ILM-E-AGHAAZ Batch poster — 6th AMU & JMI Entrance 2027-28",
   },
   {
     id: "entrance-9th",
@@ -163,36 +166,45 @@ export const COURSES = [
     courseType: "entrance",
     badge: "ENTRANCE",
     badgeTone: "blue",
-    title: "Class 9 Entrance",
+    title: "UROOJ Online Course",
     description:
-      "Structured prep for 9th entrance patterns—higher-order Maths/Science, speed drills, and past-paper style practice.",
+      "Rise. Learn. Succeed. — online preparation for 9th AMU & JMI entrance 2027-28. Complete coverage with interview prep at ₹7,999 (limited seats).",
     features: [
-      "Past-paper and pattern-based sets",
-      "Error log and revision slots",
-      "Time & accuracy coaching",
-      "One-on-one weak-topic support (as per batch)",
+      "Comprehensive study material",
+      "Live + recorded classes",
+      "Regular tests & assignments",
+      "Previous year questions practice",
+      "Performance analysis & personal mentorship",
+      "Exam-oriented strategy sessions",
+      "Doubt solving & guidance support",
     ],
-    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM (2).jpeg"),
-    imageAlt: "JASHN Batch poster — Class 9 Entrance preparation",
+    image: BATCH_IMG("ChatGPT Image Jun 22, 2026 at 03_02_56 PM.png"),
+    imageAlt: "UROOJ Batch poster — 9th AMU & JMI Entrance 2027-28",
   },
   {
     id: "entrance-11th",
     classLevels: ["senior"],
-    streams: [],
+    streams: ["science"],
     courseType: "entrance",
     badge: "ENTRANCE",
     badgeTone: "red",
-    title: "Class 11 Entrance",
+    title: "VIJAYI 4.0 Online Course",
     description:
-      "Entrance focus before Class 11—aptitude, logical reasoning, and stream awareness for Commerce, Science, or school-specific tests.",
+      "Your victory starts here — XI Science & Diploma in Engineering entrance prep for AMU & JMI 2027-28. PCM, engineering aptitude & interview prep at ₹9,999.",
     features: [
-      "Stream-aptitude and GK-style blocks",
-      "Institute & scholarship pattern mocks",
-      "Subject-choice orientation (overview)",
-      "Timed tests with performance review",
+      "PCM + engineering aptitude",
+      "AMU & JMI entrance-focused",
+      "Interview preparation",
+      "Live + recorded classes",
+      "Regular tests & assignments",
+      "Previous year questions practice",
+      "Performance analysis & mentorship",
+      "Doubt solving & guidance support",
+      "Exam-oriented strategy sessions",
     ],
-    image: BATCH_IMG("WhatsApp Image 2026-05-05 at 5.01.24 PM (1).jpeg"),
-    imageAlt: "DREAMERS Batch poster — Class 11 Entrance for Sci/Comm/Humanities",
+    image: BATCH_IMG("ChatGPT Image Jun 22, 2026 at 03_11_17 PM.png"),
+    imageAlt:
+      "VIJAYI 4.0 Batch poster — XI Sci. & Dip. in Engg. AMU & JMI Entrance 2027-28",
   },
 
   /* —— UG & PG entrance (after school) —— */
