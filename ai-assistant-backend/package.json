@@ -7,6 +7,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "dev": "node dev-server.mjs",
     "vercel-build": "echo 'No build step; Vercel deploys /api as serverless functions.'"
   }
 }

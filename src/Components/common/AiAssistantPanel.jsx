@@ -157,7 +157,14 @@ export default function AiAssistantPanel({ open, onClose }) {
           return next;
         });
       } catch (e) {
-        const errMsg = e instanceof Error ? e.message : "Could not reach the assistant.";
+        const raw = e instanceof Error ? e.message : "Could not reach the assistant.";
+        const isNetwork =
+          /failed to fetch|networkerror|load failed|network request failed/i.test(raw);
+        const errMsg = isNetwork
+          ? import.meta.env.DEV
+            ? "Cannot reach the chat API. Start the backend with `npm run dev:api` in a second terminal (and set GROQ_API_KEY in ai-assistant-backend/.env)."
+            : "The chat service is temporarily unavailable. Please call or WhatsApp us, or try again later."
+          : raw;
         setMessages((prev) => {
           if (prev.length && prev[prev.length - 1].role === "user") {
             const next = [
