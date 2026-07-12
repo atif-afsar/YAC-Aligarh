@@ -13,6 +13,7 @@ import {
   FaPhoneAlt,
   FaUserGraduate,
 } from "react-icons/fa";
+import { SITE } from "../../seo/seoConfig";
 
 const RED = "#DC3545";
 
@@ -340,11 +341,14 @@ export default function SeoLocalContent() {
               title="Visit our centre"
               body={
                 <address className="not-italic">
-                  Senco Jewellers, IT Plaza,
-                  <br />
-                  Amir Nishan Road, Aligarh,
-                  <br />
-                  Uttar Pradesh 202001, India
+                  {SITE.address.lines.map((line) => (
+                    <span key={line}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                  {SITE.address.locality}, {SITE.address.region}{" "}
+                  {SITE.address.postalCode}, India
                 </address>
               }
             />

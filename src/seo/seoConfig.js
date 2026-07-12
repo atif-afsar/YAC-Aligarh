@@ -24,13 +24,40 @@ export const SITE = {
   phoneDisplay2: "+91 94126 17279",
   email: "yasirali83637@gmail.com",
   address: {
-    street: "Senco Jewellers, IT Plaza, Amir Nishan Road",
+    lines: ["Grand Bazaar", "1st Floor", "Lal Diggi Road"],
+    street: "Grand Bazaar, 1st Floor, Lal Diggi Road",
     locality: "Aligarh",
     region: "Uttar Pradesh",
     postalCode: "202001",
     country: "IN",
+    shortLabel: "Grand Bazaar, Lal Diggi Road, Aligarh",
   },
 };
+
+/** Single-line postal address for FAQs, schema, and contact copy. */
+export function formatSiteAddressOneLine() {
+  return [
+    SITE.address.street,
+    SITE.address.locality,
+    SITE.address.region,
+    SITE.address.postalCode,
+  ]
+    .filter(Boolean)
+    .join(", ");
+}
+
+/** Compact map-pin label for hero strips and cards. */
+export function formatSiteAddressShort() {
+  return SITE.address.shortLabel;
+}
+
+/** Multi-line address blocks (e.g. centre pages, footer). */
+export function getSiteAddressLines() {
+  return [
+    ...SITE.address.lines,
+    `${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`,
+  ];
+}
 
 const k = {
   primary: "best coaching in Aligarh",
@@ -180,9 +207,9 @@ export const seoConfig = {
   ourCenters: {
     title: "Our Centers — Aligarh Campus & Online Across India | YAC",
     description:
-      "Yasir Ali Classes: flagship campus at IT Plaza, Aligarh (offline + online). Same faculty-led live programmes for Delhi NCR, Lucknow, Moradabad, Agra, Meerut, Saharanpur, Mathura, Bareilly & all India.",
+      "Yasir Ali Classes: flagship campus at Grand Bazaar, Lal Diggi Road, Aligarh (offline + online). Same faculty-led live programmes for Delhi NCR, Lucknow, Moradabad, Agra, Meerut, Saharanpur, Mathura, Bareilly & all India.",
     keywords:
-      "Yasir Ali Classes centres, YAC Aligarh campus IT Plaza, online coaching India, coaching Delhi NCR Lucknow Moradabad Agra, Meerut Saharanpur online classes, Mathura Bareilly Etawah coaching online, best coaching Aligarh offline online, " +
+      "Yasir Ali Classes centres, YAC Aligarh campus Grand Bazaar Lal Diggi Road, online coaching India, coaching Delhi NCR Lucknow Moradabad Agra, Meerut Saharanpur online classes, Mathura Bareilly Etawah coaching online, best coaching Aligarh offline online, " +
       baseKeywords,
     path: "/our-centers",
   },
@@ -260,7 +287,7 @@ const cmnFaqOnline = {
 };
 const cmnFaqLocation = {
   q: "Where is Yasir Ali Classes located in Aligarh?",
-  a: "Our coaching centre is at Senco Jewellers, IT Plaza, Amir Nishan Road, Aligarh, Uttar Pradesh 202001.",
+  a: `Our coaching centre is at ${formatSiteAddressOneLine()}.`,
 };
 
 export const landingConfig = {
@@ -508,7 +535,7 @@ export function buildBreadcrumbJsonLd(crumbs) {
 const OUR_CENTERS_FAQ = [
   {
     q: "Where is the main Yasir Ali Classes campus?",
-    a: "The flagship centre is at Senco Jewellers, IT Plaza, Amir Nishan Road, Aligarh, Uttar Pradesh 202001—visit for offline batches, doubt labs, and tests, or join the same programmes online from anywhere in India.",
+    a: `The flagship centre is at ${formatSiteAddressOneLine()}—visit for offline batches, doubt labs, and tests, or join the same programmes online from anywhere in India.`,
   },
   {
     q: "Does YAC offer online coaching outside Aligarh?",
@@ -516,7 +543,7 @@ const OUR_CENTERS_FAQ = [
   },
   {
     q: "Is the Aligarh centre online and offline?",
-    a: "Yes. Aligarh is our head campus with in-person classes at IT Plaza, and the same programmes are available as live online batches for students who cannot travel to Aligarh.",
+    a: "Yes. Aligarh is our head campus with in-person classes at Grand Bazaar, Lal Diggi Road, and the same programmes are available as live online batches for students who cannot travel to Aligarh.",
   },
   {
     q: "How do I enrol from Delhi, Lucknow or another city?",

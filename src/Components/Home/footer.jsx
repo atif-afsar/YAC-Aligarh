@@ -8,6 +8,7 @@ import {
   FaPhoneAlt,
   FaYoutube,
 } from "react-icons/fa";
+import { getSiteAddressLines } from "../../seo/seoConfig";
 
 const RED = "#DC3545";
 
@@ -168,7 +169,13 @@ export default function Footer() {
           <div className="space-y-2.5 text-sm text-gray-300">
             <p className="flex items-start gap-3">
               <FaMapMarkerAlt className="mt-0.5 shrink-0 text-red-400" />
-              Aligarh, Uttar Pradesh, India
+              <span>
+                {getSiteAddressLines().map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </span>
             </p>
             <a
               href="tel:+919045417079"

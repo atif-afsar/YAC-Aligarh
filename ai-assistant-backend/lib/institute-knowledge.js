@@ -17,7 +17,7 @@ export const instituteKnowledge = {
     country: "India",
     display: "Aligarh, Uttar Pradesh, India",
     fullAddress:
-      "Senco Jewellers, IT Plaza, Amir Nishan Rd, Amir Nishan, Aligarh, Uttar Pradesh 202001",
+      "Grand Bazaar, 1st Floor, Lal Diggi Road, Aligarh, Uttar Pradesh 202001",
   },
 
   contact: {
@@ -355,13 +355,13 @@ export const instituteKnowledge = {
       type: "In-person + Online",
       headline: "Main campus",
       address:
-        "Senco Jewellers, IT Plaza, Amir Nishan Rd, Amir Nishan, Aligarh, Uttar Pradesh 202001",
+        "Grand Bazaar, 1st Floor, Lal Diggi Road, Aligarh, Uttar Pradesh 202001",
       description:
         "Full classroom programmes, doubt labs, and test series — the same faculty-led system streamed live for students across India.",
       googleMapsEmbed:
-        "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin",
+        "https://www.google.com/maps?q=Grand+Bazaar,+1st+Floor,+Lal+Diggi+Road,+Aligarh&output=embed",
       googleMapsLink:
-        "https://maps.google.com/?q=Yasir+Ali+Classes+Aligarh",
+        "https://maps.google.com/?q=Grand+Bazaar,+1st+Floor,+Lal+Diggi+Road,+Aligarh",
     },
     onlineHubs: [
       { name: "Delhi NCR", region: "National Capital Region" },

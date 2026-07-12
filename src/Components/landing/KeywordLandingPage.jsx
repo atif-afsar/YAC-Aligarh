@@ -16,6 +16,7 @@ import {
   buildCourseListJsonLd,
   buildOrganizationJsonLd,
   buildLocalBusinessJsonLd,
+  formatSiteAddressShort,
 } from "../../seo/seoConfig";
 
 const RED = "#DC3545";
@@ -128,7 +129,7 @@ export default function KeywordLandingPage({ landing }) {
             <span aria-hidden>·</span>
             <span className="inline-flex items-center gap-1.5">
               <FaMapMarkerAlt className="text-[#DC3545]" />
-              IT Plaza, Amir Nishan Road, Aligarh
+              {formatSiteAddressShort()}
             </span>
           </div>
         </div>
@@ -248,8 +249,8 @@ export default function KeywordLandingPage({ landing }) {
             Ready to join Aligarh's best coaching?
           </h2>
           <p className="mt-3 text-base leading-relaxed text-gray-600">
-            Speak to our admissions team or visit our IT Plaza centre in
-            Aligarh.
+            Speak to our admissions team or visit our centre at Grand Bazaar,
+            Lal Diggi Road, Aligarh.
           </p>
           <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link

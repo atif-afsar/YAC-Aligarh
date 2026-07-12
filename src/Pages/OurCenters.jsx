@@ -3,7 +3,7 @@ import { motion as Motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FaArrowRight, FaBroadcastTower, FaMapMarkerAlt, FaWifi } from "react-icons/fa";
 import Seo from "../Components/common/Seo";
-import { SITE, seoConfig, buildOurCentersPageJsonLd } from "../seo/seoConfig";
+import { SITE, seoConfig, buildOurCentersPageJsonLd, getSiteAddressLines } from "../seo/seoConfig";
 
 const easeOut = [0.22, 1, 0.36, 1];
 
@@ -45,15 +45,15 @@ const hubGridStaggerReduced = {
   visible: { transition: { staggerChildren: 0, delayChildren: 0 } },
 };
 
+const MAPS_EMBED_URL =
+  "https://www.google.com/maps?q=Grand+Bazaar,+1st+Floor,+Lal+Diggi+Road,+Aligarh&output=embed";
+
 const MAIN_CENTER = {
   name: "Aligarh",
   headline: "Main campus",
   summary:
-    "Our flagship centre at IT Plaza, Aligarh—full classroom programmes, doubt labs, and test series—with the same faculty-led system streamed live for students across India.",
-  addressLines: [
-    `${SITE.address.street}`,
-    `${SITE.address.locality}, ${SITE.address.region} ${SITE.address.postalCode}`,
-  ],
+    "Our flagship centre at Grand Bazaar, Lal Diggi Road, Aligarh—full classroom programmes, doubt labs, and test series—with the same faculty-led system streamed live for students across India.",
+  addressLines: getSiteAddressLines(),
 };
 
 /** @type {{ name: string; region: string; note: string }[]} */
@@ -330,7 +330,7 @@ export default function OurCenters() {
                   aria-hidden
                 />
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin!4v1778565538238!5m2!1sen!2sin"
+                  src={MAPS_EMBED_URL}
                   className="h-full w-full border-0"
                   allowFullScreen
                   loading="lazy"
@@ -354,7 +354,7 @@ export default function OurCenters() {
                   aria-hidden
                 />
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14103.963512145961!2d78.06779983715818!3d27.90225325016561!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4c20dc101a7%3A0x71244a3465c6f617!2sYasir%20Ali%20Classes%20-%20best%20Commerce%20Coaching%20in%20Aligarh!5e0!3m2!1sen!2sin!4v1778565538238!5m2!1sen!2sin"
+                  src={MAPS_EMBED_URL}
                   className="h-52 w-full border-0 sm:h-64"
                   allowFullScreen
                   loading="lazy"

@@ -14,6 +14,8 @@ import {
   buildOrganizationJsonLd,
   buildLocalBusinessJsonLd,
   SITE,
+  formatSiteAddressOneLine,
+  formatSiteAddressShort,
 } from "../seo/seoConfig";
 
 const RED = "#DC3545";
@@ -33,7 +35,7 @@ const HIGHLIGHTS = [
   },
   {
     title: "Online + Offline",
-    desc: "Attend live in our IT Plaza centre or join online from anywhere in India.",
+    desc: "Attend live at our Grand Bazaar centre or join online from anywhere in India.",
   },
 ];
 
@@ -61,7 +63,7 @@ const FAQ = [
   },
   {
     q: "Where is Yasir Ali Classes located in Aligarh?",
-    a: "Our coaching centre is at Senco Jewellers, IT Plaza, Amir Nishan Road, Aligarh, Uttar Pradesh 202001. We also run online batches for students across India.",
+    a: `Our coaching centre is at ${formatSiteAddressOneLine()}. We also run online batches for students across India.`,
   },
   {
     q: "What courses does YAC offer?",
@@ -206,7 +208,7 @@ export default function BestCoachingInAligarh() {
             <span aria-hidden>·</span>
             <span className="inline-flex items-center gap-1.5">
               <FaMapMarkerAlt className="text-[#DC3545]" />
-              IT Plaza, Amir Nishan Road, Aligarh
+              {formatSiteAddressShort()}
             </span>
           </div>
         </div>
@@ -337,8 +339,8 @@ export default function BestCoachingInAligarh() {
             Ready to join Aligarh's best coaching?
           </h2>
           <p className="mt-3 text-base leading-relaxed text-gray-600">
-            Speak to our admissions team or visit our IT Plaza centre in
-            Aligarh.
+            Speak to our admissions team or visit our centre at Grand Bazaar,
+            Lal Diggi Road, Aligarh.
           </p>
           <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Link
