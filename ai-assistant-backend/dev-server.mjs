@@ -27,7 +27,7 @@ function loadDotEnv() {
     ) {
       value = value.slice(1, -1);
     }
-    if (!process.env[key]) process.env[key] = value;
+    process.env[key] = value;
   }
 }
 
@@ -81,6 +81,7 @@ const server = createServer(async (nodeReq, nodeRes) => {
   };
 
   try {
+    loadDotEnv();
     await chatHandler(req, createVercelResponse(nodeRes));
   } catch (err) {
     console.error("[dev-server] handler error:", err);

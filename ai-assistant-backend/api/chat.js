@@ -44,7 +44,7 @@ function resolveLlmConfig() {
   ).replace(/\/$/, "");
   const isGroq = base.includes("groq.com");
   const model =
-    process.env.AI_MODEL || (isGroq ? "llama-3.3-70b-versatile" : "gpt-4o-mini");
+    process.env.AI_MODEL || (isGroq ? "openai/gpt-oss-120b" : "gpt-4o-mini");
   return { apiKey, base, model };
 }
 
